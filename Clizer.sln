@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clizer.Console", "Clizer.Console\Clizer.Console.csproj", "{B69C81CA-4CD8-48E8-A2CF-A88D35511B8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clizer", "Clizer\Clizer.csproj", "{64D52ABE-7E90-483A-9FFF-A6F34B006847}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B69C81CA-4CD8-48E8-A2CF-A88D35511B8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B69C81CA-4CD8-48E8-A2CF-A88D35511B8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B69C81CA-4CD8-48E8-A2CF-A88D35511B8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B69C81CA-4CD8-48E8-A2CF-A88D35511B8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64D52ABE-7E90-483A-9FFF-A6F34B006847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64D52ABE-7E90-483A-9FFF-A6F34B006847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64D52ABE-7E90-483A-9FFF-A6F34B006847}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64D52ABE-7E90-483A-9FFF-A6F34B006847}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36D3B0A5-0CC6-4EDD-A2A8-12E04008B4DF}
+	EndGlobalSection
+EndGlobal

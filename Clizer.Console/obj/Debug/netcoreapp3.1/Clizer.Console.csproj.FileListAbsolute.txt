@@ -1,0 +1,14 @@
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.Console.exe
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.Console.deps.json
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.Console.runtimeconfig.json
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.Console.runtimeconfig.dev.json
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.Console.dll
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.Console.pdb
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.dll
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\bin\Debug\netcoreapp3.1\Clizer.pdb
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\obj\Debug\netcoreapp3.1\Clizer.Console.csprojAssemblyReference.cache
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\obj\Debug\netcoreapp3.1\Clizer.Console.AssemblyInfoInputs.cache
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\obj\Debug\netcoreapp3.1\Clizer.Console.AssemblyInfo.cs
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\obj\Debug\netcoreapp3.1\Clizer.Console.csproj.CopyComplete
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\obj\Debug\netcoreapp3.1\Clizer.Console.dll
+C:\Users\Dominik\source\repos\Clizer\Clizer.Console\obj\Debug\netcoreapp3.1\Clizer.Console.pdb

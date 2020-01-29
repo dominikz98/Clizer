@@ -1,4 +1,5 @@
 ﻿using Clizer.Attributes;
+using Clizer.Console.Services;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,9 +14,16 @@ namespace Clizer.Console
         [CliArgument("value", Help = "Test value.", Short = "v")]
         public int Test { get; set; }
 
+        private readonly ITestService _testService;
+
+        public LowCommand(ITestService testService)
+        {
+            _testService = testService;
+        }
+
         public Task Execute(CancellationToken cancellationToken)
         {
-            System.Console.WriteLine("Running! Value:" + Test + "; Force: " + Force);
+            System.Console.WriteLine(_testService.GetMessage(Test, Force));
             return Task.CompletedTask;
         }
     }

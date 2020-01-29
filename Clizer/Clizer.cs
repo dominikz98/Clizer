@@ -1,6 +1,7 @@
 ﻿using Clizer.Attributes;
 using Clizer.Helper;
 using Clizer.Models;
+using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,7 @@ namespace Clizer
         public void Verify()
         {
             // TODO: implement
+            _configuration.DependencyContainer?.Verify();
         }
 
         /// <summary>
@@ -107,7 +109,28 @@ namespace Clizer
         /// </summary>
         private object CreateCliCmdInstance(Type clicmdtype)
         {
-            var commandInstance = Activator.CreateInstance(clicmdtype);
+            if (clicmdtype.GetConstructors()?.Count() > 1)
+                throw new ClizerException($"\"{clicmdtype.Name}\" contains more than 1 constructor!");
+
+            var constructor = clicmdtype.GetConstructors().FirstOrDefault();
+            var parameters = new List<object>();
+            foreach (var parameter in constructor.GetParameters())
+            {
+                object injection = null;
+                try
+                {
+                    injection = _configuration.DependencyContainer.GetInstance(parameter.ParameterType);
+                }
+                catch (ActivationException)
+                {
+
+                    throw new ClizerException($"\"{clicmdtype.Name}\" needs an instance of \"{parameter.ParameterType}\" which is not registered!");
+                }
+                
+                parameters.Add(injection);
+            }
+
+            var commandInstance = Activator.CreateInstance(clicmdtype, parameters.ToArray());
             if (commandInstance == null)
                 throw new ClizerException($"Unable to create instance of \"{clicmdtype.Name}\"!");
             return commandInstance;

@@ -33,6 +33,9 @@ namespace Clizer
                 // Attach property values to command instance
                 AttachCliPropertyValues(clicmdinstance, Args);
 
+                // Execute 'Execute' method from command instance
+                await ExecuteCliCommandMethod(clicmdinstance, cancellationToken);
+
             }
             catch (ClizerException cex)
             {
@@ -152,6 +155,12 @@ namespace Clizer
                 property.SetValue(cmdInstance, value);
             }
         }
+
+        /// <summary>
+        /// Executes the entry point method in cli command instance
+        /// </summary>
+        private async Task ExecuteCliCommandMethod(object cmdInstance, CancellationToken cancellationToken)
+            => await (Task)cmdInstance.GetType().GetMethod("Execute")?.Invoke(cmdInstance, new object[] { cancellationToken });
 
     }
 }

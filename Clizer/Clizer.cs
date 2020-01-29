@@ -139,8 +139,14 @@ namespace Clizer
                     if (!arg.Contains(":") || (arg.Split(':')?[1].Length ?? 0) <= 0)
                         throw new ClizerException($"Value of called argument \"{argumentatr.Name}\" cannot be empty!");
 
-                    value = Convert.ChangeType(arg.Split(':')?[1], property.PropertyType);
-                    throw new ClizerException($"Invalid value for argument (Expected: {property.PropertyType.Name}, value: {arg})");
+                    try
+                    {
+                        value = Convert.ChangeType(arg.Split(':')?[1], property.PropertyType);
+                    }
+                    catch (Exception)
+                    {
+                        throw new ClizerException($"Invalid value for argument (Expected: {property.PropertyType.Name}, value: {arg})");
+                    }
                 }
 
                 property.SetValue(cmdInstance, value);

@@ -9,6 +9,6 @@ namespace Clizer.Console
         public bool Force { get; set; }
 
         [CliArgument("value", Help = "Test value.", Short = "v")]
-        public string Test { get; set; }
+        public int Test { get; set; }
     }
 }

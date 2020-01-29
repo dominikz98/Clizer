@@ -38,15 +38,9 @@ namespace Clizer
                 await ExecuteCliCommandMethod(clicmdinstance, cancellationToken);
 
             }
-            catch (ClizerException cex)
-            {
-                Console.ForegroundColor = _configuration.ExceptionColor;
-                Console.WriteLine(cex.Message);
-                Console.ResetColor();
-            }
             catch (Exception ex)
             {
-                throw ex;
+                _configuration.ExceptionHandler(ex);
             }
         }
 

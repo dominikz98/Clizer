@@ -14,7 +14,7 @@ namespace Clizer.Console
 
             var clizer = new Clizer();
             clizer.Configure(new ClizerConfiguration()
-                .SetExceptionColor(ConsoleColor.Red)
+                //.SetExceptionHandler((ex) => System.Console.WriteLine("FEHLER!"))
                 .IgnoreLowerUpperCase(true)
                 .AddDependencyContainer(dependencycontainer));
             await clizer.Execute(args);

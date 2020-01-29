@@ -5,15 +5,20 @@ namespace Clizer.Models
 {
     public class ClizerConfiguration
     {
-        internal ConsoleColor ExceptionColor { get; private set; } = ConsoleColor.Red;
         internal bool IgnoreStringCase { get; private set; } = true;
         internal Container DependencyContainer { get; private set; }
-
-        public ClizerConfiguration SetExceptionColor(ConsoleColor color)
-        {
-            ExceptionColor = color;
-            return this;
-        }
+        internal Action<Exception> ExceptionHandler { get; private set; }
+            = (ex) =>
+            {
+                if (ex is ClizerException)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Handler: " + ex.Message);
+                    Console.ResetColor();
+                }
+                else
+                    throw ex;
+            };
 
         public ClizerConfiguration IgnoreLowerUpperCase(bool irgnore)
         {
@@ -24,6 +29,12 @@ namespace Clizer.Models
         public ClizerConfiguration AddDependencyContainer(Container container)
         {
             DependencyContainer = container;
+            return this;
+        }
+
+        public ClizerConfiguration SetExceptionHandler(Action<Exception> handler)
+        {
+            ExceptionHandler = handler;
             return this;
         }
     }

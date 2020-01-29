@@ -54,8 +54,65 @@ namespace Clizer
         /// </summary>
         public void Verify()
         {
-            // TODO: implement
+            // CliCommand:
+            var clicmds = GetCliCmdsFromAssembly();
+
+            // - min 1 command
+            if ((clicmds?.Count() ?? 0) == 0)
+                throw new ClizerException($"Clizer configuration invalid: At leaset one public class must be a cli command with {nameof(CliCmdAttribute)}!");
+
+            foreach (var clicmd in clicmds)
+            {
+                // Sub commands have attributes
+                if (clicmd.Attribute.SubCommands != null)
+                    foreach (var subcmd in clicmd.Attribute.SubCommands)
+                        if (subcmd.GetCustomAttribute<CliCmdAttribute>() == null)
+                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" subcommand is missing {nameof(CliCmdAttribute)}!");
+
+                // - 1 constructor
+                if ((clicmd.Class.GetConstructors()?.Count() ?? 2) > 1)
+                    throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands only allowd to have 1 constructor!");
+
+                // - 1 public Task Execute(CancellationToken cancellationToken) method
+                var execmethod = clicmd.Class.GetMethod("Execute");
+                if (execmethod == null || execmethod.GetParameters()?.Count() != 1 || execmethod.GetParameters().FirstOrDefault().ParameterType != typeof(CancellationToken))
+                    throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands must have a method \"Task Execute(CancellationToken cancellationToken)\"!");
+
+                // CliOption:
+                foreach (var cliprop in clicmd.Class.GetProperties().Where(x => x.GetCustomAttribute<CliOptionAttribute>() != null))
+                {
+                    // - type == bool
+                    if (cliprop.PropertyType != typeof(bool))
+                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" cli options must be type bool, actual: {cliprop.PropertyType.Name}!");
+
+                    var attr = cliprop.GetCustomAttribute<CliOptionAttribute>();
+
+                    // - name == -h || name == --help (override)
+                    if (attr.Name.ToLower() == "--help" || attr.Short == "-h")
+                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" help option will be automatically generated, to define help messages use properties in {nameof(CliOptionAttribute)} and {nameof(CliArgumentAttribute)}!");
+
+                    // - name == -ed || name == --editor (override)
+                    if (attr.Name.ToLower() == "--editor" || attr.Short == "-ed")
+                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" editor option will be automatically generated!");
+                }
+            }
+
+            // SimpleInjector
             _configuration.DependencyContainer?.Verify();
+        }
+
+        public void Dump()
+        {
+            foreach (var clicmd in GetCliCmdsFromAssembly())
+            {
+                Console.WriteLine(clicmd.Attribute.Name);
+                Console.WriteLine(string.Empty.PadLeft(clicmd.Attribute.Name.Length, '-'));
+                if (clicmd.Attribute.SubCommands?.Count() > 0) Console.WriteLine("Sub: " + string.Join(";", clicmd.Attribute.SubCommands.Select(x => x.GetCustomAttribute<CliCmdAttribute>().Name)));
+                foreach (var cliprop in clicmd.Class.GetProperties().Where(x => x.GetCustomAttribute<CliPropertyAttribute>() != null))
+                    Console.WriteLine(" - " + cliprop.GetCustomAttribute<CliPropertyAttribute>().Name);
+
+                Console.WriteLine(string.Empty);
+            }
         }
 
         /// <summary>
@@ -120,7 +177,7 @@ namespace Clizer
 
                     throw new ClizerException($"\"{clicmdtype.Name}\" needs an instance of \"{parameter.ParameterType}\" which is not registered!");
                 }
-                
+
                 parameters.Add(injection);
             }
 

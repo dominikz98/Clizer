@@ -1,5 +1,6 @@
 ﻿using Clizer.Attributes;
 using Clizer.Console.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 

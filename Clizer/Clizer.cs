@@ -25,13 +25,13 @@ namespace Clizer
                 var clicmds = GetCliCmdsFromAssembly();
 
                 // Get lowest matching command and 
-                var lastclicmd = GetLowestMatchingCommand(args, clicmds);
+                var (Cmd, Args) = GetLowestMatchingCommand(args, clicmds);
 
                 // Create command instance
-                var clicmdinstance = CreateCliCmdInstance(lastclicmd.Cmd.Class);
+                var clicmdinstance = CreateCliCmdInstance(Cmd.Class);
 
                 // Attach property values to command instance
-                AttachCliPropertyValues(clicmdinstance, lastclicmd.Args);
+                AttachCliPropertyValues(clicmdinstance, Args);
 
             }
             catch (ClizerException cex)
@@ -115,33 +115,35 @@ namespace Clizer
         /// </summary>
         private void AttachCliPropertyValues(object cmdInstance, string[] args)
         {
-            // TODO: Throw error if argument is not property of instance
-            foreach (var property in cmdInstance.GetType().GetProperties().Where(x => x.GetCustomAttribute<CliPropertyAttribute>() != null))
+            // Check args
+            var properties = cmdInstance.GetType().GetProperties().Where(x => x.GetCustomAttribute<CliPropertyAttribute>() != null);
+            foreach (var unknown in args.GetUnkownArguments(properties.Select(x => x.GetCustomAttribute<CliPropertyAttribute>()), _configuration.IgnoreStringCase))
+                throw new ClizerException($"Unknown argument/option \"{unknown}\"");
+
+            // Set property values
+            foreach (var property in properties)
             {
-                var attribute = property.GetCustomAttribute<CliPropertyAttribute>();
-                var value = args.Select(x => x.IgnoreCasing(_configuration.IgnoreStringCase)).FirstOrDefault(y => y == attribute.Name.IgnoreCasing(_configuration.IgnoreStringCase) || y == attribute.Short.IgnoreCasing(_configuration.IgnoreStringCase));
+                var optionatr = property.GetCustomAttribute<CliOptionAttribute>();
+                var argumentatr = property.GetCustomAttribute<CliArgumentAttribute>();
+                var arg = args.FindArg((optionatr?.Name ?? argumentatr.Name), (optionatr?.Short ?? argumentatr.Short), _configuration.IgnoreStringCase);
+                object value = null;
 
-                if (attribute.Required && value == null)
-                    throw new ClizerException($"Missing option \"{attribute.Name}\"!");
+                if (optionatr != null)
+                    value = !string.IsNullOrEmpty(arg);
 
-                if (value == null)
-                    continue;
-
-                object parsedvalue = null;
-                switch (attribute.Type)
+                else if (argumentatr != null)
                 {
-                    case CommandPropertyType.Option:
-                        parsedvalue = true;
-                        break;
-                    case CommandPropertyType.Argument:
-                        parsedvalue = Convert.ChangeType(value.Split(':')[1], property.PropertyType);
-                        break;
+                    if (argumentatr.Required && string.IsNullOrEmpty(arg))
+                        throw new ClizerException($"Missing value for required argument \"{argumentatr.Name}\"!");
+
+                    if (!arg.Contains(":") || (arg.Split(':')?[1].Length ?? 0) <= 0)
+                        throw new ClizerException($"Value of called argument \"{argumentatr.Name}\" cannot be empty!");
+
+                    value = Convert.ChangeType(arg.Split(':')?[1], property.PropertyType);
+                    throw new ClizerException($"Invalid value for argument (Expected: {property.PropertyType.Name}, value: {arg})");
                 }
 
-                if (parsedvalue == null)
-                    throw new ClizerException($"Invalid value for argument (Expected: {property.PropertyType.Name}, value: {value})");
-
-                property.SetValue(cmdInstance, parsedvalue);
+                property.SetValue(cmdInstance, value);
             }
         }
 

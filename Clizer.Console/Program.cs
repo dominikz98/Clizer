@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Clizer.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace Clizer.Console

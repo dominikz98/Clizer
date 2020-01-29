@@ -69,7 +69,7 @@ namespace Clizer
 
                 // - min 1 command
                 if ((clicmds?.Count() ?? 0) == 0)
-                    throw new ClizerException($"Clizer configuration invalid: At leaset one public class must be a cli command with an {nameof(CliCmdAttribute)}!");
+                    throw new ClizerException($"At leaset one public class must be a cli command with an {nameof(CliCmdAttribute)}!");
 
                 foreach (var clicmd in clicmds)
                 {
@@ -77,33 +77,33 @@ namespace Clizer
                     if (clicmd.Attribute.SubCommands != null)
                         foreach (var subcmd in clicmd.Attribute.SubCommands)
                             if (subcmd.GetCustomAttribute<CliCmdAttribute>() == null)
-                                throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" subcommand is missing {nameof(CliCmdAttribute)}!");
+                                throw new ClizerException($"\"{clicmd.Class.Name}\": Subcommand is missing {nameof(CliCmdAttribute)}!");
 
                     // - 1 constructor
                     if ((clicmd.Class.GetConstructors()?.Count() ?? 2) > 1)
-                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands only allowed to have 1 constructor!");
+                        throw new ClizerException($"\"{clicmd.Class.Name}\": Cli commands only allowed to have 1 constructor!");
 
                     // - 1 public Task Execute(CancellationToken cancellationToken) method
                     var execmethod = clicmd.Class.GetMethod("Execute");
                     if (execmethod == null || execmethod.GetParameters()?.Count() != 1 || execmethod.GetParameters().FirstOrDefault().ParameterType != typeof(CancellationToken))
-                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands must have a method \"Task Execute(CancellationToken cancellationToken)\"!");
+                        throw new ClizerException($"\"{clicmd.Class.Name}\": Cli commands must have a method \"Task Execute(CancellationToken cancellationToken)\"!");
 
                     // CliOption:
                     foreach (var cliprop in clicmd.Class.GetProperties().Where(x => x.GetCustomAttribute<CliOptionAttribute>() != null))
                     {
                         // - type == bool
                         if (cliprop.PropertyType != typeof(bool))
-                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" cli options must be type bool, actual: {cliprop.PropertyType.Name}!");
+                            throw new ClizerException($"\"{clicmd.Class.Name}.{cliprop.Name}\": Cli options must be type bool, actual: {cliprop.PropertyType.Name}!");
 
                         var attr = cliprop.GetCustomAttribute<CliOptionAttribute>();
 
                         // - name == -h || name == --help (override)
                         if (attr.Name.ToLower() == "--help" || attr.Short == "-h")
-                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" help option will be automatically generated, to define help messages use properties in {nameof(CliOptionAttribute)} and {nameof(CliArgumentAttribute)}!");
+                            throw new ClizerException($"\"{clicmd.Class.Name}.{cliprop.Name}\": Help option will be automatically generated, to define help messages use properties in {nameof(CliOptionAttribute)} and {nameof(CliArgumentAttribute)}!");
 
                         // - name == -ed || name == --editor (override)
                         if (attr.Name.ToLower() == "--editor" || attr.Short == "-ed")
-                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" editor option will be automatically generated!");
+                            throw new ClizerException($"\"{clicmd.Class.Name}.{cliprop.Name}\": Editor option will be automatically generated!");
                     }
                 }
 

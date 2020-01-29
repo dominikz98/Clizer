@@ -101,6 +101,9 @@ namespace Clizer
             _configuration.DependencyContainer?.Verify();
         }
 
+        /// <summary>
+        /// Lists all recognized commands, their subcommands and properties
+        /// </summary>
         public void Dump()
         {
             foreach (var clicmd in GetCliCmdsFromAssembly())

@@ -13,7 +13,7 @@ namespace Clizer.Models
                 if (ex is ClizerException)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Handler: " + ex.Message);
+                    Console.WriteLine(ex.Message);
                     Console.ResetColor();
                 }
                 else

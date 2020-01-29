@@ -15,6 +15,11 @@ namespace Clizer
     {
         private ClizerConfiguration _configuration;
 
+        public Clizer()
+        {
+            _configuration = new ClizerConfiguration();
+        }
+
         /// <summary>
         /// Entry point.
         /// </summary>
@@ -40,7 +45,6 @@ namespace Clizer
 
                 // Execute 'Execute' method from command instance
                 await ExecuteCliCommandMethod(clicmdinstance, cancellationToken);
-
             }
             catch (Exception ex)
             {
@@ -58,51 +62,58 @@ namespace Clizer
         /// </summary>
         public void Verify()
         {
-            // CliCommand:
-            var clicmds = GetCliCmdsFromAssembly();
-
-            // - min 1 command
-            if ((clicmds?.Count() ?? 0) == 0)
-                throw new ClizerException($"Clizer configuration invalid: At leaset one public class must be a cli command with an {nameof(CliCmdAttribute)}!");
-
-            foreach (var clicmd in clicmds)
+            try
             {
-                // Sub commands have attributes
-                if (clicmd.Attribute.SubCommands != null)
-                    foreach (var subcmd in clicmd.Attribute.SubCommands)
-                        if (subcmd.GetCustomAttribute<CliCmdAttribute>() == null)
-                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" subcommand is missing {nameof(CliCmdAttribute)}!");
+                // CliCommand:
+                var clicmds = GetCliCmdsFromAssembly();
 
-                // - 1 constructor
-                if ((clicmd.Class.GetConstructors()?.Count() ?? 2) > 1)
-                    throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands only allowed to have 1 constructor!");
+                // - min 1 command
+                if ((clicmds?.Count() ?? 0) == 0)
+                    throw new ClizerException($"Clizer configuration invalid: At leaset one public class must be a cli command with an {nameof(CliCmdAttribute)}!");
 
-                // - 1 public Task Execute(CancellationToken cancellationToken) method
-                var execmethod = clicmd.Class.GetMethod("Execute");
-                if (execmethod == null || execmethod.GetParameters()?.Count() != 1 || execmethod.GetParameters().FirstOrDefault().ParameterType != typeof(CancellationToken))
-                    throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands must have a method \"Task Execute(CancellationToken cancellationToken)\"!");
-
-                // CliOption:
-                foreach (var cliprop in clicmd.Class.GetProperties().Where(x => x.GetCustomAttribute<CliOptionAttribute>() != null))
+                foreach (var clicmd in clicmds)
                 {
-                    // - type == bool
-                    if (cliprop.PropertyType != typeof(bool))
-                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" cli options must be type bool, actual: {cliprop.PropertyType.Name}!");
+                    // Sub commands have attributes
+                    if (clicmd.Attribute.SubCommands != null)
+                        foreach (var subcmd in clicmd.Attribute.SubCommands)
+                            if (subcmd.GetCustomAttribute<CliCmdAttribute>() == null)
+                                throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" subcommand is missing {nameof(CliCmdAttribute)}!");
 
-                    var attr = cliprop.GetCustomAttribute<CliOptionAttribute>();
+                    // - 1 constructor
+                    if ((clicmd.Class.GetConstructors()?.Count() ?? 2) > 1)
+                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands only allowed to have 1 constructor!");
 
-                    // - name == -h || name == --help (override)
-                    if (attr.Name.ToLower() == "--help" || attr.Short == "-h")
-                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" help option will be automatically generated, to define help messages use properties in {nameof(CliOptionAttribute)} and {nameof(CliArgumentAttribute)}!");
+                    // - 1 public Task Execute(CancellationToken cancellationToken) method
+                    var execmethod = clicmd.Class.GetMethod("Execute");
+                    if (execmethod == null || execmethod.GetParameters()?.Count() != 1 || execmethod.GetParameters().FirstOrDefault().ParameterType != typeof(CancellationToken))
+                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands must have a method \"Task Execute(CancellationToken cancellationToken)\"!");
 
-                    // - name == -ed || name == --editor (override)
-                    if (attr.Name.ToLower() == "--editor" || attr.Short == "-ed")
-                        throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" editor option will be automatically generated!");
+                    // CliOption:
+                    foreach (var cliprop in clicmd.Class.GetProperties().Where(x => x.GetCustomAttribute<CliOptionAttribute>() != null))
+                    {
+                        // - type == bool
+                        if (cliprop.PropertyType != typeof(bool))
+                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" cli options must be type bool, actual: {cliprop.PropertyType.Name}!");
+
+                        var attr = cliprop.GetCustomAttribute<CliOptionAttribute>();
+
+                        // - name == -h || name == --help (override)
+                        if (attr.Name.ToLower() == "--help" || attr.Short == "-h")
+                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" help option will be automatically generated, to define help messages use properties in {nameof(CliOptionAttribute)} and {nameof(CliArgumentAttribute)}!");
+
+                        // - name == -ed || name == --editor (override)
+                        if (attr.Name.ToLower() == "--editor" || attr.Short == "-ed")
+                            throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}.{cliprop.Name}\" editor option will be automatically generated!");
+                    }
                 }
-            }
 
-            // SimpleInjector
-            _configuration.DependencyContainer?.Verify();
+                // SimpleInjector
+                _configuration.DependencyContainer?.Verify();
+            }
+            catch (Exception ex)
+            {
+                _configuration.ExceptionHandler(ex);
+            }
         }
 
         /// <summary>

@@ -1,8 +1,0 @@
-C:\Users\Dominik\source\repos\Clizer\Clizer\bin\Debug\netstandard2.0\Clizer.deps.json
-C:\Users\Dominik\source\repos\Clizer\Clizer\bin\Debug\netstandard2.0\Clizer.dll
-C:\Users\Dominik\source\repos\Clizer\Clizer\bin\Debug\netstandard2.0\Clizer.pdb
-C:\Users\Dominik\source\repos\Clizer\Clizer\obj\Debug\netstandard2.0\Clizer.AssemblyInfoInputs.cache
-C:\Users\Dominik\source\repos\Clizer\Clizer\obj\Debug\netstandard2.0\Clizer.AssemblyInfo.cs
-C:\Users\Dominik\source\repos\Clizer\Clizer\obj\Debug\netstandard2.0\Clizer.dll
-C:\Users\Dominik\source\repos\Clizer\Clizer\obj\Debug\netstandard2.0\Clizer.pdb
-C:\Users\Dominik\source\repos\Clizer\Clizer\obj\Debug\netstandard2.0\Clizer.csprojAssemblyReference.cache

@@ -28,6 +28,10 @@ namespace Clizer
                 // Get lowest matching command and 
                 var (Cmd, Args) = GetLowestMatchingCommand(args, clicmds);
 
+                // Show help information text in case of --help, -h
+                if (CheckIfHelpIsRequired(Cmd, Args))
+                    return;
+
                 // Create command instance
                 var clicmdinstance = CreateCliCmdInstance(Cmd.Class);
 
@@ -59,7 +63,7 @@ namespace Clizer
 
             // - min 1 command
             if ((clicmds?.Count() ?? 0) == 0)
-                throw new ClizerException($"Clizer configuration invalid: At leaset one public class must be a cli command with {nameof(CliCmdAttribute)}!");
+                throw new ClizerException($"Clizer configuration invalid: At leaset one public class must be a cli command with an {nameof(CliCmdAttribute)}!");
 
             foreach (var clicmd in clicmds)
             {
@@ -71,7 +75,7 @@ namespace Clizer
 
                 // - 1 constructor
                 if ((clicmd.Class.GetConstructors()?.Count() ?? 2) > 1)
-                    throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands only allowd to have 1 constructor!");
+                    throw new ClizerException($"Clizer configuration invalid: \"{clicmd.Class.Name}\" cli commands only allowed to have 1 constructor!");
 
                 // - 1 public Task Execute(CancellationToken cancellationToken) method
                 var execmethod = clicmd.Class.GetMethod("Execute");
@@ -156,6 +160,27 @@ namespace Clizer
                 throw new ClizerException($"Command \"{args[0].ToLower()}\" not registered!");
 
             return (Cmd: command, Args: args.ToList().GetRange(level, args.Length - level).ToArray());
+        }
+
+        /// <summary>
+        /// Generates and displays help text if required.
+        /// </summary>
+        private bool CheckIfHelpIsRequired(CliCmd cmd, string[] args)
+        {
+            if (args.Select(x => x.IgnoreCasing(_configuration.IgnoreStringCase)).FirstOrDefault(y => y == "--help" || y == "-h") == null)
+                return false;
+
+            // Write command help text
+            var cmdhelp = $"{cmd.Attribute.Name}{(string.IsNullOrEmpty(cmd.Attribute.Help) ? string.Empty : ": " + cmd.Attribute.Help)}";
+            Console.WriteLine(cmdhelp);
+            Console.WriteLine(string.Empty.PadLeft(cmdhelp.Length, '-'));
+
+            // Write properties help text
+            var props = cmd.Class.GetProperties().Where(x => x.GetCustomAttribute<CliPropertyAttribute>() != null).Select(y => y.GetCustomAttribute<CliPropertyAttribute>());
+            foreach (var prop in props)
+                Console.WriteLine($"{prop.Name}: {prop.Help}");
+
+            return true;
         }
 
         /// <summary>

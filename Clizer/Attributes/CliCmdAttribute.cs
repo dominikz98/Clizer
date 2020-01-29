@@ -6,7 +6,7 @@ namespace Clizer.Attributes
     public class CliCmdAttribute : Attribute
     {
         public string Name { get; }
-        public bool DisableHelp { get; set; } = false;
+        public string Help { get; set; }
         public Type[] SubCommands { get; set; }
 
         public CliCmdAttribute(string name)

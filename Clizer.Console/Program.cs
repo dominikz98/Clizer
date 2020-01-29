@@ -1,6 +1,5 @@
 ﻿using Clizer.Console.Services;
 using Clizer.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace Clizer.Console
@@ -18,7 +17,6 @@ namespace Clizer.Console
                 .IgnoreLowerUpperCase(true)
                 .AddDependencyContainer(dependencycontainer));
             clizer.Verify();
-            clizer.Dump();
             await clizer.Execute(args);
         }
     }

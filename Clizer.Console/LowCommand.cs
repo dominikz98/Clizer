@@ -1,12 +1,11 @@
 ﻿using Clizer.Attributes;
 using Clizer.Console.Services;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Clizer.Console
 {
-    [CliCmd("low", typeof(LowerCommand))]
+    [CliCmd("low", typeof(LowerCommand), Help = "First command to test clizer.")]
     public class LowCommand
     {
         [CliOption("--force", Help = "Execute action forced.", Short = "-f")]

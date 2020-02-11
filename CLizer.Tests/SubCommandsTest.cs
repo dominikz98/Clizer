@@ -25,7 +25,7 @@ namespace CLizer.Tests
                                 .Register<SubCommandsTest, ParentCmd>("parent")
                                     .Register<ParentCmd, ChildCmd>("child"));
             var result = await clizer.Execute(args.ToArray(), default);
-            Assert.True(result == 999);
+            Assert.Equal(999, result);
         }
 
         [SuppressMessage("Usage", "xUnit1013:Public method should be marked as test", Justification = "<Pending>")]

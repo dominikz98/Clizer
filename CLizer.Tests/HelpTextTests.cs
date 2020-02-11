@@ -1,4 +1,4 @@
-using Clizer.Contracts;
+﻿using Clizer.Contracts;
 using Clizer.Models;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -8,26 +8,28 @@ using Xunit;
 
 namespace CLizer.Tests
 {
-    public class ArgumentAssignmentTest : ICliCmd
+    public class HelpTextTests : ICliCmd
     {
+        public int First { get; set; }
+        public int Second { get; set; }
+        public bool Force { get; set; }
 
         [Fact]
         public async Task Run()
         {
             var args = new List<string>()
             {
-                "test"
+                "help"
             };
 
             var clizer = new Clizer.Clizer();
-            clizer.Configure().AddCommandContainer(new CommandContainer(typeof(ArgumentAssignmentTest)));
+            clizer.Configure().AddCommandContainer(new CommandContainer(typeof(HelpTextTests), "Simple helptext test!"));
             var result = await clizer.Execute(args.ToArray(), default);
-            Assert.Equal((int)ClizerExitCodes.ERROR, result);
+            Assert.NotEqual(999, result);
         }
 
         [SuppressMessage("Usage", "xUnit1013:Public method should be marked as test", Justification = "<Pending>")]
         public async Task<int> Execute(CancellationToken cancellationToken)
-            => await Task.FromResult((int)ClizerExitCodes.SUCCESS);
+            => await Task.FromResult(999);
     }
 }
-

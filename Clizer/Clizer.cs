@@ -1,9 +1,11 @@
-﻿using Clizer.Contracts;
+﻿using Clizer.Attributes;
+using Clizer.Contracts;
 using Clizer.Models;
 using Clizer.Utils;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,6 +28,9 @@ namespace Clizer
             {
                 RegisterCommandsAsDependencies();
                 var parameter = GetCalledCommand(args);
+                if (parameter.Contains("help"))
+                    return ShowHelptext();
+
                 AttachAndValidateArguments(parameter);
                 return await ExecuteCommand(cancellationToken);
             }
@@ -45,6 +50,9 @@ namespace Clizer
         {
             if (_configuration._CommandContainer?._RootCommand == null)
                 throw new ClizerException($"Root command must be registered! (Call {nameof(ClizerConfiguration.AddCommandContainer)} in configuration)");
+
+            if (_configuration._CommandContainer._RootCommand.CmdType.GetInterface(typeof(ICliCmd).Name) == null)
+                throw new ClizerException($"Class '{_configuration._CommandContainer?._RootCommand.CmdType.Name}' needs to implement '{typeof(ICliCmd).Name}'!");
 
             RegisterCommandAsDependencies(_configuration._CommandContainer._RootCommand);
         }
@@ -78,7 +86,7 @@ namespace Clizer
             {
                 var property = cmdinstance.GetType().GetProperties().FirstOrDefault(x => x.Name.IgnoreCase(true) == arg.Split(':')[0].IgnoreCase(true));
                 if (property == null)
-                    throw new ClizerException($"{arg} is not a known property of {_calledCommand.Name}!");
+                    throw new ClizerException($"{arg} is not a known property of {(!string.IsNullOrEmpty(_calledCommand.Name) ? _calledCommand.Name : _calledCommand.CmdType.Name)}!");
 
                 // Argument
                 if (arg.Contains(":"))
@@ -103,12 +111,45 @@ namespace Clizer
             }
 
             // Validate
-            foreach (var property in cmdinstance.GetType().GetProperties())
+            foreach (var property in cmdinstance.GetType().GetProperties().Where(x => x.GetCustomAttribute<CliIgnoreAttribute>() == null))
                 foreach (var validateattr in property.GetCustomAttributes(false).Where(x => x is ValidationAttribute))
                     ((ValidationAttribute)validateattr).Validate(property.GetValue(cmdinstance), property.Name);
         }
 
         private async Task<int> ExecuteCommand(CancellationToken cancellationToken)
             => await ((ICliCmd)_configuration._DependencyContainer.GetInstance(_calledCommand.CmdType)).Execute(cancellationToken);
+
+        private int ShowHelptext()
+        {
+            var cmdinstance = _configuration._DependencyContainer.GetInstance(_calledCommand.CmdType);
+
+            Console.WriteLine(!string.IsNullOrEmpty(_calledCommand.Name) ? _calledCommand.Name : _calledCommand.CmdType.Name + (!string.IsNullOrEmpty(_calledCommand.Help) ? ": " + _calledCommand.Help : string.Empty));
+            Console.WriteLine(string.Empty);
+
+            var children = _calledCommand.Childrens;
+            if (children.Any())
+            {
+                Console.WriteLine("[Commands]");
+                Console.WriteLine(string.Join(Environment.NewLine, children.Select(x => $" {x.Name}: {(x.Help.Length > 0 ? ": " : string.Empty)}{x.Help}").ToArray()));
+                Console.WriteLine(string.Empty);
+            }
+
+            var arguments = _calledCommand.CmdType.GetArguments();
+            if (arguments.Any())
+            {
+                Console.WriteLine("[Arguments]");
+                Console.WriteLine(string.Join(Environment.NewLine, arguments.Select(x => $" { (x.Name + (x.GetCustomAttribute<CliHelpAttribute>() != null ? ": " : string.Empty))}{x.GetCustomAttribute<CliHelpAttribute>()?._Helptext}").ToArray()));
+                Console.WriteLine(string.Empty);
+            }
+
+            var options = _calledCommand.CmdType.GetOptions();
+            if (options.Any())
+            {
+                Console.WriteLine("[Options]");
+                Console.WriteLine(string.Join(Environment.NewLine, options.Select(x => $" {(x.Name + (x.GetCustomAttribute<CliHelpAttribute>() != null ? ": " : string.Empty))}{x.GetCustomAttribute<CliHelpAttribute>()?._Helptext}").ToArray()));
+            }
+
+            return (int)ClizerExitCodes.SUCCESS;
+        }
     }
 }

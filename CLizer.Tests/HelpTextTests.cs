@@ -26,6 +26,7 @@ namespace CLizer.Tests
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(HelpTextTests), "Simple helptext test!"));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.NotEqual(999, result);
+            Assert.NotEqual((int)ClizerExitCodes.ERROR, result);
         }
 
         [SuppressMessage("Usage", "xUnit1013:Public method should be marked as test", Justification = "<Pending>")]

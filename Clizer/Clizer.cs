@@ -36,7 +36,7 @@ namespace Clizer
             }
             catch (Exception ex)
             {
-                _configuration._ExceptionHandler(ex);
+                _configuration.ExceptionHandler(ex);
                 return (int)ClizerExitCodes.ERROR;
             }
         }
@@ -48,18 +48,18 @@ namespace Clizer
 
         private void RegisterCommandsAsDependencies()
         {
-            if (_configuration._CommandContainer?._RootCommand == null)
+            if (_configuration.CommandContainer?._RootCommand == null)
                 throw new ClizerException($"Root command must be registered! (Call {nameof(ClizerConfiguration.AddCommandContainer)} in configuration)");
 
-            if (_configuration._CommandContainer._RootCommand.CmdType.GetInterface(typeof(ICliCmd).Name) == null)
-                throw new ClizerException($"Class '{_configuration._CommandContainer?._RootCommand.CmdType.Name}' needs to implement '{typeof(ICliCmd).Name}'!");
+            if (_configuration.CommandContainer._RootCommand.CmdType.GetInterface(typeof(ICliCmd).Name) == null)
+                throw new ClizerException($"Class '{_configuration.CommandContainer?._RootCommand.CmdType.Name}' needs to implement '{typeof(ICliCmd).Name}'!");
 
-            RegisterCommandAsDependencies(_configuration._CommandContainer._RootCommand);
+            RegisterCommandAsDependencies(_configuration.CommandContainer._RootCommand);
         }
 
         private void RegisterCommandAsDependencies(CommandRegistration command)
         {
-            _configuration._DependencyContainer.RegisterSingleton(command.CmdType, command.CmdType);
+            _configuration.DependencyContainer.RegisterSingleton(command.CmdType, command.CmdType);
             if (command.Childrens.Any())
                 foreach (var children in command.Childrens)
                     RegisterCommandAsDependencies(children);
@@ -67,7 +67,7 @@ namespace Clizer
 
         private string[] GetCalledCommand(string[] args)
         {
-            _calledCommand = _configuration._CommandContainer._RootCommand;
+            _calledCommand = _configuration.CommandContainer._RootCommand;
             for (int i = 0; i < args.Length; i++)
             {
                 var nextCommand = _calledCommand.Childrens?.FirstOrDefault(x => x.Name == args[i]);
@@ -80,7 +80,7 @@ namespace Clizer
 
         private void AttachAndValidateArguments(string[] args)
         {
-            var cmdinstance = _configuration._DependencyContainer.GetInstance(_calledCommand.CmdType);
+            var cmdinstance = _configuration.DependencyContainer.GetInstance(_calledCommand.CmdType);
 
             foreach (var arg in args)
             {
@@ -117,20 +117,20 @@ namespace Clizer
         }
 
         private async Task<int> ExecuteCommand(CancellationToken cancellationToken)
-            => await ((ICliCmd)_configuration._DependencyContainer.GetInstance(_calledCommand.CmdType)).Execute(cancellationToken);
+            => await ((ICliCmd)_configuration.DependencyContainer.GetInstance(_calledCommand.CmdType)).Execute(cancellationToken);
 
         private int ShowHelptext()
         {
-            var cmdinstance = _configuration._DependencyContainer.GetInstance(_calledCommand.CmdType);
+            var cmdinstance = _configuration.DependencyContainer.GetInstance(_calledCommand.CmdType);
 
-            Console.WriteLine(!string.IsNullOrEmpty(_calledCommand.Name) ? _calledCommand.Name : _calledCommand.CmdType.Name + (!string.IsNullOrEmpty(_calledCommand.Help) ? ": " + _calledCommand.Help : string.Empty));
+            Console.WriteLine(_calledCommand.Name + (!string.IsNullOrEmpty(_calledCommand.CmdType.GetHelptext()) ? ": " + _calledCommand.CmdType.GetHelptext() : string.Empty));
             Console.WriteLine(string.Empty);
 
             var children = _calledCommand.Childrens;
             if (children.Any())
             {
                 Console.WriteLine("[Commands]");
-                Console.WriteLine(string.Join(Environment.NewLine, children.Select(x => $" {x.Name}: {(x.Help.Length > 0 ? ": " : string.Empty)}{x.Help}").ToArray()));
+                Console.WriteLine(string.Join(Environment.NewLine, children.Select(x => $" {x.Name}: {(!string.IsNullOrEmpty(x.CmdType.GetHelptext()) ? ": " + x.CmdType.GetHelptext() : string.Empty)}").ToArray()));
                 Console.WriteLine(string.Empty);
             }
 
@@ -138,7 +138,7 @@ namespace Clizer
             if (arguments.Any())
             {
                 Console.WriteLine("[Arguments]");
-                Console.WriteLine(string.Join(Environment.NewLine, arguments.Select(x => $" { (x.Name + (x.GetCustomAttribute<CliHelpAttribute>() != null ? ": " : string.Empty))}{x.GetCustomAttribute<CliHelpAttribute>()?._Helptext}").ToArray()));
+                Console.WriteLine(string.Join(Environment.NewLine, arguments.Select(x => $" { (x.Name + (!string.IsNullOrEmpty(x.GetHelptext()) ? ": " + x.GetHelptext() : string.Empty))}").ToArray()));
                 Console.WriteLine(string.Empty);
             }
 
@@ -146,7 +146,7 @@ namespace Clizer
             if (options.Any())
             {
                 Console.WriteLine("[Options]");
-                Console.WriteLine(string.Join(Environment.NewLine, options.Select(x => $" {(x.Name + (x.GetCustomAttribute<CliHelpAttribute>() != null ? ": " : string.Empty))}{x.GetCustomAttribute<CliHelpAttribute>()?._Helptext}").ToArray()));
+                Console.WriteLine(string.Join(Environment.NewLine, options.Select(x => $" {(x.Name + (!string.IsNullOrEmpty(x.GetHelptext()) ? ": " + x.GetHelptext() : string.Empty))}").ToArray()));
             }
 
             return (int)ClizerExitCodes.SUCCESS;

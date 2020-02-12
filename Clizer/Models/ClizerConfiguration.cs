@@ -7,31 +7,31 @@ namespace Clizer.Models
 {
     public class ClizerConfiguration
     {
-        internal Container _DependencyContainer { get; private set; } = new Container();
-        internal Action<Exception> _ExceptionHandler { get; private set; }
+        internal Container DependencyContainer { get; private set; } = new Container();
+        internal Action<Exception> ExceptionHandler { get; private set; }
             = (ex) =>
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.Message);
                 Console.ResetColor();
             };
-        internal CommandContainer _CommandContainer { get; private set; }
+        internal CommandContainer CommandContainer { get; private set; }
 
         public ClizerConfiguration AddDependencyContainer(Container dependecycontainer)
         {
-            _DependencyContainer = dependecycontainer;
+            DependencyContainer = dependecycontainer;
             return this;
         }
 
         public ClizerConfiguration SetExceptionHandler(Action<Exception> handler)
         {
-            _ExceptionHandler = handler;
+            ExceptionHandler = handler;
             return this;
         }
 
         public ClizerConfiguration AddCommandContainer(CommandContainer commandContainer)
         {
-            _CommandContainer = commandContainer;
+            CommandContainer = commandContainer;
             return this;
         }
     }
@@ -62,17 +62,13 @@ namespace Clizer.Models
     {
         public Type CmdType { get; private set; }
         public string Name { get; private set; }
-        public string Help { get; private set; }
         public List<CommandRegistration> Childrens { get; private set; } = new List<CommandRegistration>();
 
         public CommandRegistration(Type type, string name, string helptext)
         {
             CmdType = type;
             Name = name;
-            Help = helptext;
         }
-
-        public CommandRegistration(Type type, string name) : this(type, name, string.Empty) { }
 
         public void AddChild(CommandRegistration child)
             => Childrens.Add(child);

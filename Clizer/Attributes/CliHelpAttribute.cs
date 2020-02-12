@@ -2,14 +2,14 @@
 
 namespace Clizer.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class)]
     public class CliHelpAttribute : Attribute
     {
-        internal string _Helptext { get; set; }
+        internal string Helptext { get; set; }
 
         public CliHelpAttribute(string helptext)
         {
-            _Helptext = helptext;
+            Helptext = helptext;
         }
     }
 }

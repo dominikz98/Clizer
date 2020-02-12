@@ -59,7 +59,7 @@ namespace Clizer
 
         private void RegisterCommandAsDependencies(CommandRegistration command)
         {
-            _configuration._DependencyContainer.Register(command.CmdType);
+            _configuration._DependencyContainer.RegisterSingleton(command.CmdType, command.CmdType);
             if (command.Childrens.Any())
                 foreach (var children in command.Childrens)
                     RegisterCommandAsDependencies(children);

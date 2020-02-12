@@ -1,3 +1,4 @@
+using Clizer.Attributes;
 using Clizer.Contracts;
 using Clizer.Models;
 using System.Collections.Generic;
@@ -14,7 +15,8 @@ namespace CLizer.Tests
         [Range(1, 100)]
         public int Number { get; set; }
         public bool Force { get; set; }
-
+        [CliIgnore]
+        public bool Ignore { get; set; }
 
         [Fact]
         public async Task TestWrongProperty()
@@ -43,6 +45,20 @@ namespace CLizer.Tests
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
+        }
+
+        [Fact]
+        public async Task TestIgnoredProperty()
+        {
+            var args = new List<string>()
+            {
+                "ignore"
+            };
+
+            var clizer = new Clizer.Clizer();
+            clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
+            var result = await clizer.Execute(args.ToArray(), default);
+            Assert.Equal((int)ClizerExitCodes.ERROR, result);
         }
 
         [SuppressMessage("Usage", "xUnit1013:Public method should be marked as test", Justification = "<Pending>")]

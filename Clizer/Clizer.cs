@@ -130,7 +130,7 @@ namespace Clizer
             if (children.Any())
             {
                 Console.WriteLine("[Commands]");
-                Console.WriteLine(string.Join(Environment.NewLine, children.Select(x => $" {x.Name}: {(!string.IsNullOrEmpty(x.CmdType.GetHelptext()) ? ": " + x.CmdType.GetHelptext() : string.Empty)}").ToArray()));
+                Console.WriteLine(string.Join(Environment.NewLine, children.Select(x => $" {x.Name + (!string.IsNullOrEmpty(x.CmdType.GetHelptext()) ? ": " + x.CmdType.GetHelptext() : string.Empty)}").ToArray()));
                 Console.WriteLine(string.Empty);
             }
 

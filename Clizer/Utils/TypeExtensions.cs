@@ -8,11 +8,14 @@ namespace Clizer.Utils
 {
     public static class TypeExtensions
     {
-        public static List<PropertyInfo> GetArguments(this Type type)
-            => type.GetProperties().Where(x => x.PropertyType != typeof(bool) && x.GetCustomAttribute<CliIgnoreAttribute>() == null)?.ToList();
+        public static List<CliIArgAttribute> GetArguments(this Type type)
+            => type.GetProperties().Where(x => x.PropertyType != typeof(bool) && x.GetCustomAttribute<CliIArgAttribute>() != null)?.Select(x => x.GetCustomAttribute<CliIArgAttribute>())?.ToList();
 
-        public static List<PropertyInfo> GetOptions(this Type type)
-            => type.GetProperties().Where(x => x.PropertyType == typeof(bool) && x.GetCustomAttribute<CliIgnoreAttribute>() == null)?.ToList();
+        public static List<CliIArgAttribute> GetOptions(this Type type)
+            => type.GetProperties().Where(x => x.PropertyType == typeof(bool) && x.GetCustomAttribute<CliIArgAttribute>() != null)?.Select(x => x.GetCustomAttribute<CliIArgAttribute>())?.ToList();
+
+        public static List<PropertyInfo> GetCliProperties(this Type type)
+            => type.GetProperties().Where(x => x.GetCustomAttribute<CliIArgAttribute>() != null)?.ToList();
 
         public static string GetHelptext(this Type type)
             => type.GetCustomAttribute<CliHelpAttribute>()?.Helptext;

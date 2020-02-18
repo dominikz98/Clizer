@@ -1,3 +1,4 @@
+using Clizer.Attributes;
 using Clizer.Contracts;
 using Clizer.Models;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace CLizer.Tests
             var args = new List<string>()
             {
                 "add",
-                "second:0"
+                "--second:0"
             };
 
             var clizer = new Clizer.Clizer();
@@ -36,7 +37,9 @@ namespace CLizer.Tests
     public class AddCmd : ICliCmd
     {
         [Range(1, 100)]
+        [CliIArg("first")]
         public int First { get; set; }
+        [CliIArg("second")]
         public int Second { get; set; }
 
         public async Task<int> Execute(CancellationToken cancellationToken)

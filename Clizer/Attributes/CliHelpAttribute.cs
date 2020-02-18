@@ -2,7 +2,7 @@
 
 namespace Clizer.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class CliHelpAttribute : Attribute
     {
         internal string Helptext { get; set; }

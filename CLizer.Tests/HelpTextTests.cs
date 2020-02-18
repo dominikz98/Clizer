@@ -10,16 +10,15 @@ namespace CLizer.Tests
 {
     public class HelpTextTests : ICliCmd
     {
-        public int First { get; set; }
-        public int Second { get; set; }
-        public bool Force { get; set; }
-
-        [Fact]
-        public async Task Run()
+        [Theory]
+        [InlineData("help")]
+        [InlineData("--help")]
+        [InlineData("-h")]
+        public async Task TestHelp(string arg)
         {
             var args = new List<string>()
             {
-                "help"
+                arg
             };
 
             var clizer = new Clizer.Clizer();
@@ -32,5 +31,7 @@ namespace CLizer.Tests
         [SuppressMessage("Usage", "xUnit1013:Public method should be marked as test", Justification = "<Pending>")]
         public async Task<int> Execute(CancellationToken cancellationToken)
             => await Task.FromResult(999);
+
+
     }
 }

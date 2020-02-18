@@ -12,10 +12,12 @@ namespace CLizer.Tests
 {
     public class PropertyBindingTests : ICliCmd
     {
+        [CliIArg("number")]
         [Range(1, 100)]
         public int Number { get; set; }
+        [CliIArg("force")]
         public bool Force { get; set; }
-        [CliIgnore]
+
         public bool Ignore { get; set; }
 
         [Fact]
@@ -37,8 +39,8 @@ namespace CLizer.Tests
         {
             var args = new List<string>()
             {
-                "number:1",
-                "force"
+                "--number:1",
+                "--force"
             };
 
             var clizer = new Clizer.Clizer();

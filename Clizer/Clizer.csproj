@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Dominik Zettl</Authors>
-    <Company />
+    <RepositoryUrl>https://github.com/dominikz98/Clizer.git</RepositoryUrl>
+    <PackageTags>Clizer standard</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

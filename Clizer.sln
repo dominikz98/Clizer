@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clizer", "Clizer\Clizer.csproj", "{64D52ABE-7E90-483A-9FFF-A6F34B006847}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLizer.Tests", "CLizer.Tests\CLizer.Tests.csproj", "{38F70DB0-7538-4E05-B399-EE6A56849954}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clizer.Tests", "Clizer.Tests\Clizer.Tests.csproj", "{38F70DB0-7538-4E05-B399-EE6A56849954}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

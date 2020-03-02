@@ -17,6 +17,7 @@ public class Program : ICliCmd
 
         var result = await clizer.Execute(args.ToArray(), default);
     }
+    
     public Task<int> Execute(CancellationToken cancellationToken)
         => Task.FromResult((int)ClizerExitCodes.SUCCESS);
 }

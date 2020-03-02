@@ -4,7 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Dominik Zettl</Authors>
     <RepositoryUrl>https://github.com/dominikz98/Clizer.git</RepositoryUrl>
-    <PackageTags>Clizer standard</PackageTags>
+    <PackageTags>Clizer standard command line package lib core cmd cli</PackageTags>
+    <Company />
+    <Description>Clizer easily allows you to set up a cli accessible project to call your services and endpoints.
+The package also contains usefull utils like auto id mapping, or user configurable setting files.</Description>
   </PropertyGroup>
 
   <ItemGroup>

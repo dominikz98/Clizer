@@ -24,9 +24,15 @@ public class SubCommand : ICliCmd
     [MinLength(2)]
     [CliIArg("path", "p", "Pass io path.")]
     public string Path { get; set; }
+
+    private readonly ITestService _testService;
+
+    public SubCommand(ITestService testService)
+        => _testService = testService;
+
     public Task<int> Execute(CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Path: {Path}");
+        _testService.Print(Path);
         return Task.FromResult((int)ClizerExitCodes.SUCCESS);
     }
 }

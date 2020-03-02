@@ -9,10 +9,12 @@ public class Program : ICliCmd
         var clizer = new Clizer.Clizer();
         var dependencies = new Container();
         dependencies.Register<ITestService, TestService>();
+
         clizer.Configure()
             .AddCommandContainer(new CommandContainer(typeof(Program), "Simple helptext!")
                 .Register<Program, SubCommand>("sub"))
             .AddDependencyContainer(dependencies);
+
         var result = await clizer.Execute(args.ToArray(), default);
     }
     public Task<int> Execute(CancellationToken cancellationToken)
@@ -36,4 +38,9 @@ public class SubCommand : ICliCmd
         return Task.FromResult((int)ClizerExitCodes.SUCCESS);
     }
 }
+```
+
+How to call subcommand:
+```bat
+Call: > assembly sub --path:"C:\\users"
 ```

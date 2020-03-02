@@ -108,13 +108,14 @@ namespace Clizer
                 // Argument
                 if (arg.Contains(":"))
                 {
-                    if (arg.Split(':').Length != 2)
+                    var firstindex = arg.IndexOf(':') + 1;
+                    if (arg.Length - firstindex <= 0)
                         throw new ClizerException($"{arg} has an invalid argument format!");
 
-                    var argvalue = arg.Split(':')[1];
+                    var argvalue = arg.Substring(firstindex, arg.Length - firstindex);
                     try
                     {
-                        property.SetValue(cmdinstance, Convert.ChangeType(arg.Split(':')?[1], property.PropertyType));
+                        property.SetValue(cmdinstance, Convert.ChangeType(argvalue, property.PropertyType));
                         continue;
                     }
                     catch (Exception)

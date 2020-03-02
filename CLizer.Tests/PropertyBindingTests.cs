@@ -18,6 +18,8 @@ namespace CLizer.Tests
         [CliIArg("force")]
         public bool Force { get; set; }
 
+        [CliIArg("path")]
+        public string Path { get; set; }
         public bool Ignore { get; set; }
 
         [Fact]
@@ -61,6 +63,22 @@ namespace CLizer.Tests
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.Equal((int)ClizerExitCodes.ERROR, result);
+        }
+
+        [Fact]
+        public async Task TestPathProperty()
+        {
+            var args = new List<string>()
+            {
+                "--number:1",
+                "--force",
+                @"--path:E:\Bibliotheken\Projects"
+            };
+
+            var clizer = new Clizer.Clizer();
+            clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
+            var result = await clizer.Execute(args.ToArray(), default);
+            Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
         }
 
         [SuppressMessage("Usage", "xUnit1013:Public method should be marked as test", Justification = "<Pending>")]

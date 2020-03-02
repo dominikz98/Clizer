@@ -20,6 +20,7 @@ public class Program : ICliCmd
     public Task<int> Execute(CancellationToken cancellationToken)
         => Task.FromResult((int)ClizerExitCodes.SUCCESS);
 }
+
 public class SubCommand : ICliCmd
 {
     [Required]

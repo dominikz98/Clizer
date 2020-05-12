@@ -22,7 +22,7 @@ namespace Clizer.Tests
             };
 
             var clizer = new Clizer();
-            clizer.Configure().AddCommandContainer(new CommandContainer(typeof(HelpTextTests), "Simple helptext test!"));
+            clizer.Configure().AddCommandContainer(new CommandContainer(typeof(HelpTextTests)));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.NotEqual(999, result);
             Assert.NotEqual((int)ClizerExitCodes.ERROR, result);

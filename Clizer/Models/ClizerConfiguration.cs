@@ -1,4 +1,5 @@
-﻿using Clizer.Contracts;
+﻿using Clizer.Constants;
+using Clizer.Contracts;
 using Newtonsoft.Json;
 using SimpleInjector;
 using System;
@@ -17,15 +18,16 @@ namespace Clizer.Models
                 Console.WriteLine(ex.Message);
                 Console.ResetColor();
             };
-        internal CommandContainer CommandContainer { get; private set; }
+        internal CommandContainer? CommandContainer { get; private set; }
+        
 
         public ClizerConfiguration EnableUserConfiguration<TConfig>() where TConfig : class, new()
         {
             try
             {
-                var content = File.ReadAllText("config.json");
+                var content = File.ReadAllText(ClizerConstants.ConfigFile);
                 var instance = JsonConvert.DeserializeObject<TConfig>(content);
-                DependencyContainer.RegisterSingleton<TConfig>(() => JsonConvert.DeserializeObject<TConfig>(content));
+                DependencyContainer.RegisterSingleton(() => JsonConvert.DeserializeObject<TConfig>(content));
             }
             catch (Exception)
             {
@@ -57,19 +59,15 @@ namespace Clizer.Models
     {
         internal CommandRegistration _RootCommand;
 
-        public CommandContainer(Type rootcommand) : this(rootcommand, string.Empty) { }
-        public CommandContainer(Type rootcommand, string helptext)
-            => _RootCommand = new CommandRegistration(rootcommand, string.Empty, helptext);
+        public CommandContainer(Type rootcommand)
+            => _RootCommand = new CommandRegistration(rootcommand, string.Empty);
 
         public CommandContainer Register<TParent, TChild>(string childname) where TParent : ICliCmd where TChild : ICliCmd
-            => Register<TParent, TChild>(childname, string.Empty);
-
-        public CommandContainer Register<TParent, TChild>(string childname, string childhelptext) where TParent : ICliCmd where TChild : ICliCmd
         {
             var parent = _RootCommand.Find(typeof(TParent));
             if (parent == null)
                 throw new Exception("Parent not registered (at this moment)");
-            parent.AddChild(new CommandRegistration(typeof(TChild), childname, childhelptext));
+            parent.AddChild(new CommandRegistration(typeof(TChild), childname));
             return this;
         }
 
@@ -81,7 +79,7 @@ namespace Clizer.Models
         public string Name { get; private set; }
         public List<CommandRegistration> Childrens { get; private set; } = new List<CommandRegistration>();
 
-        public CommandRegistration(Type type, string name, string helptext)
+        public CommandRegistration(Type type, string name)
         {
             CmdType = type;
             Name = name;
@@ -90,7 +88,7 @@ namespace Clizer.Models
         public void AddChild(CommandRegistration child)
             => Childrens.Add(child);
 
-        public CommandRegistration Find(Type type)
+        public CommandRegistration? Find(Type type)
         {
             if (type == CmdType)
                 return this;

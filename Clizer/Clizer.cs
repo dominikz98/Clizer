@@ -1,4 +1,5 @@
 ﻿using Clizer.Attributes;
+using Clizer.Constants;
 using Clizer.Contracts;
 using Clizer.Models;
 using Clizer.Utils;
@@ -15,7 +16,7 @@ namespace Clizer
     public class Clizer
     {
         private readonly ClizerConfiguration _configuration;
-        private CommandRegistration _calledCommand;
+        private CommandRegistration? _calledCommand;
 
         public Clizer()
             => _configuration = new ClizerConfiguration();
@@ -31,9 +32,9 @@ namespace Clizer
 
                 var parameter = GetCalledCommand(args);
 
-                if (parameter.Contains("help") || parameter.Contains("-h") || parameter.Contains("--help"))
+                if (parameter.Contains(ClizerConstants.HelpCommand) || parameter.Contains(ClizerConstants.HelpOption) || parameter.Contains(ClizerConstants.HelpOptionShortcut))
                     return ShowHelptext();
-                else if (parameter.Contains("config"))
+                else if (parameter.Contains(ClizerConstants.ConfigCommand))
                     return ShowConfig();
 
                 AttachAndValidateArguments(parameter);
@@ -50,7 +51,8 @@ namespace Clizer
         /// <summary>
         /// Configure Clizer.
         /// </summary>
-        public ClizerConfiguration Configure() => _configuration;
+        public ClizerConfiguration Configure() 
+            => _configuration;
 
         /// <summary>
         /// Register and validate commands from CommandContainer in SimpleInjector DependencyContainer.
@@ -85,10 +87,10 @@ namespace Clizer
         /// <returns></returns>
         private string[] GetCalledCommand(string[] args)
         {
-            _calledCommand = _configuration.CommandContainer._RootCommand;
+            _calledCommand = _configuration?.CommandContainer?._RootCommand;
             for (int i = 0; i < args.Length; i++)
             {
-                var nextCommand = _calledCommand.Childrens?.FirstOrDefault(x => x.Name == args[i]);
+                var nextCommand = _calledCommand?.Childrens?.FirstOrDefault(x => x.Name == args[i]);
                 if (nextCommand == null)
                     return args.ToList().GetRange(i, args.Length - i).ToArray();
                 _calledCommand = nextCommand;
@@ -102,12 +104,15 @@ namespace Clizer
         /// <param name="args">command arguments</param>
         private void AttachAndValidateArguments(string[] args)
         {
+            if (_calledCommand == null)
+                return;
+
             var cmdinstance = _configuration.DependencyContainer.GetInstance(_calledCommand.CmdType);
 
             foreach (var arg in args)
             {
                 var argname = arg.Split(':')[0].IgnoreCase(true);
-                var property = cmdinstance.GetType().GetCliProperties().FirstOrDefault(x => x.GetCustomAttribute<CliIArgAttribute>().Name.IgnoreCase(true) == argname || x.GetCustomAttribute<CliIArgAttribute>().Shortcut.IgnoreCase(true) == argname);
+                var property = cmdinstance.GetType().GetCliProperties().FirstOrDefault(x => x.GetCustomAttribute<CliIArgAttribute>()?.Name?.IgnoreCase(true) == argname || x.GetCustomAttribute<CliIArgAttribute>().Shortcut.IgnoreCase(true) == argname);
                 if (property == null)
                     throw new ClizerException($"{argname} is not a known property of {(!string.IsNullOrEmpty(_calledCommand.Name) ? _calledCommand.Name : _calledCommand.CmdType.Name)}!");
 
@@ -118,7 +123,7 @@ namespace Clizer
                     if (arg.Length - firstindex <= 0)
                         throw new ClizerException($"{arg} has an invalid argument format!");
 
-                    var argvalue = arg.Substring(firstindex, arg.Length - firstindex);
+                    var argvalue = arg[firstindex..];
                     try
                     {
                         property.SetValue(cmdinstance, Convert.ChangeType(argvalue, property.PropertyType));
@@ -145,13 +150,21 @@ namespace Clizer
         /// </summary>
         /// <returns>command result</returns>
         private async Task<int> ExecuteCommand(CancellationToken cancellationToken)
-            => await ((ICliCmd)_configuration.DependencyContainer.GetInstance(_calledCommand.CmdType)).Execute(cancellationToken);
+        {
+            if (_calledCommand == null)
+                return (int)ClizerExitCodes.ERROR;
+
+            return await ((ICliCmd)_configuration.DependencyContainer.GetInstance(_calledCommand.CmdType)).Execute(cancellationToken);
+        }
 
         /// <summary>
         /// Generates helptext for called command
         /// </summary>
         private int ShowHelptext()
         {
+            if (_calledCommand == null)
+                return (int)ClizerExitCodes.ERROR;
+
             var cmdinstance = _configuration.DependencyContainer.GetInstance(_calledCommand.CmdType);
 
             Console.WriteLine(_calledCommand.Name + (!string.IsNullOrEmpty(_calledCommand.CmdType.GetHelptext()) ? ": " + _calledCommand.CmdType.GetHelptext() : string.Empty));
@@ -183,9 +196,12 @@ namespace Clizer
             return (int)ClizerExitCodes.SUCCESS;
         }
 
+        /// <summary>
+        /// Opens config file in default editor
+        /// </summary>
         private int ShowConfig()
         {
-            var process = Process.Start(new ProcessStartInfo(@"C:\Projects\Clizer\CLizer.Tests\bin\Debug\netcoreapp3.1\config.json") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(ClizerConstants.ConfigFile) { UseShellExecute = true });
             return (int)ClizerExitCodes.SUCCESS;
         }
     }

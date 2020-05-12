@@ -42,7 +42,39 @@ public class SubCommand : ICliCmd
 }
 ```
 
-How to call subcommand:
+## Quick commands:
+
+### Call subcommand:
 ```bat
 Call: > assembly sub --path:"C:\\users"
+```
+
+### Show help
+```bat
+Call: > assembly help
+Call: > assembly --help
+Call: > assembly -h
+```
+
+### Edit config
+```bat
+Call: > assembly config
+```
+
+## Configuration
+
+### Register custom config class
+
+``` c#
+var clizer = new Clizer();
+    clizer.Configure().AddCommandContainer(new CommandContainer(typeof(CustomCommand)))
+                        .EnableUserConfiguration<CustomConfiguration>();
+```
+
+### Inject/use config class
+``` c#
+public CustomCommand(CustomConfiguration configuration)
+{
+    _configuration = configuration;
+}
 ```

@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLizer.Tests
+namespace Clizer.Tests
 {
     public class PropertyBindingTests : ICliCmd
     {
@@ -30,7 +30,7 @@ namespace CLizer.Tests
                 "test"
             };
 
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.Equal((int)ClizerExitCodes.ERROR, result);
@@ -45,7 +45,7 @@ namespace CLizer.Tests
                 "--force"
             };
 
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
@@ -59,7 +59,7 @@ namespace CLizer.Tests
                 "ignore"
             };
 
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.Equal((int)ClizerExitCodes.ERROR, result);
@@ -75,7 +75,7 @@ namespace CLizer.Tests
                 @"--path:E:\Bibliotheken\Projects"
             };
 
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PropertyBindingTests)));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.Equal((int)ClizerExitCodes.SUCCESS, result);

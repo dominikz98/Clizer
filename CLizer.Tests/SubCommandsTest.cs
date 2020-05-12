@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLizer.Tests
+namespace Clizer.Tests
 {
     public class SubCommandsTest : ICliCmd
     {
@@ -20,7 +20,7 @@ namespace CLizer.Tests
                 "child"
             };
 
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(SubCommandsTest))
                                 .Register<SubCommandsTest, ParentCmd>("parent")
                                     .Register<ParentCmd, ChildCmd>("child"));

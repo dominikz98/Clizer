@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLizer.Tests
+namespace Clizer.Tests
 {
     public class HelpTextTests : ICliCmd
     {
@@ -21,7 +21,7 @@ namespace CLizer.Tests
                 arg
             };
 
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(HelpTextTests), "Simple helptext test!"));
             var result = await clizer.Execute(args.ToArray(), default);
             Assert.NotEqual(999, result);

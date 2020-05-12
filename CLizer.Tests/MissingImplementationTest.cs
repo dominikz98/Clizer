@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLizer.Tests
+namespace Clizer.Tests
 {
     public class MissingImplementationTest : ICliCmd
     {
@@ -13,7 +13,7 @@ namespace CLizer.Tests
         [Fact]
         public async Task Run()
         {
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().SetExceptionHandler((ex) => throw ex); 
             await Assert.ThrowsAsync<ClizerException>(() => clizer.Execute(new string[0], default));
         }

@@ -1,7 +1,9 @@
 ﻿using Clizer.Contracts;
+using Newtonsoft.Json;
 using SimpleInjector;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Clizer.Models
 {
@@ -16,6 +18,21 @@ namespace Clizer.Models
                 Console.ResetColor();
             };
         internal CommandContainer CommandContainer { get; private set; }
+
+        public ClizerConfiguration EnableUserConfiguration<TConfig>() where TConfig : class, new()
+        {
+            try
+            {
+                var content = File.ReadAllText("config.json");
+                var instance = JsonConvert.DeserializeObject<TConfig>(content);
+                DependencyContainer.RegisterSingleton<TConfig>(() => JsonConvert.DeserializeObject<TConfig>(content));
+            }
+            catch (Exception)
+            {
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(new TConfig()));
+            }
+            return this;
+        }
 
         public ClizerConfiguration AddDependencyContainer(Container dependecycontainer)
         {

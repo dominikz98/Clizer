@@ -4,6 +4,7 @@ using Clizer.Models;
 using Clizer.Utils;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -27,11 +28,16 @@ namespace Clizer
             try
             {
                 RegisterCommandsAsDependencies();
+
                 var parameter = GetCalledCommand(args);
+
                 if (parameter.Contains("help") || parameter.Contains("-h") || parameter.Contains("--help"))
                     return ShowHelptext();
+                else if (parameter.Contains("config"))
+                    return ShowConfig();
 
                 AttachAndValidateArguments(parameter);
+
                 return await ExecuteCommand(cancellationToken);
             }
             catch (Exception ex)
@@ -174,6 +180,12 @@ namespace Clizer
                 Console.WriteLine(string.Join(Environment.NewLine, options.Select(x => $" {(x.Name + (!string.IsNullOrEmpty(x.Shortcut) ? " | " + x.Shortcut : string.Empty) + (!string.IsNullOrEmpty(x.Helptext) ? ": " + x.Helptext : string.Empty))}").ToArray()));
             }
 
+            return (int)ClizerExitCodes.SUCCESS;
+        }
+
+        private int ShowConfig()
+        {
+            var process = Process.Start(new ProcessStartInfo(@"C:\Projects\Clizer\CLizer.Tests\bin\Debug\netcoreapp3.1\config.json") { UseShellExecute = true });
             return (int)ClizerExitCodes.SUCCESS;
         }
     }

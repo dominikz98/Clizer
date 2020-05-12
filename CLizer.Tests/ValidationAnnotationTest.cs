@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLizer.Tests
+namespace Clizer.Tests
 {
     public class ValidationAnnotationTest : ICliCmd
     {
@@ -22,7 +22,7 @@ namespace CLizer.Tests
                 "--second:0"
             };
 
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().SetExceptionHandler((ex) => throw ex)
                               .AddCommandContainer(new CommandContainer(typeof(ValidationAnnotationTest))
                                 .Register<ValidationAnnotationTest, AddCmd>("add"));

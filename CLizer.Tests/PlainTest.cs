@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLizer.Tests
+namespace Clizer.Tests
 {
     public class PlainTest : ICliCmd
     {
@@ -13,7 +13,7 @@ namespace CLizer.Tests
         [Fact]
         public async Task Run()
         {
-            var clizer = new Clizer.Clizer();
+            var clizer = new Clizer();
             clizer.Configure().AddCommandContainer(new CommandContainer(typeof(PlainTest)));
             var result = await clizer.Execute(new string[0], default);
             Assert.Equal((int)ClizerExitCodes.SUCCESS, result);

@@ -1,5 +1,6 @@
 ﻿using Clizer.Constants;
 using Clizer.Contracts;
+using Clizer.Utils;
 using Newtonsoft.Json;
 using SimpleInjector;
 using System;
@@ -12,14 +13,9 @@ namespace Clizer.Models
     {
         internal Container DependencyContainer { get; private set; } = new Container();
         internal Action<Exception> ExceptionHandler { get; private set; }
-            = (ex) =>
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
-                Console.ResetColor();
-            };
+            = (ex) => ConsoleExtensions.WriteColoredLine(ConsoleColor.Red, ex.Message);
         internal CommandContainer? CommandContainer { get; private set; }
-        
+
 
         public ClizerConfiguration EnableUserConfiguration<TConfig>() where TConfig : class, new()
         {

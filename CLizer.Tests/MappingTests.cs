@@ -1,6 +1,5 @@
-﻿using Clizer.Models;
+﻿using Clizer.Utils;
 using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Clizer.Tests

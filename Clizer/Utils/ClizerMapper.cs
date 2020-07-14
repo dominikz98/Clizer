@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Clizer.Models
+namespace Clizer.Utils
 {
     public static class ClizerMapper
     {

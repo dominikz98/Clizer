@@ -112,7 +112,7 @@ namespace Clizer
             foreach (var arg in args)
             {
                 var argname = arg.Split(':')[0].IgnoreCase(true);
-                var property = cmdinstance.GetType().GetCliProperties().FirstOrDefault(x => x.GetCustomAttribute<CliIArgAttribute>()?.Name?.IgnoreCase(true) == argname || x.GetCustomAttribute<CliIArgAttribute>().Shortcut.IgnoreCase(true) == argname);
+                var property = cmdinstance.GetType().GetCliProperties().FirstOrDefault(x => x.GetCustomAttribute<CliIArgAttribute>()?.Name?.IgnoreCase(true) == argname || x.GetCustomAttribute<CliIArgAttribute>()?.Shortcut.IgnoreCase(true) == argname);
                 if (property == null)
                     throw new ClizerException($"{argname} is not a known property of {(!string.IsNullOrEmpty(_calledCommand.Name) ? _calledCommand.Name : _calledCommand.CmdType.Name)}!");
 

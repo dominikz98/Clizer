@@ -1,48 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
 
 namespace Clizer.Utils
 {
     public static class ClizerCollector
     {
-        public static TData GetValidInput<TData>(string prefix, List<ValidationAttribute> validations)
-        {
-            var isnullable = Nullable.GetUnderlyingType(typeof(TData)) != null;
-            prefix += $"{(!isnullable ? "*" : string.Empty)}: ";
-            TData value;
-            bool valid;
+        //public static TData GetValidInput<TData>(string prefix, List<ValidationAttribute> validations)
+        //{
+        //    var isnullable = Nullable.GetUnderlyingType(typeof(TData)) != null;
+        //    prefix += $"{(!isnullable ? "*" : string.Empty)}: ";
+        //    TData value;
+        //    bool valid;
 
-            do
-            {
-                Console.Write(prefix);
-                var input = Console.ReadLine();
-                string? errormessage = null;
+        //    do
+        //    {
+        //        Console.Write(prefix);
+        //        var input = Console.ReadLine();
+        //        string? errormessage = null;
 
-                if (!GenericTryParse(input, out value) && isnullable && string.IsNullOrEmpty(input))
-                    valid = true;
-                else
-                {
-                    valid = true;
-                    foreach (var validation in validations)
-                        if (!validation.IsValid(value))
-                        {
-                            valid = false;
-                            errormessage = validation.ErrorMessage;
-                            break;
-                        }
-                }
+        //        if (string.IsNullOrEmpty(input) && !GenericTryParse(input, out value) && isnullable)
+        //            valid = true;
+        //        else
+        //        {
+        //            valid = true;
+        //            foreach (var validation in validations)
+        //                if (!validation.IsValid(value))
+        //                {
+        //                    valid = false;
+        //                    errormessage = validation.ErrorMessage;
+        //                    break;
+        //                }
+        //        }
 
-                if (valid)
-                    ConsoleExtensions.AppendToLine(ConsoleColor.Green, prefix.Length + (input?.Length ?? 0), " ✓");
-                else
-                    ConsoleExtensions.AppendToLine(ConsoleColor.Red, prefix.Length + (input?.Length ?? 0), $" X ({errormessage ?? "invalid"})");
+        //        if (valid)
+        //            ConsoleExtensions.AppendToLine(ConsoleColor.Green, prefix.Length + (input?.Length ?? 0), " ✓");
+        //        else
+        //            ConsoleExtensions.AppendToLine(ConsoleColor.Red, prefix.Length + (input?.Length ?? 0), $" X ({errormessage ?? "invalid"})");
 
-            } while (!valid);
+        //    } while (!valid);
 
-            return value;
-        }
+        //    return value;
+        //}
 
         private static bool GenericTryParse<TData>(string input, out TData value)
         {

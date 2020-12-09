@@ -11,14 +11,14 @@ namespace Clizer.Utils
         public static List<CliIArgAttribute> GetArguments(this Type type)
             => type.GetProperties()
                     ?.Where(x => x.PropertyType != typeof(bool) && x.GetCustomAttribute<CliIArgAttribute>() != null)
-                    ?.Select(x => x.GetCustomAttribute<CliIArgAttribute>())
+                    ?.Select(x => x.GetCustomAttribute<CliIArgAttribute>()!)
                     ?.ToList() 
                     ?? new List<CliIArgAttribute>();
 
         public static List<CliIArgAttribute> GetOptions(this Type type)
             => type.GetProperties()
                     ?.Where(x => x.PropertyType == typeof(bool) && x.GetCustomAttribute<CliIArgAttribute>() != null)
-                    ?.Select(x => x.GetCustomAttribute<CliIArgAttribute>())
+                    ?.Select(x => x.GetCustomAttribute<CliIArgAttribute>()!)
                     ?.ToList() 
                     ?? new List<CliIArgAttribute>();
 

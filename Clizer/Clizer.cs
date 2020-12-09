@@ -59,13 +59,13 @@ namespace Clizer
         /// </summary>
         private void RegisterCommandsAsDependencies()
         {
-            if (_configuration.CommandContainer?._RootCommand == null)
+            if (_configuration.CommandContainer?._rootCommand == null)
                 throw new ClizerException($"Root command must be registered! (Call {nameof(ClizerConfiguration.AddCommandContainer)} in configuration)");
 
-            if (_configuration.CommandContainer._RootCommand.CmdType.GetInterface(typeof(ICliCmd).Name) == null)
-                throw new ClizerException($"Class '{_configuration.CommandContainer?._RootCommand.CmdType.Name}' needs to implement '{typeof(ICliCmd).Name}'!");
+            if (_configuration.CommandContainer._rootCommand.CmdType.GetInterface(typeof(ICliCmd).Name) == null)
+                throw new ClizerException($"Class '{_configuration.CommandContainer?._rootCommand.CmdType.Name}' needs to implement '{typeof(ICliCmd).Name}'!");
 
-            RegisterCommandAsDependencies(_configuration.CommandContainer._RootCommand);
+            RegisterCommandAsDependencies(_configuration.CommandContainer._rootCommand);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Clizer
         /// <returns></returns>
         private string[] GetCalledCommand(string[] args)
         {
-            _calledCommand = _configuration?.CommandContainer?._RootCommand;
+            _calledCommand = _configuration?.CommandContainer?._rootCommand;
             for (int i = 0; i < args.Length; i++)
             {
                 var nextCommand = _calledCommand?.Childrens?.FirstOrDefault(x => x.Name == args[i]);
@@ -95,7 +95,7 @@ namespace Clizer
                     return args.ToList().GetRange(i, args.Length - i).ToArray();
                 _calledCommand = nextCommand;
             }
-            return new string[0];
+            return Array.Empty<string>();
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Clizer
         /// <summary>
         /// Opens config file in default editor
         /// </summary>
-        private int ShowConfig()
+        private static int ShowConfig()
         {
             Process.Start(new ProcessStartInfo(ClizerConstants.ConfigFile) { UseShellExecute = true });
             return (int)ClizerExitCodes.SUCCESS;

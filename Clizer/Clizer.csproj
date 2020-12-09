@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Dominik Zettl</Authors>
     <RepositoryUrl>https://github.com/dominikz98/Clizer.git</RepositoryUrl>
     <PackageTags>Clizer standard command line package lib core cmd cli</PackageTags>
@@ -10,12 +10,21 @@
 The package also contains usefull utils like auto id mapping, auto generated helptext, or user configurable setting files.</Description>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <Version>1.1.0</Version>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

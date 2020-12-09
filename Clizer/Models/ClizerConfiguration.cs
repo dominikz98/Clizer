@@ -53,14 +53,14 @@ namespace Clizer.Models
 
     public class CommandContainer
     {
-        internal CommandRegistration _RootCommand;
+        internal CommandRegistration _rootCommand;
 
         public CommandContainer(Type rootcommand)
-            => _RootCommand = new CommandRegistration(rootcommand, string.Empty);
+            => _rootCommand = new CommandRegistration(rootcommand, string.Empty);
 
         public CommandContainer Register<TParent, TChild>(string childname) where TParent : ICliCmd where TChild : ICliCmd
         {
-            var parent = _RootCommand.Find(typeof(TParent));
+            var parent = _rootCommand.Find(typeof(TParent));
             if (parent == null)
                 throw new Exception("Parent not registered (at this moment)");
             parent.AddChild(new CommandRegistration(typeof(TChild), childname));

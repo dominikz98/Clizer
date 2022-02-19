@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Authors>Dominik Zettl</Authors>
+		<RepositoryUrl>https://github.com/dominikz98/Clizer.git</RepositoryUrl>
+		<PackageTags>Clizer standard command line package lib core cmd cli</PackageTags>
+		<Company />
+		<Description>
+			Clizer easily allows you to set up a cli accessible project to call your services and endpoints.
+			The package also contains usefull utils like auto id mapping, auto generated helptext, or user configurable setting files.
+		</Description>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<Version>1.1.0</Version>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	</ItemGroup>
+
+</Project>

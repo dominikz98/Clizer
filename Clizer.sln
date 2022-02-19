@@ -13,16 +13,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BD3B4201
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AAA6FF2-ABF8-424B-AFB5-403BB1FB7BA6}"
 	ProjectSection(SolutionItems) = preProject
+		docs\commands.md = docs\commands.md
+		docs\configs.md = docs\configs.md
+		docs\custom_extensions.md = docs\custom_extensions.md
+		docs\dependency_injection.md = docs\dependency_injection.md
 		src\CLIzer\LICENSE = src\CLIzer\LICENSE
+		docs\mapper.md = docs\mapper.md
+		docs\middlewares.md = docs\middlewares.md
+		README.md = README.md
+		docs\validation.md = docs\validation.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.Mapper", "src\CLIzer.Mapper\CLIzer.Mapper.csproj", "{2B82DF7B-95AA-43E8-86FC-0AAFC7E59D7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Mapper", "src\CLIzer.Mapper\CLIzer.Mapper.csproj", "{2B82DF7B-95AA-43E8-86FC-0AAFC7E59D7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.UserConfig", "src\CLIzer.UserConfig\CLIzer.UserConfig.csproj", "{CA659D2F-3F7F-4369-AE65-35004DA65F7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.UserConfig", "src\CLIzer.UserConfig\CLIzer.UserConfig.csproj", "{CA659D2F-3F7F-4369-AE65-35004DA65F7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.Mapper.Tests", "tests\CLIzer.Mapper.Tests\CLIzer.Mapper.Tests.csproj", "{14D359B9-CEF1-41A9-AC17-D7B46BF2B150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Mapper.Tests", "tests\CLIzer.Mapper.Tests\CLIzer.Mapper.Tests.csproj", "{14D359B9-CEF1-41A9-AC17-D7B46BF2B150}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.UserConfig.Tests", "tests\CLIzer.UserConfig.Tests\CLIzer.UserConfig.Tests.csproj", "{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.UserConfig.Tests", "tests\CLIzer.UserConfig.Tests\CLIzer.UserConfig.Tests.csproj", "{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

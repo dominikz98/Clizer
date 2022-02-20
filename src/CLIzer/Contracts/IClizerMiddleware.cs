@@ -2,6 +2,6 @@
 {
     public interface IClizerMiddleware
     {
-        Task Intercept(string[] args, CancellationToken cancellationToken);
+        Task<ClizerPostAction> Intercept(string[] args, CancellationToken cancellationToken);
     }
 }

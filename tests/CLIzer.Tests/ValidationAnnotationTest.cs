@@ -40,8 +40,8 @@ namespace CLIzer.Tests
         [CliIArg("second")]
         public int Second { get; set; }
 
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult((int)ClizerExitCodes.SUCCESS);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.SUCCESS);
     }
 }
 

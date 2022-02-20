@@ -17,8 +17,8 @@ namespace CLIzer.Tests
         {
             var args = rawArgs.Split(';');
 
-            var clizer = new Clizer();
-            clizer.Configure((config) => config
+            var clizer = new Clizer()
+                .Configure((config) => config
 
                 .RegisterCommands((container) => container
                     .Root<RootCmd>()
@@ -32,7 +32,7 @@ namespace CLIzer.Tests
                 )
             );
             var result = await clizer.Execute(args, default);
-            Assert.Equal(100, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace CLIzer.Tests
                 )
             );
             var result = await clizer.Execute(Array.Empty<string>(), default);
-            Assert.Equal(100, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
         [Fact]
@@ -54,50 +54,50 @@ namespace CLIzer.Tests
         {
             var clizer = new Clizer();
             var result = await clizer.Execute(Array.Empty<string>(), default);
-            Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }
 
     public class RootCmd : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(100);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.SUCCESS);
     }
 
     public class GrandparentCmd : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(999);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.ERROR);
     }
 
     public class ParentCmd : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(999);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.ERROR);
     }
 
     public class ChildCmd : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(100);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.SUCCESS);
 
     }
 
     public class CompanyCmd : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(999);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.ERROR);
     }
 
     public class DepartmentCmd : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(999);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.ERROR);
 
     }
     public class EmployeeCmd : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(100);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.SUCCESS);
     }
 }

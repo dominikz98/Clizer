@@ -12,13 +12,13 @@ namespace CLIzer.UserConfig
             _configAccessor = configAccessor;
         }
 
-        public Task<int> Execute(CancellationToken cancellationToken)
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
         {
             if (_configAccessor.Path is null)
-                return Task.FromResult((int)ClizerExitCodes.ERROR);
+                return Task.FromResult(ClizerExitCode.ERROR);
 
             Process.Start(new ProcessStartInfo(_configAccessor.Path) { UseShellExecute = true });
-            return Task.FromResult((int)ClizerExitCodes.SUCCESS);
+            return Task.FromResult(ClizerExitCode.SUCCESS);
         }
     }
 }

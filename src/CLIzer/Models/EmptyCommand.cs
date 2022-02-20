@@ -4,7 +4,7 @@ namespace CLIzer.Models
 {
     internal class EmptyCommand : ICliCmd
     {
-        public Task<int> Execute(CancellationToken cancellationToken)
-            => Task.FromResult((int)ClizerExitCodes.SUCCESS);
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.SUCCESS);
     }
 }

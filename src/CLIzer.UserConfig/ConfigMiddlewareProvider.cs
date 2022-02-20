@@ -13,11 +13,13 @@ namespace CLIzer.UserConfig
             _accessor = accessor;
         }
 
-        public async Task Intercept(string[] args, CancellationToken cancellationToken)
+        public async Task<ClizerPostAction> Intercept(string[] args, CancellationToken cancellationToken)
         {
             var data = await _accessor.Load(cancellationToken);
             if (_config is ConfigProvider<T> config)
                 config.Value = data ?? new();
+
+            return ClizerPostAction.CONTINUE;
         }
     }
 }

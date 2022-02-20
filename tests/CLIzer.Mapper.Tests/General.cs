@@ -41,7 +41,7 @@ namespace CLIzer.Mapper.Tests
                 );
 
             var result = await clizer.Execute(Array.Empty<string>(), default);
-            Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }
 }

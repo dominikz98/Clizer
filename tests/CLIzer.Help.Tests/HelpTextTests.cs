@@ -1,4 +1,5 @@
 ﻿using CLIzer.Contracts;
+using CLIzer.Help;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -18,10 +19,10 @@ namespace CLIzer.Tests
                 arg
             };
 
-            var clizer = new Clizer();
+            var clizer = new Clizer().Configure(config => config.EnableHelp());
+
             var result = await clizer.Execute(args.ToArray(), default);
-            Assert.NotEqual(999, result);
-            Assert.NotEqual((int)ClizerExitCodes.ERROR, result);
+            Assert.NotEqual(ClizerExitCode.ERROR, result);
         }
     }
 }

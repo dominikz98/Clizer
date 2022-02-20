@@ -22,36 +22,39 @@ namespace CLIzer
         /// <summary>
         /// Entry point.
         /// </summary>
-        public async Task<int> Execute(string[] args, CancellationToken cancellationToken)
+        public async Task<ClizerExitCode> Execute(string[] args, CancellationToken cancellationToken)
         {
             try
             {
                 var services = RegisterAllDependencies();
 
-                var (command, parameters) = GetCalledCommand(args);
+                var parameters = SetCalledCommand(services, args);
 
-                if (command is null)
-                    return (int)ClizerExitCodes.ERROR;
+                var resolver = services.GetRequiredService<CommandResolver>();
+                if (resolver.Called is null)
+                    return ClizerExitCode.ERROR;
 
-                if (parameters.Intersect(ClizerConstants.Help).Any())
-                    return ShowHelptext(services, command);
-
+                var exit = false;
                 foreach (var type in _configuration.Middlewares)
                 {
                     var middleware = (IClizerMiddleware)services.GetRequiredService(type);
-                    await middleware.Intercept(parameters.ToArray(), cancellationToken);
+                    var result = await middleware.Intercept(parameters.ToArray(), cancellationToken);
+                    if (result == ClizerPostAction.EXIT)
+                        exit = true;
                 }
 
+                if (exit)
+                    return ClizerExitCode.SUCCESS;
 
-                AttachAndValidateArguments(services, command, parameters);
+                AttachAndValidateArguments(services, parameters);
 
-                var instance = services.GetRequiredService(command.Type);
+                var instance = services.GetRequiredService(resolver.Called.Type);
                 return await ((ICliCmd)instance).Execute(cancellationToken);
             }
             catch (Exception ex)
             {
                 _configuration.ExceptionHandler(ex);
-                return (int)ClizerExitCodes.ERROR;
+                return ClizerExitCode.ERROR;
             }
         }
 
@@ -88,6 +91,8 @@ namespace CLIzer
             foreach (var command in _configuration.Container.Commands)
                 InjectCommand(command);
 
+            _configuration.Services.AddSingleton<CommandResolver>();
+
             return _configuration.Services.BuildServiceProvider();
         }
 
@@ -98,9 +103,10 @@ namespace CLIzer
                 InjectCommand(subcommand);
         }
 
-        private (CommandRegistration? command, string[] parameters) GetCalledCommand(string[] args)
+        private string[] SetCalledCommand(IServiceProvider services, string[] args)
         {
             var parameter = new List<string>();
+            var resolver = services.GetRequiredService<CommandResolver>();
             var command = _configuration.Container!.RootCommand;
             command.Commands = _configuration.Container.Commands;
             args = args.ToList()
@@ -114,33 +120,33 @@ namespace CLIzer
                 if (nextCommand is null)
                 {
                     args = args.ToList().GetRange(i, args.Length - i).ToArray();
-                    return (command, args);
+                    resolver.Called = command;
+                    return args;
                 }
 
                 command = nextCommand;
             }
 
-            return (command, Array.Empty<string>());
+            resolver.Called = command;
+            return Array.Empty<string>();
         }
 
-        private static void AttachAndValidateArguments(IServiceProvider services, CommandRegistration command, string[] parameters)
+        private static void AttachAndValidateArguments(IServiceProvider services, string[] parameters)
         {
-            if (command == null)
-                return;
-
-            var cmdinstance = services.GetRequiredService(command.Type);
+            var resolver = services.GetRequiredService<CommandResolver>();
+            var cmdinstance = services.GetRequiredService(resolver.Called!.Type);
 
             foreach (var parameter in parameters)
             {
                 var argname = parameter.Split(':')[0];
-                var property = command.Type
+                var property = resolver.Called.Type
                     .GetCliProperties()
                     .Where(x => x.GetCustomAttribute<CliIArgAttribute>()?.Name?.ToLower() == argname
                         || x.GetCustomAttribute<CliIArgAttribute>()?.Shortcut.ToLower() == argname)
                     .FirstOrDefault();
 
                 if (property == null)
-                    throw new ClizerException($"{argname} is not a known property of {(!string.IsNullOrEmpty(command.Name) ? command.Name : command.Type.Name)}!");
+                    throw new ClizerException($"{argname} is not a known property of {(!string.IsNullOrEmpty(resolver.Called.Name) ? resolver.Called.Name : resolver.Called.Type.Name)}!");
 
                 // Argument
                 if (parameter.Contains(':'))
@@ -178,39 +184,6 @@ namespace CLIzer
                 foreach (var validateattr in validations)
                     ((ValidationAttribute)validateattr).Validate(property.GetValue(cmdinstance), property.Name);
             }
-        }
-
-        private static int ShowHelptext(IServiceProvider services, CommandRegistration command)
-        {
-            var cmdinstance = services.GetRequiredService(command.Type);
-
-            Console.WriteLine(command.Name + (!string.IsNullOrEmpty(command.Type.GetHelptext()) ? ": " + command.Type.GetHelptext() : string.Empty));
-            Console.WriteLine(string.Empty);
-
-            var children = command.Commands;
-            if (children.Any())
-            {
-                Console.WriteLine("[Commands]");
-                Console.WriteLine(string.Join(Environment.NewLine, children.Select(x => $" {x.Name + (!string.IsNullOrEmpty(x.Type.GetHelptext()) ? ": " + x.Type.GetHelptext() : string.Empty)}").ToArray()));
-                Console.WriteLine(string.Empty);
-            }
-
-            var arguments = command.Type.GetArguments();
-            if (arguments.Any())
-            {
-                Console.WriteLine("[Arguments]");
-                Console.WriteLine(string.Join(Environment.NewLine, arguments.Select(x => $" { (x.Name + (!string.IsNullOrEmpty(x.Shortcut) ? " | " + x.Shortcut : string.Empty) + (!string.IsNullOrEmpty(x.Helptext) ? ": " + x.Helptext : string.Empty))}").ToArray()));
-                Console.WriteLine(string.Empty);
-            }
-
-            var options = command.Type.GetOptions();
-            if (options.Any())
-            {
-                Console.WriteLine("[Options]");
-                Console.WriteLine(string.Join(Environment.NewLine, options.Select(x => $" {(x.Name + (!string.IsNullOrEmpty(x.Shortcut) ? " | " + x.Shortcut : string.Empty) + (!string.IsNullOrEmpty(x.Helptext) ? ": " + x.Helptext : string.Empty))}").ToArray()));
-            }
-
-            return (int)ClizerExitCodes.SUCCESS;
         }
     }
 }

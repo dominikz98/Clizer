@@ -25,7 +25,7 @@ namespace CLIzer.UserConfig.Tests
                 );
 
             var result = await clizer.Execute(Array.Empty<string>(), default);
-            Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace CLIzer.UserConfig.Tests
                 );
 
             var result = await clizer.Execute(Array.Empty<string>(), default);
-            Assert.Equal(fileAccessor.Data.Value, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }
 }

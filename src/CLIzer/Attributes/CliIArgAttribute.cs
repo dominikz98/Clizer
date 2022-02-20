@@ -3,17 +3,17 @@
     [AttributeUsage(AttributeTargets.Property)]
     public class CliIArgAttribute : Attribute
     {
-        internal string? Helptext { get; private set; }
+        public string? Helptext { get; private set; }
 
         internal string? _name;
-        internal string? Name
+        public string? Name
         {
             get { return !(_name ?? string.Empty).StartsWith("--") ? "--" + _name : _name; }
             private set { _name = value; }
         }
 
         internal string? _shortcut;
-        internal string Shortcut
+        public string Shortcut
         {
             get { return !string.IsNullOrEmpty(_shortcut) && !_shortcut.StartsWith("-") ? "-" + _shortcut : (_shortcut ?? string.Empty); }
             private set { _shortcut = value; }

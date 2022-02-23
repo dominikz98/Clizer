@@ -14,7 +14,7 @@ The project provides useful functions to make it really easy all the way:
 - [Other Utils](docs/utils.md)
 - [Custom Extensions](docs/custom_extensions.md)
 
-## Minimal setup:
+# Minimal setup:
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config

@@ -1,6 +1,7 @@
 ﻿using CLIzer.Contracts;
 using CLIzer.Mapper.Contracts;
 using CLIzer.Mapper.Models;
+using CLIzer.Utils;
 
 namespace CLIzer.Mapper
 {
@@ -15,7 +16,7 @@ namespace CLIzer.Mapper
             _file = file;
         }
 
-        public async Task<ClizerPostAction> Intercept(string[] args, CancellationToken cancellationToken)
+        public async Task<ClizerPostAction> Intercept(CommandResolver commandResolver, string[] args, CancellationToken cancellationToken)
         {
             if (_mapper is not ClizerMapper mapper)
                 return ClizerPostAction.CONTINUE;

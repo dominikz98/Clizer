@@ -4,6 +4,6 @@ namespace CLIzer.Utils
 {
     public class CommandResolver
     {
-        public CommandRegistration? Called { get; set; }
+        public CommandRegistration? Called { get; internal set; }
     }
 }

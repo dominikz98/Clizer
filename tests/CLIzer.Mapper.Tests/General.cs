@@ -1,7 +1,9 @@
 ﻿using CLIzer.Contracts;
 using CLIzer.Mapper.Models;
 using CLIzer.Tests;
+using CLIzer.Utils;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 

@@ -1,6 +1,7 @@
 using CLIzer.Attributes;
 using CLIzer.Contracts;
 using CLIzer.Models;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;

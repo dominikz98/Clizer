@@ -1,4 +1,5 @@
 ﻿using CLIzer.Contracts;
+using CLIzer.Utils;
 
 namespace CLIzer.Help
 {
@@ -16,7 +17,7 @@ namespace CLIzer.Help
             _printer = printer;
         }
 
-        public Task<ClizerPostAction> Intercept(string[] args, CancellationToken cancellationToken)
+        public Task<ClizerPostAction> Intercept(CommandResolver commandResolver, string[] args, CancellationToken cancellationToken)
         {
             if (args.Intersect(_helpAll).Any())
             {

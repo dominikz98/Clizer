@@ -38,7 +38,7 @@ namespace CLIzer
                 foreach (var type in _configuration.Middlewares)
                 {
                     var middleware = (IClizerMiddleware)services.GetRequiredService(type);
-                    var result = await middleware.Intercept(parameters.ToArray(), cancellationToken);
+                    var result = await middleware.Intercept(resolver, parameters.ToArray(), cancellationToken);
                     if (result == ClizerPostAction.EXIT)
                         exit = true;
                 }

@@ -21,13 +21,13 @@ File accessor can be used to load data from io, databases, file storages, ...
 
 Json file from IO accessor example:
 ```csharp
-public class JsonFileByRelativePathAccessor<T> : IClizerFileAccessor<T> where T : class, new()
+public class JsonFileAccessor<T> : IClizerFileAccessor<T> where T : class, new()
 {
     public string RelativePath { get; }
 
     public string? Path => System.IO.Path.Combine(Environment.CurrentDirectory, RelativePath);
 
-    public JsonFileByRelativePathAccessor(string relativePath)
+    public JsonFileAccessor(string relativePath)
     {
         RelativePath = relativePath;
     }

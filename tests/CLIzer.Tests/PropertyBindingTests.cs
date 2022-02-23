@@ -1,6 +1,7 @@
 using CLIzer.Attributes;
 using CLIzer.Contracts;
 using CLIzer.Models;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
@@ -36,7 +37,7 @@ namespace CLIzer.Tests
             var clizer = new Clizer();
             clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
             var result = await clizer.Execute(args.ToArray(), default);
-            Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
         [Fact]
@@ -65,28 +66,43 @@ namespace CLIzer.Tests
             var clizer = new Clizer();
             clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
             var result = await clizer.Execute(args.ToArray(), default);
-            Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
+        }
+
+        [Fact]
+        public async Task With_Shortcuts()
+        {
+            var args = new List<string>()
+            {
+                "-n:1",
+                "-f"
+            };
+
+            var clizer = new Clizer();
+            clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
+            var result = await clizer.Execute(args.ToArray(), default);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }
 
     class PropertyBindingCmd : ICliCmd
     {
-        [CliIArg("number")]
+        [CliIArg("number", "n")]
         [Range(1, 100)]
         public int Number { get; set; }
-        [CliIArg("force")]
+        [CliIArg("force", "f")]
         public bool Force { get; set; }
 
         [CliIArg("path")]
         public string? Path { get; set; }
         public bool Ignore { get; set; }
 
-        public Task<int> Execute(CancellationToken cancellationToken)
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
         {
             if (Force && Number > 0)
-                return Task.FromResult((int)ClizerExitCodes.SUCCESS);
+                return Task.FromResult(ClizerExitCode.SUCCESS);
 
-            return Task.FromResult((int)ClizerExitCodes.ERROR);
+            return Task.FromResult(ClizerExitCode.ERROR);
         }
     }
 }

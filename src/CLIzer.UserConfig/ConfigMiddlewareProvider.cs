@@ -1,4 +1,5 @@
 ﻿using CLIzer.Contracts;
+using CLIzer.Utils;
 
 namespace CLIzer.UserConfig
 {
@@ -13,11 +14,13 @@ namespace CLIzer.UserConfig
             _accessor = accessor;
         }
 
-        public async Task Intercept(string[] args, CancellationToken cancellationToken)
+        public async Task<ClizerPostAction> Intercept(CommandResolver commandResolver, string[] args, CancellationToken cancellationToken)
         {
             var data = await _accessor.Load(cancellationToken);
             if (_config is ConfigProvider<T> config)
                 config.Value = data ?? new();
+
+            return ClizerPostAction.CONTINUE;
         }
     }
 }

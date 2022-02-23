@@ -13,16 +13,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BD3B4201
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AAA6FF2-ABF8-424B-AFB5-403BB1FB7BA6}"
 	ProjectSection(SolutionItems) = preProject
+		docs\arguments.md = docs\arguments.md
+		docs\commands.md = docs\commands.md
+		docs\configuration.md = docs\configuration.md
+		docs\custom_extensions.md = docs\custom_extensions.md
+		docs\customconfigs.md = docs\customconfigs.md
+		docs\dependency_injection.md = docs\dependency_injection.md
+		docs\help.md = docs\help.md
 		src\CLIzer\LICENSE = src\CLIzer\LICENSE
+		docs\mapper.md = docs\mapper.md
+		docs\middlewares.md = docs\middlewares.md
+		README.md = README.md
+		docs\utils.md = docs\utils.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.Mapper", "src\CLIzer.Mapper\CLIzer.Mapper.csproj", "{2B82DF7B-95AA-43E8-86FC-0AAFC7E59D7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Mapper", "src\CLIzer.Mapper\CLIzer.Mapper.csproj", "{2B82DF7B-95AA-43E8-86FC-0AAFC7E59D7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.UserConfig", "src\CLIzer.UserConfig\CLIzer.UserConfig.csproj", "{CA659D2F-3F7F-4369-AE65-35004DA65F7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.UserConfig", "src\CLIzer.UserConfig\CLIzer.UserConfig.csproj", "{CA659D2F-3F7F-4369-AE65-35004DA65F7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.Mapper.Tests", "tests\CLIzer.Mapper.Tests\CLIzer.Mapper.Tests.csproj", "{14D359B9-CEF1-41A9-AC17-D7B46BF2B150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Mapper.Tests", "tests\CLIzer.Mapper.Tests\CLIzer.Mapper.Tests.csproj", "{14D359B9-CEF1-41A9-AC17-D7B46BF2B150}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.UserConfig.Tests", "tests\CLIzer.UserConfig.Tests\CLIzer.UserConfig.Tests.csproj", "{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.UserConfig.Tests", "tests\CLIzer.UserConfig.Tests\CLIzer.UserConfig.Tests.csproj", "{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Help", "src\CLIzer.Help\CLIzer.Help.csproj", "{573CB6AE-F2E1-440B-8FA5-FBC2AB656679}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Help.Tests", "tests\CLIzer.Help.Tests\CLIzer.Help.Tests.csproj", "{4F1B9ED0-ECEF-483B-AD8E-C2A72F3533B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +69,14 @@ Global
 		{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{573CB6AE-F2E1-440B-8FA5-FBC2AB656679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{573CB6AE-F2E1-440B-8FA5-FBC2AB656679}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{573CB6AE-F2E1-440B-8FA5-FBC2AB656679}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{573CB6AE-F2E1-440B-8FA5-FBC2AB656679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F1B9ED0-ECEF-483B-AD8E-C2A72F3533B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F1B9ED0-ECEF-483B-AD8E-C2A72F3533B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F1B9ED0-ECEF-483B-AD8E-C2A72F3533B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F1B9ED0-ECEF-483B-AD8E-C2A72F3533B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +88,8 @@ Global
 		{CA659D2F-3F7F-4369-AE65-35004DA65F7B} = {F166207D-DDC1-49AD-9CB5-E708C4297DFC}
 		{14D359B9-CEF1-41A9-AC17-D7B46BF2B150} = {BD3B4201-1A08-4B68-A0AE-655F50496DE1}
 		{CF446583-B2AC-4BD8-88FC-91A40DCE7FE9} = {BD3B4201-1A08-4B68-A0AE-655F50496DE1}
+		{573CB6AE-F2E1-440B-8FA5-FBC2AB656679} = {F166207D-DDC1-49AD-9CB5-E708C4297DFC}
+		{4F1B9ED0-ECEF-483B-AD8E-C2A72F3533B4} = {BD3B4201-1A08-4B68-A0AE-655F50496DE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8697E305-D1B1-4CB6-AC84-26CEDBC559F1}

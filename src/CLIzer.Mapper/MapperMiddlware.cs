@@ -1,6 +1,7 @@
 ﻿using CLIzer.Contracts;
 using CLIzer.Mapper.Contracts;
 using CLIzer.Mapper.Models;
+using CLIzer.Utils;
 
 namespace CLIzer.Mapper
 {
@@ -15,16 +16,17 @@ namespace CLIzer.Mapper
             _file = file;
         }
 
-        public async Task Intercept(string[] args, CancellationToken cancellationToken)
+        public async Task<ClizerPostAction> Intercept(CommandResolver commandResolver, string[] args, CancellationToken cancellationToken)
         {
             if (_mapper is not ClizerMapper mapper)
-                return;
+                return ClizerPostAction.CONTINUE;
 
             var data = await _file.Load(cancellationToken);
             if (data is null)
-                return;
+                return ClizerPostAction.CONTINUE;
 
             mapper.Storage = data;
+            return ClizerPostAction.CONTINUE;
         }
     }
 }

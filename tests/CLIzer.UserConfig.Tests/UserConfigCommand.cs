@@ -1,4 +1,5 @@
 ﻿using CLIzer.Contracts;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,12 +14,13 @@ namespace CLIzer.UserConfig.Tests
             _configuration = configuration.Value;
         }
 
-        public Task<int> Execute(CancellationToken cancellationToken)
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
         {
             if (_configuration is null)
-                return Task.FromResult((int)ClizerExitCodes.ERROR);
+                return Task.FromResult(ClizerExitCode.ERROR);
 
-            return Task.FromResult(_configuration.Value);
+            Console.WriteLine($"Value: {_configuration.Value}");
+            return Task.FromResult(ClizerExitCode.SUCCESS);
         }
     }
 }

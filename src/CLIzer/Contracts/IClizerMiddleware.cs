@@ -1,7 +1,9 @@
-﻿namespace CLIzer.Contracts
+﻿using CLIzer.Utils;
+
+namespace CLIzer.Contracts
 {
     public interface IClizerMiddleware
     {
-        Task Intercept(string[] args, CancellationToken cancellationToken);
+        Task<ClizerPostAction> Intercept(CommandResolver commandResolver, string[] args, CancellationToken cancellationToken);
     }
 }

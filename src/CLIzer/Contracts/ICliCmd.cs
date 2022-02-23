@@ -2,6 +2,6 @@
 {
     public interface ICliCmd
     {
-        Task<int> Execute(CancellationToken cancellationToken);
+        Task<ClizerExitCode> Execute(CancellationToken cancellationToken);
     }
 }

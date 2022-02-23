@@ -1,5 +1,6 @@
 ﻿using CLIzer.Contracts;
 using CLIzer.Mapper.Contracts;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,13 +15,16 @@ namespace CLIzer.Mapper.Tests
             _mapper = mapper;
         }
 
-        public async Task<int> Execute(CancellationToken cancellationToken)
+        public async Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
         {
-            var entity1 = new TestEntity();
-            var mapping1 = await _mapper.MapId(entity1, x => x.Id, 10, default);
-            var reverse1 = _mapper.GetByShortId<TestEntity>(mapping1.ShortId);
+            var entity = new TestEntity();
+            var mapping = await _mapper.MapId(entity, x => x.Id, 10, default);
+            Console.WriteLine($"[ID MAPPING]: {entity.Id} -> {mapping.ShortId}");
 
-            return (int)ClizerExitCodes.SUCCESS;
+            var reverse = _mapper.GetByShortId<TestEntity>(mapping.ShortId);
+            Console.WriteLine($"[ID MAPPING]: {mapping.ShortId} -> {reverse}");
+
+            return ClizerExitCode.SUCCESS;
         }
     }
 }

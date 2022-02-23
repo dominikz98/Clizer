@@ -1,7 +1,9 @@
 ﻿using CLIzer.Contracts;
 using CLIzer.Mapper.Models;
 using CLIzer.Tests;
+using CLIzer.Utils;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -41,7 +43,7 @@ namespace CLIzer.Mapper.Tests
                 );
 
             var result = await clizer.Execute(Array.Empty<string>(), default);
-            Assert.Equal((int)ClizerExitCodes.SUCCESS, result);
+            Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }
 }

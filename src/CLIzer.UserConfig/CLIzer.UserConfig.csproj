@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CLIzer\CLIzer.csproj" />
+    <ProjectReference Include="..\CLIzer.Core\CLIzer.Core.csproj" />
   </ItemGroup>
 
 </Project>

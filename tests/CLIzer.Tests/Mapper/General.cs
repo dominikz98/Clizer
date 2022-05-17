@@ -40,7 +40,7 @@ namespace CLIzer.Tests.Mapper
                         .Root<MappingCommand>())
                 );
 
-            var result = await clizer.Execute(Array.Empty<string>(), default);
+            var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }

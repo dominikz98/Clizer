@@ -24,7 +24,7 @@ namespace CLIzer.Tests.UserConfig
                         .Root<UserConfigCommand>())
                 );
 
-            var result = await clizer.Execute(Array.Empty<string>(), default);
+            var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
@@ -46,7 +46,7 @@ namespace CLIzer.Tests.UserConfig
                         .Root<UserConfigCommand>())
                 );
 
-            var result = await clizer.Execute(Array.Empty<string>(), default);
+            var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }

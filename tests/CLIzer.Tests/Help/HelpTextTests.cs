@@ -21,7 +21,7 @@ namespace CLIzer.Tests.Help
 
             var clizer = new Clizer().Configure(config => config.EnableHelp());
 
-            var result = await clizer.Execute(args.ToArray(), default);
+            var result = await clizer.Execute(args.ToArray());
             Assert.NotEqual(ClizerExitCode.ERROR, result);
         }
     }

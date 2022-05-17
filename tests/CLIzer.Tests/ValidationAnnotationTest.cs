@@ -28,7 +28,7 @@ namespace CLIzer.Tests
                 )
             );
 
-            await Assert.ThrowsAsync<ValidationException>(() => clizer.Execute(args.ToArray(), default));
+            await Assert.ThrowsAsync<ValidationException>(() => clizer.Execute(args.ToArray()));
         }
     }
 

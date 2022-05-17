@@ -1,4 +1,4 @@
-﻿namespace CLIzer.Mapper.Models
+﻿namespace CLIzer.Models.Mapper
 {
     public class ClizerDictionaryEntry
     {

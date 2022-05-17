@@ -1,7 +1,7 @@
 ﻿using CLIzer.Contracts;
 using System.Diagnostics;
 
-namespace CLIzer.UserConfig
+namespace CLIzer.Utils
 {
     internal class ConfigCommandProvider<T> : ICliCmd where T : class, new()
     {

@@ -1,4 +1,4 @@
-﻿namespace CLIzer.Utils
+﻿namespace CLIzer.Extensions
 {
     public static class ConsoleExtensions
     {

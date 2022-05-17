@@ -1,6 +1,6 @@
-﻿using CLIzer.Mapper.Models;
+﻿using CLIzer.Models.Mapper;
 
-namespace CLIzer.Mapper.Contracts
+namespace CLIzer.Contracts
 {
     public interface IClizerMapper
     {

@@ -1,14 +1,15 @@
 ﻿using CLIzer.Contracts;
+using CLIzer.Models;
 using CLIzer.Utils;
 
-namespace CLIzer.UserConfig
+namespace CLIzer.Middlewares
 {
-    internal class ConfigMiddlewareProvider<T> : IClizerMiddleware where T : class, new()
+    internal class ConfigMiddleware<T> : IClizerMiddleware where T : class, new()
     {
         private readonly IConfig<T> _config;
         private readonly IClizerFileAccessor<T> _accessor;
 
-        public ConfigMiddlewareProvider(IConfig<T> config, IClizerFileAccessor<T> accessor)
+        public ConfigMiddleware(IConfig<T> config, IClizerFileAccessor<T> accessor)
         {
             _config = config;
             _accessor = accessor;

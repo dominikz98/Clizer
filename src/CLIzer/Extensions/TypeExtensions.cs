@@ -1,7 +1,7 @@
 ﻿using CLIzer.Attributes;
 using System.Reflection;
 
-namespace CLIzer.Utils
+namespace CLIzer.Extensions
 {
     public static class TypeExtensions
     {

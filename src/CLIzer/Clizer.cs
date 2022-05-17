@@ -1,5 +1,6 @@
 ﻿using CLIzer.Attributes;
 using CLIzer.Contracts;
+using CLIzer.Extensions;
 using CLIzer.Models;
 using CLIzer.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,23 +23,27 @@ namespace CLIzer
         /// <summary>
         /// Entry point.
         /// </summary>
-        public async Task<ClizerExitCode> Execute(string[] args, CancellationToken cancellationToken)
+        public async Task<ClizerExitCode> Execute(string[] args)
         {
             try
             {
+                // register cancellation source
+                var cancellation = new CancellationTokenSource();
+                Console.CancelKeyPress += new ConsoleCancelEventHandler((sender, args) => cancellation.Cancel());
+
+                // resolve dependencies and commands
                 var services = RegisterAllDependencies();
-
                 var parameters = SetCalledCommand(services, args);
-
                 var resolver = services.GetRequiredService<CommandResolver>();
                 if (resolver.Called is null)
                     return ClizerExitCode.ERROR;
 
+                // execute middlewares
                 var exit = false;
                 foreach (var type in _configuration.Middlewares)
                 {
                     var middleware = (IClizerMiddleware)services.GetRequiredService(type);
-                    var result = await middleware.Intercept(resolver, parameters.ToArray(), cancellationToken);
+                    var result = await middleware.Intercept(resolver, parameters.ToArray(), cancellation.Token);
                     if (result == ClizerPostAction.EXIT)
                         exit = true;
                 }
@@ -46,10 +51,11 @@ namespace CLIzer
                 if (exit)
                     return ClizerExitCode.SUCCESS;
 
+                // validate and attach passed arguments to command
                 AttachAndValidateArguments(services, parameters);
 
                 var instance = services.GetRequiredService(resolver.Called.Type);
-                return await ((ICliCmd)instance).Execute(cancellationToken);
+                return await ((ICliCmd)instance).Execute(cancellation.Token);
             }
             catch (Exception ex)
             {

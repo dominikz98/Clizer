@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CLIzer.Mapper\CLIzer.Mapper.csproj" />
     <ProjectReference Include="..\CLIzer.Tests\CLIzer.Tests.csproj" />
   </ItemGroup>
 

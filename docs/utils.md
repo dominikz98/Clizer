@@ -14,6 +14,8 @@ ConsoleExtensions.AppendToLine(ConsoleColor.White, 5, "100%");
 ConsoleExtensions.WriteColoredLine(ConsoleColor.Red, "ERROR");
 ```
 
+## Cancellation Binding
+Passed CancellationTokens will automatecally be triggerd by pressing STRG + C.
 
 ## File Accessor
 With IClizerFileAccessor you can create and inject a file accessor to encapsulate file management.

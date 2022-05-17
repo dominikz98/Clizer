@@ -1,7 +1,6 @@
 using CLIzer.Attributes;
 using CLIzer.Contracts;
 using CLIzer.Models;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
@@ -22,7 +21,7 @@ namespace CLIzer.Tests
 
             var clizer = new Clizer();
             clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
-            await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray(), default));
+            await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
         }
 
         [Fact]
@@ -36,7 +35,7 @@ namespace CLIzer.Tests
 
             var clizer = new Clizer();
             clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
-            var result = await clizer.Execute(args.ToArray(), default);
+            var result = await clizer.Execute(args.ToArray());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
@@ -50,7 +49,7 @@ namespace CLIzer.Tests
 
             var clizer = new Clizer();
             clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
-            await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray(), default));
+            await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
         }
 
         [Fact]
@@ -65,7 +64,7 @@ namespace CLIzer.Tests
 
             var clizer = new Clizer();
             clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
-            var result = await clizer.Execute(args.ToArray(), default);
+            var result = await clizer.Execute(args.ToArray());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
@@ -80,7 +79,7 @@ namespace CLIzer.Tests
 
             var clizer = new Clizer();
             clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
-            var result = await clizer.Execute(args.ToArray(), default);
+            var result = await clizer.Execute(args.ToArray());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }

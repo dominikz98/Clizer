@@ -1,5 +1,4 @@
 using CLIzer.Contracts;
-using CLIzer.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +31,7 @@ namespace CLIzer.Tests
                                 .SubCommand<EmployeeCmd>("employee")
                 )
             );
-            var result = await clizer.Execute(args, default);
+            var result = await clizer.Execute(args);
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
@@ -46,7 +45,7 @@ namespace CLIzer.Tests
                     .Root<RootCmd>()
                 )
             );
-            var result = await clizer.Execute(Array.Empty<string>(), default);
+            var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
@@ -54,7 +53,7 @@ namespace CLIzer.Tests
         public async Task Empty()
         {
             var clizer = new Clizer();
-            var result = await clizer.Execute(Array.Empty<string>(), default);
+            var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
     }

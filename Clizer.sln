@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BD3B4201
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AAA6FF2-ABF8-424B-AFB5-403BB1FB7BA6}"
 	ProjectSection(SolutionItems) = preProject
-		aliases.md = aliases.md
+		docs\aliases.md = docs\aliases.md
 		docs\arguments.md = docs\arguments.md
 		docs\commands.md = docs\commands.md
 		docs\configuration.md = docs\configuration.md

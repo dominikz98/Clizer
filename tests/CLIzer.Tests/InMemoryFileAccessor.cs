@@ -4,19 +4,18 @@ using System.Threading.Tasks;
 
 namespace CLIzer.Tests
 {
-    public class InMemoryFileAccessor<T> : IClizerFileAccessor<T> where T : class, new()
+    public class InMemoryFileAccessor<T> : IClizerFileAccessor<T>
     {
         public T? Data { get; set; }
+        public string Source => "Unit Test (In memory value)";
 
-        public string? Path => null;
-
-        public InMemoryFileAccessor() { }
+        public InMemoryFileAccessor(T? data)
+        {
+            Data = data;
+        }
 
         public Task<T?> Load(CancellationToken cancellationToken)
-        {
-            Data ??= new();
-            return Task.FromResult<T?>(Data);
-        }
+           => Task.FromResult(Data);
 
         public Task Save(T data, CancellationToken cancellationToken)
         {

@@ -3,23 +3,21 @@ using System.Text.Json;
 
 namespace CLIzer.Utils
 {
-    public class JsonFileByRelativePathAccessor<T> : IClizerFileAccessor<T> where T : class, new()
+    public class JsonFileByPathAccessor<T> : IClizerFileAccessor<T> where T : class, new()
     {
-        public string RelativePath { get; }
+        public string Source { get; set; }
 
-        public string? Path => System.IO.Path.Combine(Environment.CurrentDirectory, RelativePath);
-
-        public JsonFileByRelativePathAccessor(string relativePath)
+        public JsonFileByPathAccessor(string path)
         {
-            RelativePath = relativePath;
+            Source = path;
         }
 
         public async Task<T?> Load(CancellationToken cancellationToken)
         {
-            if (Path is null)
+            if (Source is null)
                 return null;
 
-            using var fs = new FileStream(Path, FileMode.OpenOrCreate);
+            using var fs = new FileStream(Source, FileMode.OpenOrCreate);
 
             if (fs.Length == 0)
                 return null;
@@ -33,10 +31,10 @@ namespace CLIzer.Utils
 
         public async Task Save(T data, CancellationToken cancellationToken)
         {
-            if (Path is null)
+            if (Source is null)
                 return;
 
-            using var fs = new FileStream(Path, FileMode.Create);
+            using var fs = new FileStream(Source, FileMode.Create);
             await JsonSerializer.SerializeAsync(fs, data, cancellationToken: cancellationToken);
         }
     }

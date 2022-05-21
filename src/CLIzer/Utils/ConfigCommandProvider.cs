@@ -14,10 +14,10 @@ namespace CLIzer.Utils
 
         public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
         {
-            if (_configAccessor.Path is null)
+            if (_configAccessor.Source is null)
                 return Task.FromResult(ClizerExitCode.ERROR);
 
-            Process.Start(new ProcessStartInfo(_configAccessor.Path) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(_configAccessor.Source) { UseShellExecute = true });
             return Task.FromResult(ClizerExitCode.SUCCESS);
         }
     }

@@ -12,7 +12,7 @@ namespace CLIzer.Tests.Mapper
         [Fact]
         public async Task Map_To_Short_Id()
         {
-            var pathResolver = new InMemoryFileAccessor<ClizerDictionary>();
+            var pathResolver = new InMemoryFileAccessor<ClizerDictionary>(new ClizerDictionary());
             var mapper = new ClizerMapper(pathResolver);
 
             var entity1 = new TestEntity();
@@ -31,7 +31,7 @@ namespace CLIzer.Tests.Mapper
         [Fact]
         public async Task Injection()
         {
-            var pathResolver = new InMemoryFileAccessor<ClizerDictionary>();
+            var pathResolver = new InMemoryFileAccessor<ClizerDictionary>(new ClizerDictionary());
 
             var clizer = new Clizer()
                 .Configure((config) => config

@@ -8,6 +8,7 @@ The project provides useful functions to make it really easy all the way:
 - :heavy_check_mark: [Argument parsing and validation](docs/arguments.md)
 - :bookmark: [Custom Configs](docs/custom_configs.md)
 - :book: [Help text generation](docs/help.md)
+- :chains: [User configurable aliases](docs/aliases.md)
 - :link: [ID Mapper](docs/mapper.md)
 - :shield: [Middlewares](docs/middlewares.md)
 - :syringe: [Dependency Injection](docs/dependency_injection.md)

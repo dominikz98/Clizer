@@ -10,7 +10,7 @@ namespace CLIzer.Extensions
     public static class ClizerConfigurationExtension
     {
         public static ClizerConfiguration EnableMapping(this ClizerConfiguration configuration, string relativePath)
-            => configuration.EnableMapping(new JsonFileByRelativePathAccessor<ClizerDictionary>(relativePath));
+            => configuration.EnableMapping(new JsonFileByPathAccessor<ClizerDictionary>(relativePath));
 
         public static ClizerConfiguration EnableMapping(this ClizerConfiguration configuration, IClizerFileAccessor<ClizerDictionary> fileAccessor)
         {
@@ -33,7 +33,7 @@ namespace CLIzer.Extensions
         }
 
         public static ClizerConfiguration RegisterConfig<TConfig>(this ClizerConfiguration configuration, string name, string relativePath) where TConfig : class, new()
-            => configuration.RegisterConfig(name, new JsonFileByRelativePathAccessor<TConfig>(relativePath));
+            => configuration.RegisterConfig(name, new JsonFileByPathAccessor<TConfig>(relativePath));
 
         public static ClizerConfiguration RegisterConfig<TConfig>(this ClizerConfiguration configuration, string name, IClizerFileAccessor<TConfig> fileAccessor) where TConfig : class, new()
         {
@@ -49,6 +49,17 @@ namespace CLIzer.Extensions
             });
 
             configuration.RegisterMiddleware<ConfigMiddleware<TConfig>>();
+
+            return configuration;
+        }
+
+        public static ClizerConfiguration EnableAliases(this ClizerConfiguration configuration, string relativePath)
+            => configuration.EnableAliases(new TextFileByPathAccessor(relativePath));
+
+        public static ClizerConfiguration EnableAliases(this ClizerConfiguration configuration, IClizerFileAccessor<string> fileAccessor)
+        {
+            configuration.RegisterServices(services => services
+                .AddSingleton((_) => new AliasesResolver(fileAccessor)));
 
             return configuration;
         }

@@ -5,10 +5,10 @@ namespace CLIzer.Utils
 {
     internal class AliasesResolver
     {
-        private readonly List<Alias> _aliases = new();
-        private readonly IClizerFileAccessor<string> _file;
+        public List<Alias> Aliases { get; set; } = new();
+        private readonly IClizerDataAccessor<string> _file;
 
-        public AliasesResolver(IClizerFileAccessor<string> file)
+        public AliasesResolver(IClizerDataAccessor<string> file)
         {
             _file = file;
         }
@@ -35,7 +35,7 @@ namespace CLIzer.Utils
                     .Select(x => x.Trim().ToLower())
                     .ToList();
 
-                _aliases.Add(new Alias(name, commands));
+                Aliases.Add(new Alias(name, commands));
             }
         }
 
@@ -52,7 +52,7 @@ namespace CLIzer.Utils
 
         private string[] ReplaceAliasesWithCommands(string arg)
         {
-            var alias = _aliases.FirstOrDefault(x => x.Name.Equals(arg, StringComparison.OrdinalIgnoreCase));
+            var alias = Aliases.FirstOrDefault(x => x.Name.Equals(arg, StringComparison.OrdinalIgnoreCase));
             if (alias is null)
                 return new string[] { arg };
 

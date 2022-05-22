@@ -3,6 +3,8 @@
 Use Clizer to easily access your written services/commands via CLI.
 <a href="https://img.shields.io/nuget/v/clizer?label=Clizer"></a>
 
+[![NuGet](https://img.shields.io/nuget/v/clizer?label=Clizer)](https://www.nuget.org/packages/CLIzer/)
+
 The project provides useful functions to make it really easy all the way:
 - :rocket: [Main/sub command handling](docs/commands.md)
 - :hammer: [Easy Configuration](docs/configuration.md)

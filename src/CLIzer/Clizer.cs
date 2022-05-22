@@ -1,6 +1,7 @@
 ﻿using CLIzer.Attributes;
 using CLIzer.Contracts;
 using CLIzer.Extensions;
+using CLIzer.Middlewares;
 using CLIzer.Models;
 using CLIzer.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,9 @@ namespace CLIzer
         {
             try
             {
+                // remove empty args
+                args = args.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
                 // register cancellation source
                 var cancellation = new CancellationTokenSource();
                 Console.CancelKeyPress += new ConsoleCancelEventHandler((sender, args) => cancellation.Cancel());
@@ -43,17 +47,23 @@ namespace CLIzer
                 }
 
                 // resolve command to be executed
-                var parameters = SetCalledCommand(services, args);
+                args = SetCalledCommand(services, args);
                 var resolver = services.GetRequiredService<CommandResolver>();
-                if (resolver.Called is null)
+                var dynamicHelpCommandCalled = _configuration.Middlewares.Any(x => typeof(HelpMiddleware) != null)
+                    && args.Any(x => x.Equals("help", StringComparison.OrdinalIgnoreCase));
+
+                if (resolver.Called is null && !dynamicHelpCommandCalled)
+                {
+                    FindSimilarCommands(services, args);
                     return ClizerExitCode.ERROR;
+                }
 
                 // execute middlewares
                 var exit = false;
                 foreach (var type in _configuration.Middlewares)
                 {
                     var middleware = (IClizerMiddleware)services.GetRequiredService(type);
-                    var result = await middleware.Intercept(resolver, parameters.ToArray(), cancellation.Token);
+                    var result = await middleware.Intercept(resolver, args, cancellation.Token);
                     if (result == ClizerPostAction.EXIT)
                         exit = true;
                 }
@@ -61,7 +71,7 @@ namespace CLIzer
                     return ClizerExitCode.SUCCESS;
 
                 // validate and attach passed arguments to command
-                AttachAndValidateArguments(services, parameters);
+                AttachAndValidateArguments(services, args);
 
                 // execute called command
                 var instance = services.GetRequiredService(resolver.Called.Type);
@@ -123,28 +133,79 @@ namespace CLIzer
         {
             var parameter = new List<string>();
             var resolver = services.GetRequiredService<CommandResolver>();
+            var parent = _configuration.Container!.RootCommand;
             var command = _configuration.Container!.RootCommand;
             command.Commands = _configuration.Container.Commands;
-            args = args.ToList()
-                .Where(x => !string.IsNullOrWhiteSpace(x))
+
+            // exclude options and arguments
+            var commandArgs = args.ToList()
+                .Where(x => !x.Contains('-'))
+                .Where(x => !x.Contains(':'))
                 .Select(x => x.ToLower())
                 .ToArray();
 
-            for (int i = 0; i < args.Length; i++)
+            foreach (var arg in commandArgs)
             {
-                var nextCommand = command.Commands.FirstOrDefault(x => x.Name.Equals(args[i]));
+                var nextCommand = command.Commands.FirstOrDefault(x => x.Name.Equals(arg));
                 if (nextCommand is null)
                 {
-                    args = args.ToList().GetRange(i, args.Length - i).ToArray();
-                    resolver.Called = command;
-                    return args;
+                    parent = command;
+                    command = null;
+                    break;
                 }
 
+                args = args.Where(x => x != arg).ToArray();
+                parent = command;
                 command = nextCommand;
             }
 
+            resolver.Parent = parent;
             resolver.Called = command;
-            return Array.Empty<string>();
+            return args;
+        }
+
+        private void FindSimilarCommands(IServiceProvider services, string[] args)
+        {
+            var resolver = services.GetRequiredService<CommandResolver>();
+            if (resolver.Parent is null)
+                return;
+
+            if (resolver.Parent == _configuration.Container!.RootCommand)
+                return;
+
+            Console.WriteLine($"Unknown command for {resolver.Parent.Name}. See '--help'");
+
+            // list similar commands
+            var parent = args.FirstOrDefault() ?? string.Empty;
+            var similarCommands = resolver.Parent
+                .GetAll()
+                .Select(x => x.Name.ToLower())
+                .Where(x => LevenshteinDistance.Compute(parent, x) <= 3);
+
+            if (similarCommands.Any())
+            {
+                Console.WriteLine("Most similar commands:");
+                foreach (var similar in similarCommands)
+                    Console.WriteLine($" - {similar}");
+            }
+
+            // list similar aliases
+            var aliasesResolver = services.GetRequiredService<AliasesResolver>();
+            if (aliasesResolver is null)
+                return;
+
+            var similarAliases = aliasesResolver
+                .Aliases
+                .Select(x => x.Name.ToLower())
+                .Where(x => LevenshteinDistance.Compute(parent, x) <= 2);
+
+            if (!similarAliases.Any())
+                return;
+
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Most similar aliases:");
+            foreach (var similar in similarAliases)
+                Console.WriteLine($" - {similar}");
         }
 
         private static void AttachAndValidateArguments(IServiceProvider services, string[] parameters)

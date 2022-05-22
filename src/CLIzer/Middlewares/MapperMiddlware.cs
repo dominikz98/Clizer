@@ -7,9 +7,9 @@ namespace CLIzer.Middlewares
     internal class MapperMiddlware : IClizerMiddleware
     {
         private readonly IClizerMapper _mapper;
-        private readonly IClizerFileAccessor<ClizerDictionary> _file;
+        private readonly IClizerDataAccessor<ClizerDictionary> _file;
 
-        public MapperMiddlware(IClizerMapper mapper, IClizerFileAccessor<ClizerDictionary> file)
+        public MapperMiddlware(IClizerMapper mapper, IClizerDataAccessor<ClizerDictionary> file)
         {
             _mapper = mapper;
             _file = file;

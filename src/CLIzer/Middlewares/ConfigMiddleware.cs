@@ -7,9 +7,9 @@ namespace CLIzer.Middlewares
     internal class ConfigMiddleware<T> : IClizerMiddleware where T : class, new()
     {
         private readonly IConfig<T> _config;
-        private readonly IClizerFileAccessor<T> _accessor;
+        private readonly IClizerDataAccessor<T> _accessor;
 
-        public ConfigMiddleware(IConfig<T> config, IClizerFileAccessor<T> accessor)
+        public ConfigMiddleware(IConfig<T> config, IClizerDataAccessor<T> accessor)
         {
             _config = config;
             _accessor = accessor;

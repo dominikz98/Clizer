@@ -18,10 +18,10 @@ The remaining args which will be applied to the command.
 ```csharp
 class EpicFileLoader : IClizerMiddleware
 {
-    private readonly IClizerFileAccessor<SecretFormula> _accessor;
+    private readonly IClizerDataAccessor<SecretFormula> _accessor;
     private readonly IBurgerFactory _burgerFactory;
 
-    public EpicFileLoader(IClizerFileAccessor<SecretFormula> accessor, IBurgerFactory burgerFactory)
+    public EpicFileLoader(IClizerDataAccessor<SecretFormula> accessor, IBurgerFactory burgerFactory)
     {
         _accessor = accessor;
         _burgerFactory = burgerFactory;

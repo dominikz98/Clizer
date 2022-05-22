@@ -7,10 +7,10 @@ namespace CLIzer
     {
         internal ClizerDictionary Storage { get; set; }
 
-        private readonly IClizerFileAccessor<ClizerDictionary> _file;
+        private readonly IClizerDataAccessor<ClizerDictionary> _file;
         private readonly Random _rnd;
 
-        public ClizerMapper(IClizerFileAccessor<ClizerDictionary> file)
+        public ClizerMapper(IClizerDataAccessor<ClizerDictionary> file)
         {
             _rnd = new Random();
             Storage = new ClizerDictionary();

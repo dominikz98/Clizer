@@ -1,6 +1,6 @@
 ﻿namespace CLIzer.Contracts
 {
-    public interface IClizerFileAccessor<T>
+    public interface IClizerDataAccessor<T>
     {
         string Source { get; }
         Task<T?> Load(CancellationToken cancellationToken);

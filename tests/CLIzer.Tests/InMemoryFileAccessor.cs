@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CLIzer.Tests
 {
-    public class InMemoryFileAccessor<T> : IClizerFileAccessor<T>
+    public class InMemoryFileAccessor<T> : IClizerDataAccessor<T>
     {
         public T? Data { get; set; }
         public string Source => "Unit Test (In memory value)";

@@ -1,8 +1,8 @@
 ﻿using CLIzer.Contracts;
 
-namespace CLIzer.Utils
+namespace CLIzer.Accessors
 {
-    internal class TextFileByPathAccessor : IClizerFileAccessor<string>
+    internal class TextFileByPathAccessor : IClizerDataAccessor<string>
     {
         public string Source { get; }
 

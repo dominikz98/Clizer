@@ -4,7 +4,7 @@ With the EnableMapping() method in the configuration section, an instance of ICl
 With these mapper, entities with complex and long IDs can be (reverse-) mapped into a short four-digit ID.
 Guids/Urls/... can be displayed and assigned with a short ID.
 
-The mappings are scope safe and will be stored in passed relative path or fileaccessor.
+The mappings are scope safe and will be stored in passed relative path or data accessor.
 Each object type has a separate ID pool, so two objects with equal IDs, but other types have different mappings.
 
 ## Example

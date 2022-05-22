@@ -8,9 +8,9 @@ There are 2 ways to define how the configuration will be load and saved:
 If you pass in a relative path, the file will be automatically loaded and parsed from json.
 Other formats currently not automatically supported.
 
-## IClizerFileAccessor
+## IClizerDataAccessor
 Here you go if you want to load your config from databases/storage/... or in another format than json.
-[Create a implementation of IClizerFileAccessor](utils.md)
+[Create a implementation of IClizerDataAccessor](utils.md)
 
 ## Example
 

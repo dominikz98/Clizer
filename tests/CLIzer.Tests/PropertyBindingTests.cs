@@ -16,7 +16,7 @@ namespace CLIzer.Tests
         {
             var args = new List<string>()
             {
-                "test"
+                "--test:1"
             };
 
             var clizer = new Clizer();
@@ -44,7 +44,7 @@ namespace CLIzer.Tests
         {
             var args = new List<string>()
             {
-                "ignore"
+                "--ignore"
             };
 
             var clizer = new Clizer();

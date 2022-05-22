@@ -17,9 +17,9 @@ ConsoleExtensions.WriteColoredLine(ConsoleColor.Red, "ERROR");
 ## Cancellation Binding
 Passed CancellationTokens will automatecally be triggerd by pressing STRG + C.
 
-## File Accessor
-With IClizerFileAccessor you can create and inject a file accessor to encapsulate file management.
-File accessor can be used to load data from IO, databases, file storage, ...
+## Data Accessor
+With IClizerFileAccessor you can create and inject a data accessor to encapsulate file management.
+Data accessor can be used to load data from IO, databases, file storage, ...
 
 Json file from IO accessor example:
 ```csharp

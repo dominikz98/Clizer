@@ -5,9 +5,9 @@ namespace CLIzer.Utils
 {
     internal class ConfigCommandProvider<T> : ICliCmd where T : class, new()
     {
-        private readonly IClizerFileAccessor<T> _configAccessor;
+        private readonly IClizerDataAccessor<T> _configAccessor;
 
-        public ConfigCommandProvider(IClizerFileAccessor<T> configAccessor)
+        public ConfigCommandProvider(IClizerDataAccessor<T> configAccessor)
         {
             _configAccessor = configAccessor;
         }

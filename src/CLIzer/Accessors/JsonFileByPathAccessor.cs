@@ -1,9 +1,9 @@
 ﻿using CLIzer.Contracts;
 using System.Text.Json;
 
-namespace CLIzer.Utils
+namespace CLIzer.Accessors
 {
-    public class JsonFileByPathAccessor<T> : IClizerFileAccessor<T> where T : class, new()
+    public class JsonFileByPathAccessor<T> : IClizerDataAccessor<T> where T : class, new()
     {
         public string Source { get; set; }
 

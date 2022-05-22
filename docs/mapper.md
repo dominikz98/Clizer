@@ -1,13 +1,13 @@
 # ID Mapper
 With the EnableMapping() method in the configuration section, an instance of IClizerMapper can be injected in your commands.
 
-With these mapper, entities with complex and long IDss can be (reverse-) mapped into a short four-digit ID.
+With these mapper, entities with complex and long IDs can be (reverse-) mapped into a short four-digit ID.
 Guids/Urls/... can be displayed and assigned with a short ID.
 
 The mappings are scope safe and will be stored in passed relative path or fileaccessor.
 Each object type has a separate ID pool, so two objects with equal IDs, but other types have different mappings.
 
-# Example
+## Example
 
 ```batch
 C:\Users\Spongebob> {{assembly}} cook

@@ -14,7 +14,7 @@ With this resolver, you can access the command which will be called after the mi
 ## Args
 The remaining args which will be applied to the command.
 
-# Example
+## Example
 ```csharp
 class EpicFileLoader : IClizerMiddleware
 {

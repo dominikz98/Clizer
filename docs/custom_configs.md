@@ -12,7 +12,7 @@ Other formats currently not automatically supported.
 Here you go if you want to load your config from databases/storage/... or in another format than json.
 [Create a implementation of IClizerFileAccessor](utils.md)
 
-# Example
+## Example
 
 ```batch
 C:\Users\Spongebob> {{assembly}} config

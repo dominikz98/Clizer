@@ -14,11 +14,10 @@ namespace CLIzer.Tests.Aliases
         {
             var args = new List<string>()
             {
-                "ut",
-                "al"
+                "ut"
             };
 
-            var aliases = "ut = unit test \r\n al = aliases";
+            var aliases = "ut = unit test al \r\n al = aliases";
             var fileAccessor = new InMemoryFileAccessor<string>(aliases);
             var clizer = new Clizer()
                 .Configure(config => config

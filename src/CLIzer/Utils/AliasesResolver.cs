@@ -44,15 +44,25 @@ namespace CLIzer.Utils
             var result = new List<string>();
             foreach (var arg in args)
             {
-                var alias = _aliases.FirstOrDefault(x => x.Name.Equals(arg, StringComparison.OrdinalIgnoreCase));
-                if (alias is null)
-                {
-                    result.Add(arg);
-                    continue;
-                }
-
-                result.AddRange(alias.Commands);
+                var commands = ReplaceAliasesWithCommands(arg);
+                result.AddRange(commands);
             }
+            return result.ToArray();
+        }
+
+        private string[] ReplaceAliasesWithCommands(string arg)
+        {
+            var alias = _aliases.FirstOrDefault(x => x.Name.Equals(arg, StringComparison.OrdinalIgnoreCase));
+            if (alias is null)
+                return new string[] { arg };
+
+            var result = new List<string>();
+            foreach (var command in alias.Commands)
+            {
+                var subcommands = ReplaceAliasesWithCommands(command);
+                result.AddRange(subcommands);
+            }
+
             return result.ToArray();
         }
     }

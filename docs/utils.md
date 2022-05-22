@@ -14,6 +14,9 @@ ConsoleExtensions.AppendToLine(ConsoleColor.White, 5, "100%");
 ConsoleExtensions.WriteColoredLine(ConsoleColor.Red, "ERROR");
 ```
 
+## Similar command searching
+If no command could be found for passed call chain, suggestions of similar commands from the last valid called parent will be displayed.
+
 ## Cancellation Binding
 Passed CancellationTokens will automatecally be triggerd by pressing STRG + C.
 

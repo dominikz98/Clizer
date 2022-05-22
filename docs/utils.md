@@ -14,16 +14,19 @@ ConsoleExtensions.AppendToLine(ConsoleColor.White, 5, "100%");
 ConsoleExtensions.WriteColoredLine(ConsoleColor.Red, "ERROR");
 ```
 
+## Similar command searching
+If no command could be found for passed call chain, suggestions of similar commands from the last valid called parent will be displayed.
+
 ## Cancellation Binding
 Passed CancellationTokens will automatecally be triggerd by pressing STRG + C.
 
-## File Accessor
-With IClizerFileAccessor you can create and inject a file accessor to encapsulate file management.
-File accessor can be used to load data from IO, databases, file storage, ...
+## Data Accessor
+With IClizerDataAccessor you can create and inject a data accessor to encapsulate file management.
+Data accessor can be used to load data from IO, databases, file storage, ...
 
 Json file from IO accessor example:
 ```csharp
-public class JsonFileAccessor<T> : IClizerFileAccessor<T> where T : class, new()
+public class JsonFileAccessor<T> : IClizerDataAccessor<T> where T : class, new()
 {
     public string RelativePath { get; }
 

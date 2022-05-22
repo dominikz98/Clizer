@@ -1,7 +1,7 @@
 # Custom Extensions
 Try to make your own configuration classes or extend the configuration class itself to prevent duplicate code/work.
 
-# Example
+## Example
 
 ```csharp
 var config = new SingleCommandConfiguration<TheFlyingDutchmanCmd>();

@@ -8,7 +8,7 @@ If help is passed in args, the following sections will be printed about the call
 
 To overwrite the displayed help text, fill up the help text parameter in CliIArgAttribute constructor.
 
-# Example
+## Example
 
 Calls:
 ```batch

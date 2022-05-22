@@ -6,7 +6,7 @@ using Xunit;
 
 namespace CLIzer.Tests.Help
 {
-    public class HelpTextTests
+    public class General
     {
         [Theory]
         [InlineData("help")]

@@ -1,7 +1,7 @@
 # Dependency Injection
 With the RegisterServices() method in the configuration section, a delegate to configure a service collection or an instance of itself can be passed.
 
-# Example
+## Example
 ```csharp
 new Clizer()
     .Configure((config) => config

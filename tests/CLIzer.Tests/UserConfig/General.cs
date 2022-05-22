@@ -31,13 +31,11 @@ namespace CLIzer.Tests.UserConfig
         [Fact]
         public async Task Inject_Config()
         {
-            var fileAccessor = new InMemoryFileAccessor<TestUserConfiguration>
-            {
-                Data = new()
+            var fileAccessor = new InMemoryFileAccessor<TestUserConfiguration>(
+                new TestUserConfiguration()
                 {
                     Value = 99
-                }
-            };
+                });
 
             var clizer = new Clizer()
                 .Configure((config) => config

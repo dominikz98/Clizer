@@ -31,8 +31,18 @@ namespace CLIzer
                 var cancellation = new CancellationTokenSource();
                 Console.CancelKeyPress += new ConsoleCancelEventHandler((sender, args) => cancellation.Cancel());
 
-                // resolve dependencies and commands
+                // register services, commands and middlewares
                 var services = RegisterAllDependencies();
+
+                // replace aliases with full command names
+                var aliasesResolver = services.GetService<AliasesResolver>();
+                if (aliasesResolver != null)
+                {
+                    await aliasesResolver.LoadAliases(cancellation.Token);
+                    args = aliasesResolver.ReplaceAliasesWithCommands(args);
+                }
+
+                // resolve command to be executed
                 var parameters = SetCalledCommand(services, args);
                 var resolver = services.GetRequiredService<CommandResolver>();
                 if (resolver.Called is null)
@@ -47,13 +57,13 @@ namespace CLIzer
                     if (result == ClizerPostAction.EXIT)
                         exit = true;
                 }
-
                 if (exit)
                     return ClizerExitCode.SUCCESS;
 
                 // validate and attach passed arguments to command
                 AttachAndValidateArguments(services, parameters);
 
+                // execute called command
                 var instance = services.GetRequiredService(resolver.Called.Type);
                 return await ((ICliCmd)instance).Execute(cancellation.Token);
             }

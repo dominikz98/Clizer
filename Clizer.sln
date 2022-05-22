@@ -13,10 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BD3B4201
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AAA6FF2-ABF8-424B-AFB5-403BB1FB7BA6}"
 	ProjectSection(SolutionItems) = preProject
+		docs\aliases.md = docs\aliases.md
 		docs\arguments.md = docs\arguments.md
 		docs\commands.md = docs\commands.md
 		docs\configuration.md = docs\configuration.md
-		docs\customconfigs.md = docs\customconfigs.md
+		docs\custom_configs.md = docs\custom_configs.md
 		docs\custom_extensions.md = docs\custom_extensions.md
 		docs\dependency_injection.md = docs\dependency_injection.md
 		docs\help.md = docs\help.md

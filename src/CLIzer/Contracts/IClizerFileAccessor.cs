@@ -1,8 +1,8 @@
 ﻿namespace CLIzer.Contracts
 {
-    public interface IClizerFileAccessor<T> where T : class, new()
+    public interface IClizerFileAccessor<T>
     {
-        string? Path { get; }
+        string Source { get; }
         Task<T?> Load(CancellationToken cancellationToken);
         Task Save(T data, CancellationToken cancellationToken);
     }

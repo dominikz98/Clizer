@@ -17,7 +17,7 @@ Call the arg shortcut with - prefix to assign the property.
 ## [Helptext](help.md)
 Here you can add some custom help text, which will override default generation.
 
-# Example
+## Example
 
 Calls:
 ```batch

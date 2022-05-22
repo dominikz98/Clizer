@@ -47,7 +47,7 @@ C:\Users\Spongebob> {{assembly}} company employee add
 So you already registered many sub commands, but don't know how to get back to root level?
 Just call Return() and get the instance of the command container.
 
-# Example
+## Example
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config

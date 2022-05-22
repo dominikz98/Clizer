@@ -7,8 +7,35 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Include="..\..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<Authors>Dominik Zettl</Authors>
+		<RepositoryUrl>https://github.com/dominikz98/Clizer.git</RepositoryUrl>
+		<PackageTags>Clizer standard command line package lib net6 cmd cli mapper</PackageTags>
+		<Company />
+		<Description>Use Clizer to easily access your written services/commands via CLI. Documentation in README on Github.
+		</Description>
+		<Version>2.1.0</Version>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageReleaseNotes>V2.1.0:
+- Search similiar commands if no matching found
+- Support of user configurable alias
+- Support of cancellation- and closing-handling</PackageReleaseNotes>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/dominikz98/Clizer.git</PackageProjectUrl>
+		<Copyright>Dominik Zettl</Copyright>
+	</PropertyGroup>
 
 </Project>

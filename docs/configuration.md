@@ -9,6 +9,7 @@ A delegate or an instance of the configuration could be passed.
 - [RegisterServices()](dependency_injection.md)
 - [RegisterCommands()](commands.md)
 - [EnableHelp()](help.md)
+- [EnableAliases()](aliases.md)
 - HandleException()
 
 ## Exception Handling
@@ -17,7 +18,7 @@ By default, the exception will be rethrowed.
 
 **In Prod:** Catch all of the type ClizerException, these exceptions contains details about invalid configuration and other information about the internal structure!
 
-# Example
+## Example
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config

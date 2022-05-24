@@ -21,8 +21,9 @@ namespace CLIzer
         public Clizer() : this(new()) { }
 
         /// <summary>
-        /// Entry point.
+        /// Entry point
         /// </summary>
+        /// <exception cref="ClizerException"></exception>
         public async Task<ClizerExitCode> Execute(string[] args)
         {
             try

@@ -22,14 +22,13 @@ The project provides useful functions to make it really easy all the way:
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config
-        .RegisterCommands(container => container
-            .Root<MainCommand>()));
+        .RegisterCommands(GetType().Assembly));
 
-await clizer.Execute(args.ToArray(), default);
+await clizer.Execute(args);
 
-class MainCommand : ICliCmd
+class Command : ICliCmd
 {
-    public Task<int> Execute(CancellationToken cancellationToken)
-        => Task.FromResult((int)ClizerExitCodes.SUCCESS);
+    public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+        => Task.FromResult(ClizerExitCode.ERROR);
 }
 ```

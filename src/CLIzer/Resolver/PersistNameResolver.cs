@@ -1,4 +1,6 @@
-﻿namespace CLIzer.Contracts
+﻿using CLIzer.Contracts;
+
+namespace CLIzer.Resolver
 {
     internal class PersistNameResolver<TCmd> : ICommandNameResolver where TCmd : ICliCmd
     {

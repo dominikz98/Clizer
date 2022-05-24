@@ -25,7 +25,7 @@ namespace CLIzer.Models
             if (factory is null)
                 Middlewares.Add(new MiddlewareRegistration(typeof(T), null));
             else
-                Middlewares.Add(new MiddlewareRegistration(typeof(T), (sp) => factory(sp)));
+                Middlewares.Add(new MiddlewareRegistration(typeof(T), factory));
             return this;
         }
 

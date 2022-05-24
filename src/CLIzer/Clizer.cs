@@ -50,9 +50,9 @@ namespace CLIzer
 
                 // execute middlewares
                 var exit = false;
-                foreach (var middlewaRegistration in _configuration.Middlewares)
+                var middlewares = services.GetServices<IClizerMiddleware>();
+                foreach (var middleware in middlewares)
                 {
-                    var middleware = (IClizerMiddleware)services.GetRequiredService(middlewaRegistration.Type);
                     var result = await middleware.Intercept(context, cancellation.Token);
                     if (result == ClizerPostAction.EXIT)
                         exit = true;
@@ -99,9 +99,9 @@ namespace CLIzer
             // register middlewares
             foreach (var middleware in _configuration.Middlewares)
                 if (middleware.Factory is not null)
-                    _configuration.Services.AddSingleton(middleware.Type, middleware.Factory);
+                    _configuration.Services.AddSingleton(middleware.Factory);
                 else
-                    _configuration.Services.AddSingleton(middleware.Type);
+                    _configuration.Services.AddSingleton(typeof(IClizerMiddleware), middleware.Type);
 
             // inject commands
             _configuration.RootCommand ??= new CommandRegistration(typeof(EmptyCommand), string.Empty);

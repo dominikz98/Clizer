@@ -1,4 +1,5 @@
-﻿using CLIzer.Contracts;
+﻿using CLIzer.Attributes;
+using CLIzer.Contracts;
 using CLIzer.Extensions;
 using System.Collections.Generic;
 using System.Threading;
@@ -22,28 +23,28 @@ namespace CLIzer.Tests.Aliases
             var clizer = new Clizer()
                 .Configure(config => config
                 .EnableAliases(fileAccessor)
-                .RegisterCommands(cmds => cmds
-                    .Command<UnitCommand>("unit")
-                    .SubCommand<TestCommand>("test")
-                    .SubCommand<AliasesCommand>("aliases")));
+                .RegisterCommands(GetType().Assembly));
 
             var result = await clizer.Execute(args.ToArray());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
+        [CliName("unit")]
         class UnitCommand : ICliCmd
         {
             public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
                 => Task.FromResult(ClizerExitCode.HINT);
         }
 
-        class TestCommand : ICliCmd
+        [CliName("test")]
+        class TestCommand : ICliCmd<UnitCommand>
         {
             public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
                 => Task.FromResult(ClizerExitCode.HINT);
         }
 
-        class AliasesCommand : ICliCmd
+        [CliName("aliases")]
+        class AliasesCommand : ICliCmd<TestCommand>
         {
             public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
                 => Task.FromResult(ClizerExitCode.SUCCESS);

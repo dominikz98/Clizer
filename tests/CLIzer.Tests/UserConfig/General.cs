@@ -19,10 +19,8 @@ namespace CLIzer.Tests.UserConfig
 
             var clizer = new Clizer()
                 .Configure((config) => config
-                    .RegisterConfig<TestUserConfiguration>("config", "smitty_werben_jagger_man_jensen.json")
-                    .RegisterCommands((container) => container
-                        .Root<UserConfigCommand>())
-                );
+                    .EnableConfig<TestUserConfiguration>("config", "smitty_werben_jagger_man_jensen.json")
+                    .RegisterCommands<UserConfigCommand>());
 
             var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
@@ -39,10 +37,8 @@ namespace CLIzer.Tests.UserConfig
 
             var clizer = new Clizer()
                 .Configure((config) => config
-                    .RegisterConfig("config", fileAccessor)
-                    .RegisterCommands((container) => container
-                        .Root<UserConfigCommand>())
-                );
+                    .EnableConfig("config", fileAccessor)
+                    .RegisterCommands<UserConfigCommand>());
 
             var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);

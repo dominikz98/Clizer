@@ -1,7 +1,7 @@
 ﻿using CLIzer.Contracts;
 using CLIzer.Models;
 
-namespace CLIzer.Utils
+namespace CLIzer.Resolver
 {
     internal class AliasesResolver
     {

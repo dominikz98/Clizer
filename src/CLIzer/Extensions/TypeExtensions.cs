@@ -19,6 +19,9 @@ namespace CLIzer.Extensions
                 .Select(x => x.GetCustomAttribute<CliIArgAttribute>()!)
                 .ToList();
 
+        public static CliNameAttribute? GetName(this Type type)
+            => type.GetCustomAttribute<CliNameAttribute>();
+
         public static List<PropertyInfo> GetCliProperties(this Type type)
             => type.GetProperties()
                 .Where(x => x.GetCustomAttribute<CliIArgAttribute>() != null)

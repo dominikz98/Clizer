@@ -20,7 +20,7 @@ namespace CLIzer.Tests
             };
 
             var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
+            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
             await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
         }
 
@@ -34,7 +34,7 @@ namespace CLIzer.Tests
             };
 
             var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
+            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
             var result = await clizer.Execute(args.ToArray());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
@@ -48,7 +48,7 @@ namespace CLIzer.Tests
             };
 
             var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
+            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
             await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
         }
 
@@ -63,7 +63,7 @@ namespace CLIzer.Tests
             };
 
             var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
+            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
             var result = await clizer.Execute(args.ToArray());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
@@ -78,7 +78,7 @@ namespace CLIzer.Tests
             };
 
             var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands((container) => container.Root<PropertyBindingCmd>()));
+            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
             var result = await clizer.Execute(args.ToArray());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }

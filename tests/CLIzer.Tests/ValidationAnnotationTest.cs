@@ -23,15 +23,14 @@ namespace CLIzer.Tests
             clizer.Configure((config) => config
 
                 .HandleException((ex) => throw ex)
-                .RegisterCommands((container) => container
-                    .Command<AddCmd>("add")
-                )
+                .RegisterCommands(GetType().Assembly)
             );
 
             await Assert.ThrowsAsync<ValidationException>(() => clizer.Execute(args.ToArray()));
         }
     }
 
+    [CliName("add")]
     public class AddCmd : ICliCmd
     {
         [Range(1, 100)]

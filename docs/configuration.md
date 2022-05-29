@@ -23,19 +23,17 @@ By default, the exception will be rethrowed.
 var clizer = new Clizer()
     .Configure((config) => config
 
-        .RegisterCommands((container) => container
-            .Root<KrustyKrabCmd>())
+        .RegisterCommands(GetType().Assembly)
 
         .RegisterServices((services) => services
-            .AddScoped<DriveThroughService > ())
+            .AddScoped<DriveThroughService>())
 
         .RegisterMiddleware<KelpShakeMiddleware>()
 
-        .RegisterConfig<SecretFormularConfiguration>("config", "secret_formula.json")
+        .EnableConfig<SecretFormularConfiguration>("config", "secret_formula.json")
 
         .EnableHelp()
 
         .HandleException((ex) => ConsoleExtensions.WriteColoredLine(ConsoleColor.Red, ex.Message))
     );
-);
 ```

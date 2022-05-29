@@ -1,66 +1,54 @@
 # Commands
-Commands can be registered with in the Configure() method.
-All commands will be automatically injected, so don't worry about that.
-You can use the following 4 methods to dot it in a hierarchically or flat way:
+Commands can be registered with in the Configure() method. All commands will be automatically injected. You can arrange your commands in a hierarchically or flat way.
 
-## Root()
-You want to execute a command if the assembly is directly called?
-So there you go.
+(Following examples references the setup on the bottom of this document)
 
-Commands passed in this method, will be registered directly in the 'root path' of the command container.
-Here is a little example in reference to the structure in the below area:
-```batch
-Call:
-C:\Users\Spongebob> {{assembly}}
+## Main
+To define commands of this type, let your class implement **ICliCmd**.<br>
+If no main command is passed, a empty command will be registered instead.
 
-Output:
-Hello from Root Command :0
-```
+These commands will be called with the first argument in the call chain (marked red in the following example):
 
-## Command()
-This method registers commands in a 'flat' level and returns an instance of its own registration.
-Concatenated Command() calls will all be at the same call level:
+>Call:
+>C:\Users\Spongebob> {{assembly}} **<a style="color:red">karbburger</a>**
 
-```csharp
-.Configure((config) => config
-    .RegisterCommands((container) => container
-        .Command<ThaddeusCmd>("thaddeus")
-        .Command<PatrickCmd>("patrick")
-    )
-)
-```
+## Sub
+To define commands of this type, let your class implement **ICliCmd\<TParent\>**.<br>
+The passed parent type needs to be a implementation of **ICliCmd** or **ICliCmd\<TParent\>**.
 
-```batch
-C:\Users\Spongebob> {{assembly}} thaddeus
-C:\Users\Spongebob> {{assembly}} patrick
-```
+These commands can be nested and will be called after the first argument and until arguments or options are passed in the call chain (marked orange in the following example):
 
-## SubCommand()
-Here commands can be registered with a dependency to its predecessor.
-The method returns an instance of the new registered one.
-Here is a little example in reference to the structure in the below area:
-```batch
-C:\Users\Spongebob> {{assembly}} company employee add
-```
+>Call:
+>C:\Users\Spongebob> {{assembly}} <a style="color:red">karbburger</a> **<a style="color:orange">eat</a>** --all
 
-## Return()
-So you already registered many sub commands, but don't know how to get back to root level?
-Just call Return() and get the instance of the command container.
+## Naming
+Commands can be named by attaching the **CliName** attribute on the top of your command class.
+
+Alternative you can define a own name resolver by passing an implementation of **ICommandNameResolver** in the command registration method within the configuration section. (Keep in mind, that the CliName attribute will be ignored in this way)
 
 ## Example
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config
+    .RegisterCommands(GetType().Assembly));
 
-    .RegisterCommands((container) => container
-        .Root<RootCmd>()
-        .Command<CompanyCmd>("company")
-            .SubCommand<EmployeeCmd>("employee")
-                .SubCommand<AddEmployeeCmd>("add")
-        .Return()
-        .Command<GrandparentCmd>("grandparent")
-            .SubCommand<ParentCmd>("parent")
-                .SubCommand<ChildCmd>("child")
-    )
-);
+await clizer.Execute(args.ToArray());
+
+
+[CliName("krabburger")]
+public class KrabBurgerCmd : ICliCmd
+{
+    public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+        => Task.FromResult(ClizerExitCode.ERROR);
+}
+
+[CliName("eat")]
+public class EatCmd : ICliCmd<KrabBurgerCmd>
+{
+    [CliIArg("all", "a")]
+    public bool All { get; set; }
+
+    public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+        => Task.FromResult(ClizerExitCode.SUCCESS);
+}
 ```

@@ -6,17 +6,12 @@ The project itself uses middlewares to provide functionality like [help text](he
 
 Use this option to call routines and prevent boiler code which would be executed at the start of your commands.
 
-The following parameters are passed in the middleware:
-
-## CommandResolver
-With this resolver, you can access the command which will be called after the middleware.
-
-## Args
-The remaining args which will be applied to the command.
+## CommandContext
+This context provides all resolved information about the call that will be executed and the callchain.
 
 ## Example
 ```csharp
-class EpicFileLoader : IClizerMiddleware
+public class EpicFileLoader : IClizerMiddleware
 {
     private readonly IClizerDataAccessor<SecretFormula> _accessor;
     private readonly IBurgerFactory _burgerFactory;
@@ -27,7 +22,7 @@ class EpicFileLoader : IClizerMiddleware
         _burgerFactory = burgerFactory;
     }
 
-    public async Task<ClizerPostAction> Intercept(CommandResolver commandResolver, string[] args, CancellationToken cancellationToken)
+    public async Task<ClizerPostAction> Intercept(CommandContext context, CancellationToken cancellationToken)
     {
         var data = await _accessor.Load(cancellationToken);
         if (data is null)

@@ -36,9 +36,7 @@ namespace CLIzer.Tests.Mapper
             var clizer = new Clizer()
                 .Configure((config) => config
                     .EnableMapping(pathResolver)
-                    .RegisterCommands((container) => container
-                        .Root<MappingCommand>())
-                );
+                    .RegisterCommands<MappingCommand>());
 
             var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);

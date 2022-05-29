@@ -14,25 +14,22 @@ Here you go if you want to load your config from databases/storage/... or in ano
 
 ## Example
 
-```batch
-C:\Users\Spongebob> {{assembly}} config
-```
+>C:\Users\Spongebob> {{assembly}} config
+>C:\Users\Spongebob> {{assembly}} krustykrab
 
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config
-        .RegisterConfig<SecretFormularConfig>("config", "secret_formula.json")
-        .RegisterCommands((container) => container
-            .Root<KrustyKrabCmd>())
-    )
-);
+    .RegisterConfig<SecretFormularConfig>("config", "secret_formula.json")
+    .RegisterCommands(GetType().Assembly));
 
-class SecretFormularConfig
+public class SecretFormularConfig
 {
     public int ValueOfLove { get; set;}
 }
 
-class KrustyKrabCmd 
+[CliName("krustykrab")]
+public class KrustyKrabCmd : ICliCmd
 {
     private readonly SecretFormularConfig? _config;
 

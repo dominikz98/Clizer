@@ -20,12 +20,9 @@ Here you can add some custom help text, which will override default generation.
 ## Example
 
 Calls:
-```batch
-C:\Users\Spongebob> {{assembly}} --number:1 --force --path:E:\secret_formula.json
-```
-```batch
-C:\Users\Spongebob> {{assembly}} --number:1 -f
-```
+>C:\Users\Spongebob> {{assembly}} --number:1 --force --path:E:\secret_formula.json
+
+>C:\Users\Spongebob> {{assembly}} --number:1 -f
 
 Command:
 ```csharp

@@ -3,7 +3,7 @@ using CLIzer.Contracts;
 using CLIzer.Middlewares;
 using CLIzer.Models;
 using CLIzer.Models.Mapper;
-using CLIzer.Utils;
+using CLIzer.Resolver;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CLIzer.Extensions
@@ -29,14 +29,13 @@ namespace CLIzer.Extensions
         public static ClizerConfiguration EnableHelp(this ClizerConfiguration configuration)
         {
             configuration.RegisterMiddleware<HelpMiddleware>();
-            configuration.RegisterServices(services => services.AddSingleton<HelpTextPrinter>());
             return configuration;
         }
 
-        public static ClizerConfiguration RegisterConfig<TConfig>(this ClizerConfiguration configuration, string name, string relativePath) where TConfig : class, new()
-            => configuration.RegisterConfig(name, new JsonFileByPathAccessor<TConfig>(relativePath));
+        public static ClizerConfiguration EnableConfig<TConfig>(this ClizerConfiguration configuration, string name, string relativePath) where TConfig : class, new()
+            => configuration.EnableConfig(name, new JsonFileByPathAccessor<TConfig>(relativePath));
 
-        public static ClizerConfiguration RegisterConfig<TConfig>(this ClizerConfiguration configuration, string name, IClizerDataAccessor<TConfig> fileAccessor) where TConfig : class, new()
+        public static ClizerConfiguration EnableConfig<TConfig>(this ClizerConfiguration configuration, string name, IClizerDataAccessor<TConfig> fileAccessor) where TConfig : class, new()
         {
             configuration.RegisterServices((services) =>
             {
@@ -44,12 +43,12 @@ namespace CLIzer.Extensions
                 services.AddSingleton<IConfig<TConfig>, ConfigProvider<TConfig>>();
             });
 
-            configuration.RegisterCommands((container) =>
+            configuration.RegisterMiddleware((services) =>
             {
-                container.Command<ConfigCommandProvider<TConfig>>(name);
+                var accessor = services.GetRequiredService<IClizerDataAccessor<TConfig>>();
+                var config = services.GetRequiredService<IConfig<TConfig>>();
+                return new ConfigMiddleware<TConfig>(config, name, accessor);
             });
-
-            configuration.RegisterMiddleware<ConfigMiddleware<TConfig>>();
 
             return configuration;
         }

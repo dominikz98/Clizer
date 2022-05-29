@@ -1,3 +1,4 @@
+using CLIzer.Attributes;
 using CLIzer.Contracts;
 using System;
 using System.Threading;
@@ -19,33 +20,9 @@ namespace CLIzer.Tests
 
             var clizer = new Clizer()
                 .Configure((config) => config
+                    .RegisterCommands(GetType().Assembly));
 
-                .RegisterCommands((container) => container
-                    .Root<RootCmd>()
-                    .Command<GrandparentCmd>("grandparent")
-                        .SubCommand<ParentCmd>("parent")
-                            .SubCommand<ChildCmd>("child")
-                    .Return()
-                    .Command<CompanyCmd>("company")
-                        .SubCommand<DepartmentCmd>("department")
-                                .SubCommand<EmployeeCmd>("employee")
-                )
-            );
             var result = await clizer.Execute(args);
-            Assert.Equal(ClizerExitCode.SUCCESS, result);
-        }
-
-        [Fact]
-        public async Task Only_Root_Command()
-        {
-            var clizer = new Clizer();
-            clizer.Configure((config) => config
-
-                .RegisterCommands((container) => container
-                    .Root<RootCmd>()
-                )
-            );
-            var result = await clizer.Execute(Array.Empty<string>());
             Assert.Equal(ClizerExitCode.SUCCESS, result);
         }
 
@@ -58,44 +35,45 @@ namespace CLIzer.Tests
         }
     }
 
-    public class RootCmd : ICliCmd
-    {
-        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(ClizerExitCode.SUCCESS);
-    }
-
+    [CliName("grandparent")]
     public class GrandparentCmd : ICliCmd
     {
         public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
             => Task.FromResult(ClizerExitCode.ERROR);
     }
 
-    public class ParentCmd : ICliCmd
+    [CliName("parent")]
+    public class ParentCmd : ICliCmd<GrandparentCmd>
     {
         public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
             => Task.FromResult(ClizerExitCode.ERROR);
     }
 
-    public class ChildCmd : ICliCmd
+    [CliName("child")]
+    public class ChildCmd : ICliCmd<ParentCmd>
     {
         public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
             => Task.FromResult(ClizerExitCode.SUCCESS);
 
     }
 
+    [CliName("company")]
     public class CompanyCmd : ICliCmd
     {
         public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
             => Task.FromResult(ClizerExitCode.ERROR);
     }
 
-    public class DepartmentCmd : ICliCmd
+    [CliName("department")]
+    public class DepartmentCmd : ICliCmd<CompanyCmd>
     {
         public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
             => Task.FromResult(ClizerExitCode.ERROR);
 
     }
-    public class EmployeeCmd : ICliCmd
+
+    [CliName("employee")]
+    public class EmployeeCmd : ICliCmd<DepartmentCmd>
     {
         public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
             => Task.FromResult(ClizerExitCode.SUCCESS);

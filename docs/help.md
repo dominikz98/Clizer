@@ -11,26 +11,18 @@ To overwrite the displayed help text, fill up the help text parameter in CliIArg
 ## Example
 
 Calls:
-```batch
-C:\Users\Spongebob> {{assembly}} burger help
-```
-```batch
-C:\Users\Spongebob> {{assembly}} burger --help
-```
-```batch
-C:\Users\Spongebob> {{assembly}} burger -h
-```
+> C:\Users\Spongebob> {{assembly}} burger help
+> C:\Users\Spongebob> {{assembly}} burger --help
+> C:\Users\Spongebob> {{assembly}} burger -h
 
 Command:
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config
-        .EnableHelp()
-        .RegisterCommands((container) => container
-            .Command<KrabBurgerCmd>("burger"))
-    )
-);
+    .EnableHelp()
+    .RegisterCommands(GetType().Assembly));
 
+[CliName("burger")]
 public class KrabBurgerCmd : ICliCmd
 {
     [Range(1, 100)]

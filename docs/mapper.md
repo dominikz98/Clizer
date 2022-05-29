@@ -18,14 +18,11 @@ Command:
 ```csharp
 var clizer = new Clizer()
     .Configure((config) => config
-        .EnableMapping("mappings.json")
-        .RegisterCommands((container) => container
-            .Command<CookCmd>("cook"))
-            .Command<EatCmd>("eat"))
-    )
-);
+    .EnableMapping("mappings.json")
+    .RegisterCommands(GetType().Assembly));
 
-public class CookCmd
+[CliName("cook")]
+public class CookCmd : ICliCmd
 {
     private readonly IClizerMapper _mapper;
 
@@ -43,7 +40,8 @@ public class CookCmd
     }
 }
 
-public class EatCmd
+[CliName("eat")]
+public class EatCmd : ICliCmd
 {
     [Range(1000, 9999)]
     [CliIArg("burger")]
@@ -56,7 +54,7 @@ public class EatCmd
         _mapper = mapper;
     }
 
-    public async Task Craft(CancellationToken cancellationToken)    
+    public async Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
     {
         var burgerId = _mapper.GetByShortId<KrabBurger>(mapping.ShortId);
         KrabBurger burger = await ReceiveBurger(burgerId, cancellationToken);

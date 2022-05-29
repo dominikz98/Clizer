@@ -16,7 +16,6 @@ The project provides useful functions to make it really easy all the way:
 - :shield: [Middlewares](docs/middlewares.md)
 - :syringe: [Dependency Injection](docs/dependency_injection.md)
 - :toolbox: [Other Utils](docs/utils.md)
-- [Custom Extensions](docs/custom_extensions.md)
 
 # Minimal setup:
 ```csharp
@@ -26,9 +25,12 @@ var clizer = new Clizer()
 
 await clizer.Execute(args);
 
-class Command : ICliCmd
+public class Command : ICliCmd
 {
-    public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
-        => Task.FromResult(ClizerExitCode.ERROR);
+    public async Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+    {
+        await DoSomeCrazyStuff(cancellationToken);
+        return ClizerExitCode.SUCCESS;
+    }
 }
 ```

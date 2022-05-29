@@ -2,9 +2,9 @@
 {
     public class CommandContext
     {
-        public CommandRegistration? RootCommand { get; set; }
+        public CommandRegistration? RootCommand { get; internal set; }
         public CommandRegistration? Command { get; internal set; }
-        public string Execute { get; set; }
+        public string Execute { get; internal set; }
         public IReadOnlyCollection<CommandRegistration> CallChain { get; internal set; }
         public IReadOnlyCollection<string> Args { get; internal set; }
 

@@ -19,8 +19,11 @@ namespace CLIzer.Tests
                 "--test:1"
             };
 
-            var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
+            var clizer = new Clizer()
+                .Configure((config) => config
+                    .RegisterCommands<PropertyBindingCmd>()
+                );
+
             await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
         }
 

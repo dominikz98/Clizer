@@ -19,7 +19,10 @@ namespace CLIzer.Tests.Help
                 arg
             };
 
-            var clizer = new Clizer().Configure(config => config.EnableHelp());
+            var clizer = new Clizer()
+                .Configure(config => config
+                .RegisterCommands(GetType().Assembly)
+                .EnableHelp());
 
             var result = await clizer.Execute(args.ToArray());
             Assert.NotEqual(ClizerExitCode.ERROR, result);

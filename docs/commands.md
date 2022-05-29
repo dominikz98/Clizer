@@ -7,7 +7,7 @@ Commands can be registered with in the Configure() method. All commands will be 
 To define commands of this type, let your class implement **ICliCmd**.<br>
 If no main command is passed, a empty command will be registered instead.
 
-These commands will be called with the first argument in the call chain (marked red in the following example):
+These commands will be called with the first argument in the call chain (marked bold in the following example):
 
 >Call:
 >C:\Users\Spongebob> {{assembly}} **<a style="color:red">karbburger</a>**
@@ -16,7 +16,7 @@ These commands will be called with the first argument in the call chain (marked 
 To define commands of this type, let your class implement **ICliCmd\<TParent\>**.<br>
 The passed parent type needs to be a implementation of **ICliCmd** or **ICliCmd\<TParent\>**.
 
-These commands can be nested and will be called after the first argument and until arguments or options are passed in the call chain (marked orange in the following example):
+These commands can be nested and will be called after the first argument and until arguments or options are passed in the call chain (marked bold in the following example):
 
 >Call:
 >C:\Users\Spongebob> {{assembly}} <a style="color:red">karbburger</a> **<a style="color:orange">eat</a>** --all

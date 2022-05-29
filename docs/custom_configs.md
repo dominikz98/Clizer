@@ -15,6 +15,7 @@ Here you go if you want to load your config from databases/storage/... or in ano
 ## Example
 
 >C:\Users\Spongebob> {{assembly}} config
+
 >C:\Users\Spongebob> {{assembly}} krustykrab
 
 ```csharp

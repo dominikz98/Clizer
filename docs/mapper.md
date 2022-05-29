@@ -9,10 +9,9 @@ Each object type has a separate ID pool, so two objects with equal IDs, but othe
 
 ## Example
 
-```batch
-C:\Users\Spongebob> {{assembly}} cook
-C:\Users\Spongebob> {{assembly}} eat {{shortId}}
-```
+> C:\Users\Spongebob> {{assembly}} cook
+
+> C:\Users\Spongebob> {{assembly}} eat {{shortId}}
 
 Command:
 ```csharp

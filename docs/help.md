@@ -12,7 +12,9 @@ To overwrite the displayed help text, fill up the help text parameter in CliIArg
 
 Calls:
 > C:\Users\Spongebob> {{assembly}} burger help
+
 > C:\Users\Spongebob> {{assembly}} burger --help
+
 > C:\Users\Spongebob> {{assembly}} burger -h
 
 Command:

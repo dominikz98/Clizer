@@ -9,5 +9,6 @@ namespace CLIzer.Contracts.Tables
         Alignment Alignment { get; }
         public Func<T, string> ValueAccessor { get; }
         public bool CanShrink { get; }
+        public bool PadIfPossible { get; }
     }
 }

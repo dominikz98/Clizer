@@ -5,9 +5,8 @@ namespace CLIzer.Design.Tables;
 
 internal static class TableWidthCalculator<T>
 {
-    public static Dictionary<ITableColumnDefinition<T>, int> RelativeToFullWidth(ITableColumnDefinition<T>[] columnDefinitions, IReadOnlyCollection<T> data)
+    public static Dictionary<ITableColumnDefinition<T>, int> RelativeToWidth(int maxWidth, ITableColumnDefinition<T>[] columnDefinitions, IReadOnlyCollection<T> data)
     {
-        var maxWidth = Console.WindowWidth;
         var relativeWidths = new Dictionary<ITableColumnDefinition<T>, int>();
 
         // get required chars per column
@@ -45,7 +44,7 @@ internal static class TableWidthCalculator<T>
         IReadOnlyCollection<ITableColumnDefinition<T>> columnDefinitions)
     {
         // attach remaining width
-        var extendWidthPerColumn = (100 - (double)requiredWidth) / columnDefinitions.Count();
+        var extendWidthPerColumn = (100 - (double)requiredWidth) / columnDefinitions.Count;
         var roundedExtendWidthPerColumn = (int)Math.Round(extendWidthPerColumn, 0, MidpointRounding.ToZero);
 
         foreach (var column in relativeWidths.Keys)
@@ -70,7 +69,7 @@ internal static class TableWidthCalculator<T>
         if (!shrinkableColumns.Any())
             shrinkableColumns = columnDefinitions.ToList();
 
-        var shrinkWidthPerColumn = ((double)requiredWidth - 100) / shrinkableColumns.Count();
+        var shrinkWidthPerColumn = ((double)requiredWidth - 100) / shrinkableColumns.Count;
         var roundedShrinkWidthPerColumn = (int)Math.Round(shrinkWidthPerColumn, 0, MidpointRounding.ToZero);
 
         var almostShrinkableColums = shrinkableColumns
@@ -89,3 +88,13 @@ internal static class TableWidthCalculator<T>
         return relativeWidths;
     }
 }
+
+internal static class TableWidthCalculator
+{
+    public static int ExactToWidth(int maxWidth, int relativeWidth)
+    {
+        var exactWidth = (double)maxWidth / 100 * relativeWidth;
+        return (int)Math.Round(exactWidth, 0, MidpointRounding.ToZero);
+    }
+}
+

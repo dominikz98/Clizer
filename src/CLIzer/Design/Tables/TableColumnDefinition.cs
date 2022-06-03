@@ -10,6 +10,7 @@ namespace CLIzer.Design.Tables
         public Alignment Alignment { get; set; } = Alignment.Start;
         public Func<T, string> ValueAccessor { get; set; } = (x) => string.Empty;
         public bool CanShrink { get; set; } = true;
+        public bool PadIfPossible { get; set; } = true;
 
         public TableColumnDefinition() { }
 

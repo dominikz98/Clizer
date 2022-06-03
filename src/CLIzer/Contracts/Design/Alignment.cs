@@ -1,9 +1,8 @@
-﻿namespace CLIzer.Contracts.Design
+﻿namespace CLIzer.Contracts.Design;
+
+public enum Alignment
 {
-    public enum Alignment
-    {
-        Start,
-        Center,
-        End
-    }
+    Start,
+    Center,
+    End
 }

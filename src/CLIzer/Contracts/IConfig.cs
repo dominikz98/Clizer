@@ -1,7 +1,6 @@
-﻿namespace CLIzer.Contracts
+﻿namespace CLIzer.Contracts;
+
+public interface IConfig<T> where T : class, new()
 {
-    public interface IConfig<T> where T : class, new()
-    {
-        public T? Value { get; }
-    }
+    public T? Value { get; }
 }

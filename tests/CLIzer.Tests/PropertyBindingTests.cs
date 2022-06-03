@@ -7,104 +7,103 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLIzer.Tests
+namespace CLIzer.Tests;
+
+public class PropertyBindingTests
 {
-    public class PropertyBindingTests
+    [Fact]
+    public async Task Wrong_Property()
     {
-        [Fact]
-        public async Task Wrong_Property()
+        var args = new List<string>()
         {
-            var args = new List<string>()
-            {
-                "--test:1"
-            };
+            "--test:1"
+        };
 
-            var clizer = new Clizer()
-                .Configure((config) => config
-                    .RegisterCommands<PropertyBindingCmd>()
-                );
+        var clizer = new Clizer()
+            .Configure((config) => config
+                .RegisterCommands<PropertyBindingCmd>()
+            );
 
-            await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
-        }
-
-        [Fact]
-        public async Task Correct_Binding_Property()
-        {
-            var args = new List<string>()
-            {
-                "--number:1",
-                "--force"
-            };
-
-            var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
-            var result = await clizer.Execute(args.ToArray());
-            Assert.Equal(ClizerExitCode.SUCCESS, result);
-        }
-
-        [Fact]
-        public async Task Ignored_Property()
-        {
-            var args = new List<string>()
-            {
-                "--ignore"
-            };
-
-            var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
-            await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
-        }
-
-        [Fact]
-        public async Task Path_Property()
-        {
-            var args = new List<string>()
-            {
-                "--number:1",
-                "--force",
-                @"--path:E:\Bibliotheken\Projects"
-            };
-
-            var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
-            var result = await clizer.Execute(args.ToArray());
-            Assert.Equal(ClizerExitCode.SUCCESS, result);
-        }
-
-        [Fact]
-        public async Task With_Shortcuts()
-        {
-            var args = new List<string>()
-            {
-                "-n:1",
-                "-f"
-            };
-
-            var clizer = new Clizer();
-            clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
-            var result = await clizer.Execute(args.ToArray());
-            Assert.Equal(ClizerExitCode.SUCCESS, result);
-        }
+        await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
     }
 
-    class PropertyBindingCmd : ICliCmd
+    [Fact]
+    public async Task Correct_Binding_Property()
     {
-        [CliIArg("number", "n")]
-        [Range(1, 100)]
-        public int Number { get; set; }
-        [CliIArg("force", "f")]
-        public bool Force { get; set; }
-
-        [CliIArg("path")]
-        public string? Path { get; set; }
-        public bool Ignore { get; set; }
-
-        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+        var args = new List<string>()
         {
-            if (Force && Number > 0)
-                return Task.FromResult(ClizerExitCode.SUCCESS);
+            "--number:1",
+            "--force"
+        };
 
-            return Task.FromResult(ClizerExitCode.ERROR);
-        }
+        var clizer = new Clizer();
+        clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
+        var result = await clizer.Execute(args.ToArray());
+        Assert.Equal(ClizerExitCode.SUCCESS, result);
+    }
+
+    [Fact]
+    public async Task Ignored_Property()
+    {
+        var args = new List<string>()
+        {
+            "--ignore"
+        };
+
+        var clizer = new Clizer();
+        clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
+        await Assert.ThrowsAnyAsync<ClizerException>(() => clizer.Execute(args.ToArray()));
+    }
+
+    [Fact]
+    public async Task Path_Property()
+    {
+        var args = new List<string>()
+        {
+            "--number:1",
+            "--force",
+            @"--path:E:\Bibliotheken\Projects"
+        };
+
+        var clizer = new Clizer();
+        clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
+        var result = await clizer.Execute(args.ToArray());
+        Assert.Equal(ClizerExitCode.SUCCESS, result);
+    }
+
+    [Fact]
+    public async Task With_Shortcuts()
+    {
+        var args = new List<string>()
+        {
+            "-n:1",
+            "-f"
+        };
+
+        var clizer = new Clizer();
+        clizer.Configure((config) => config.RegisterCommands<PropertyBindingCmd>());
+        var result = await clizer.Execute(args.ToArray());
+        Assert.Equal(ClizerExitCode.SUCCESS, result);
+    }
+}
+
+class PropertyBindingCmd : ICliCmd
+{
+    [CliIArg("number", "n")]
+    [Range(1, 100)]
+    public int Number { get; set; }
+    [CliIArg("force", "f")]
+    public bool Force { get; set; }
+
+    [CliIArg("path")]
+    public string? Path { get; set; }
+    public bool Ignore { get; set; }
+
+    public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+    {
+        if (Force && Number > 0)
+            return Task.FromResult(ClizerExitCode.SUCCESS);
+
+        return Task.FromResult(ClizerExitCode.ERROR);
     }
 }

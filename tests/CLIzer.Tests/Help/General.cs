@@ -4,28 +4,27 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLIzer.Tests.Help
+namespace CLIzer.Tests.Help;
+
+public class General
 {
-    public class General
+    [Theory]
+    [InlineData("help")]
+    [InlineData("--help")]
+    [InlineData("-h")]
+    public async Task Call_Help(string arg)
     {
-        [Theory]
-        [InlineData("help")]
-        [InlineData("--help")]
-        [InlineData("-h")]
-        public async Task Call_Help(string arg)
+        var args = new List<string>()
         {
-            var args = new List<string>()
-            {
-                arg
-            };
+            arg
+        };
 
-            var clizer = new Clizer()
-                .Configure(config => config
-                .RegisterCommands(GetType().Assembly)
-                .EnableHelp());
+        var clizer = new Clizer()
+            .Configure(config => config
+            .RegisterCommands(GetType().Assembly)
+            .EnableHelp());
 
-            var result = await clizer.Execute(args.ToArray());
-            Assert.NotEqual(ClizerExitCode.ERROR, result);
-        }
+        var result = await clizer.Execute(args.ToArray());
+        Assert.NotEqual(ClizerExitCode.ERROR, result);
     }
 }

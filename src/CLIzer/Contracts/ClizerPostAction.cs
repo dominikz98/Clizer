@@ -1,8 +1,7 @@
-﻿namespace CLIzer.Contracts
+﻿namespace CLIzer.Contracts;
+
+public enum ClizerPostAction
 {
-    public enum ClizerPostAction
-    {
-        CONTINUE,
-        EXIT
-    }
+    CONTINUE,
+    EXIT
 }

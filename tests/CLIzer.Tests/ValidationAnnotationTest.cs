@@ -6,41 +6,40 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLIzer.Tests
+namespace CLIzer.Tests;
+
+public class ValidationAnnotationTest
 {
-    public class ValidationAnnotationTest
+    [Fact]
+    public async Task Invalid_Range()
     {
-        [Fact]
-        public async Task Invalid_Range()
+        var args = new List<string>()
         {
-            var args = new List<string>()
-            {
-                "add",
-                "--second:0"
-            };
+            "add",
+            "--second:0"
+        };
 
-            var clizer = new Clizer();
-            clizer.Configure((config) => config
+        var clizer = new Clizer();
+        clizer.Configure((config) => config
 
-                .HandleException((ex) => throw ex)
-                .RegisterCommands(GetType().Assembly)
-            );
+            .HandleException((ex) => throw ex)
+            .RegisterCommands(GetType().Assembly)
+        );
 
-            await Assert.ThrowsAsync<ValidationException>(() => clizer.Execute(args.ToArray()));
-        }
+        await Assert.ThrowsAsync<ValidationException>(() => clizer.Execute(args.ToArray()));
     }
+}
 
-    [CliName("add")]
-    public class AddCmd : ICliCmd
-    {
-        [Range(1, 100)]
-        [CliIArg("first")]
-        public int First { get; set; }
-        [CliIArg("second")]
-        public int Second { get; set; }
+[CliName("add")]
+public class AddCmd : ICliCmd
+{
+    [Range(1, 100)]
+    [CliIArg("first")]
+    public int First { get; set; }
+    [CliIArg("second")]
+    public int Second { get; set; }
 
-        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
-            => Task.FromResult(ClizerExitCode.SUCCESS);
-    }
+    public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+        => Task.FromResult(ClizerExitCode.SUCCESS);
 }
 

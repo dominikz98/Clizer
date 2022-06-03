@@ -19,11 +19,10 @@ The project provides useful functions to make it really easy all the way:
 
 # Minimal setup:
 ```csharp
-var clizer = new Clizer()
-    .Configure((config) => config
-        .RegisterCommands(GetType().Assembly));
-
-await clizer.Execute(args);
+await new Clizer()
+    .Configure(config => config
+    .RegisterCommands(typeof(Program).Assembly))
+    .Execute(Array.Empty<string>());
 
 public class Command : ICliCmd
 {

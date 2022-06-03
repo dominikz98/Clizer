@@ -1,5 +1,4 @@
 ﻿using CLIzer.Contracts.Tables;
-using CLIzer.Models;
 
 namespace CLIzer.Design.Tables;
 
@@ -32,8 +31,14 @@ internal static class TableWidthCalculator<T>
             return ExtendColumns(requiredWidth, relativeWidths, columnDefinitions);
 
         var truncatedColumns = TruncateColumns(requiredWidth, relativeWidths, columnDefinitions);
-        if (!truncatedColumns.Any())
-            throw new ClizerException("Table columns allocate to much width to be drawed. Try remove a column.");
+        if (truncatedColumns.Any())
+            return truncatedColumns;
+
+        // fallback (columns allocates to much width to be drawn)
+        var sameWidth = 100 / (double)columnDefinitions.Length;
+        var roundedSameWidth = (int)Math.Round(sameWidth, 0, MidpointRounding.ToZero);
+        foreach (var key in relativeWidths.Keys)
+            relativeWidths[key] = roundedSameWidth;
 
         return truncatedColumns;
     }
@@ -58,7 +63,7 @@ internal static class TableWidthCalculator<T>
         Dictionary<ITableColumnDefinition<T>, int> relativeWidths,
         IReadOnlyCollection<ITableColumnDefinition<T>> columnDefinitions)
     {
-        // truncate columns shrinkable columns
+        // truncate shrinkable columns
         if (!columnDefinitions.Any())
             return new Dictionary<ITableColumnDefinition<T>, int>();
 

@@ -17,6 +17,7 @@ namespace CLIzer.Design.Tables
             // calculate relative column widths
             var columnWidths = TableWidthCalculator<T>.RelativeToWidth(Console.WindowWidth, table.ColumnDefinitions, data);
 
+            // draw table
             DrawHeader(columnWidths, table.ColumnDefinitions);
             DrawSeparator();
             DrawRows(columnWidths, table.ColumnDefinitions, data);
@@ -35,7 +36,7 @@ namespace CLIzer.Design.Tables
             foreach (var column in columns)
             {
                 var width = TableWidthCalculator.ExactToWidth(Console.WindowWidth, widths[column]) - 1;
-                var value = FormatCellContent(column.Name ?? String.Empty, width, column.Alignment, false, true);
+                var value = FormatCell(column.Name ?? String.Empty, width, column.Alignment, false, true);
                 DrawCell(value, column.Color, columns.First() == column);
             }
         }
@@ -52,12 +53,12 @@ namespace CLIzer.Design.Tables
                 foreach (var column in columns)
                 {
                     var width = TableWidthCalculator.ExactToWidth(Console.WindowWidth, widths[column]) - 1;
-                    var value = FormatCellContent(column.ValueAccessor(entry), width, column.Alignment, true, column.PadIfPossible);
+                    var value = FormatCell(column.ValueAccessor(entry), width, column.Alignment, true, column.PadIfPossible);
                     DrawCell(value, column.Color, columns.First() == column);
                 }
         }
 
-        private static string FormatCellContent(string value, int width, Alignment alignment, bool truncateIfRequired, bool padIfPossible)
+        private static string FormatCell(string value, int width, Alignment alignment, bool truncateIfRequired, bool padIfPossible)
         {
             if (value.Length > width && truncateIfRequired)
                 value = value[..(width - 3)] + "...";

@@ -1,27 +1,28 @@
 ﻿using CLIzer.Contracts;
 
-namespace CLIzer.Resolver
+namespace CLIzer.Resolver;
+
+internal class PersistNameResolver : ICommandNameResolver
 {
-    internal class PersistNameResolver<TCmd> : ICommandNameResolver where TCmd : ICliCmd
+    public Type CmdType { get; }
+    public string Name { get; }
+    public ICommandNameResolver Fallback { get; }
+
+    public PersistNameResolver(Type type, string name, ICommandNameResolver fallback)
     {
-        public string Name { get; }
-        public ICommandNameResolver Fallback { get; }
+        CmdType = type;
+        Name = name;
+        Fallback = fallback;
+    }
 
-        public PersistNameResolver(string name, ICommandNameResolver fallback)
-        {
-            Name = name;
-            Fallback = fallback;
-        }
+    public string Resolve<T>() where T : ICliCmd
+        => Resolve(typeof(T));
 
-        public string Resolve<T>() where T : ICliCmd
-            => Resolve(typeof(T));
+    public string Resolve(Type cmdType)
+    {
+        if (cmdType != CmdType)
+            return Fallback.Resolve(cmdType);
 
-        public string Resolve(Type cmdType)
-        {
-            if (cmdType != typeof(TCmd))
-                return Fallback.Resolve(cmdType);
-
-            return Name;
-        }
+        return Name;
     }
 }

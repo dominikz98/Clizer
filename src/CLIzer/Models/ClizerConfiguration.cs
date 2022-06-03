@@ -79,8 +79,12 @@ namespace CLIzer.Models
                 .ToList();
 
             // register root command and resolve hierarchical
-            var rootNameResolver = new PersistNameResolver<RootCmd>(string.Empty, nameResolver);
-            RootCommand = AttachSubCommands(typeof(RootCmd), commands, rootNameResolver);
+            var rootCmd = commandsWithoutParent.Count == 1 && typeof(RootCmd) == typeof(EmptyCommand)
+                ? commandsWithoutParent[0]
+                : typeof(RootCmd);
+
+            var rootNameResolver = new PersistNameResolver(rootCmd, string.Empty, nameResolver);
+            RootCommand = AttachSubCommands(commandsWithoutParent[0], commands, rootNameResolver);
 
             // resolve subcommands hierarchical from custom entry point
             var remainingCommands = commands.Except(commandsWithoutParent).ToList();

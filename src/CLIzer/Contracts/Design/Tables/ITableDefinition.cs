@@ -1,8 +1,7 @@
-﻿namespace CLIzer.Contracts.Tables
+﻿namespace CLIzer.Contracts.Design.Tables;
+
+public interface ITableDefinition<T>
 {
-    public interface ITableDefinition<T>
-    {
-        public string? Name { get; }
-        ITableColumnDefinition<T>[] ColumnDefinitions { get; }
-    }
+    ITableTitleDefinition? Title { get; }
+    ITableColumnDefinition<T>[] ColumnDefinitions { get; }
 }

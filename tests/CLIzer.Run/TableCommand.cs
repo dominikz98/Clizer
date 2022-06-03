@@ -20,7 +20,11 @@ public class TableCommand : ICliCmd
 
         var table = new TableDefinition<TestEntity>()
         {
-            Name = "Test-Entities",
+            Title = new TableTitleDefinition("Test-Entities")
+            {
+                Color = ConsoleColor.Blue,
+                Alignment = Alignment.Center
+            },
             ColumnDefinitions = new TableColumnDefinition<TestEntity>[]
             {
             new TableColumnDefinition<TestEntity>("Id", (x) => $"#{x.Id}")
@@ -40,7 +44,6 @@ public class TableCommand : ICliCmd
         };
 
         var tableref = TablePrinter<TestEntity>.Draw(table, data);
-        ;
 
         return Task.FromResult(ClizerExitCode.SUCCESS);
     }

@@ -1,10 +1,9 @@
-﻿using CLIzer.Contracts.Tables;
+﻿using CLIzer.Contracts.Design.Tables;
 
-namespace CLIzer.Design.Tables
+namespace CLIzer.Design.Tables;
+
+public class TableDefinition<T> : ITableDefinition<T> where T : class
 {
-    public class TableDefinition<T> : ITableDefinition<T> where T : class
-    {
-        public string? Name { get; set; }
-        public ITableColumnDefinition<T>[] ColumnDefinitions { get; set; } = Array.Empty<ITableColumnDefinition<T>>();
-    }
+    public ITableTitleDefinition? Title { get; set; }
+    public ITableColumnDefinition<T>[] ColumnDefinitions { get; set; } = Array.Empty<ITableColumnDefinition<T>>();
 }

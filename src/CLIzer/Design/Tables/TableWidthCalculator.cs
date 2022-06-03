@@ -1,4 +1,4 @@
-﻿using CLIzer.Contracts.Tables;
+﻿using CLIzer.Contracts.Design.Tables;
 
 namespace CLIzer.Design.Tables;
 

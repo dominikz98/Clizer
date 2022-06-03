@@ -1,9 +1,6 @@
-﻿using CLIzer.Contracts.Tables;
+﻿namespace CLIzer.Contracts.Design.Tables;
 
-namespace CLIzer.Contracts.Design.Tables
+public interface ITableRef<T>
 {
-    public interface ITableRef<T>
-    {
-        public ITableDefinition<T> Definition { get; }
-    }
+    public ITableDefinition<T> Definition { get; }
 }

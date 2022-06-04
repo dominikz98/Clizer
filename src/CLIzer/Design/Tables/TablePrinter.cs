@@ -64,9 +64,12 @@ public class TablePrinter<T>
         foreach (var entry in data)
             foreach (var column in columns)
             {
+                var value = column.ValueAccessor(entry);
+                var style = column.StyleAccessor(entry, column);
+
                 var width = TableWidthCalculator.ExactToWidth(Console.WindowWidth, widths[column]) - 1;
-                var value = FormatCell(column.ValueAccessor(entry), width, column.Alignment, true, column.PadIfPossible);
-                DrawCell(value, column.Color, columns.First() == column);
+                var cell = FormatCell(value, width, style.Alignment, true, column.PadIfPossible);
+                DrawCell(cell, style.Color, columns.First() == column);
             }
     }
 

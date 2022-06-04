@@ -27,7 +27,8 @@ internal class StudentTable : ITableDefinition<StudentEntity>
             },
             new TableColumnDefinition<StudentEntity>("Birthday", (x) => $"{x.Birthday:yyyy.MM.dd}")
             {
-                Alignment = Alignment.End
+                Alignment = Alignment.End,
+                StyleAccessor = (x, style) => x.Birthday.Year < 2000 ? new TableCellStyle(ConsoleColor.Red, style.Alignment) : style
             }
         };
 }

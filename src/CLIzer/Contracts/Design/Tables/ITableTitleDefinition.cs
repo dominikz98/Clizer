@@ -1,8 +1,6 @@
 ﻿namespace CLIzer.Contracts.Design.Tables;
 
-public interface ITableTitleDefinition
+public interface ITableTitleDefinition : ITableCellStyle
 {
     string Name { get; }
-    ConsoleColor Color { get; }
-    Alignment Alignment { get; }
 }

@@ -20,6 +20,10 @@ public class TableCommand : ICliCmd
         var table = new StudentTable();
         var tableref = TablePrinter<StudentEntity>.Draw(table, data);
 
+        Console.WriteLine("TEST");
+        var newData = data.ToList().GetRange(0, data.Length - 1);
+        TablePrinter<StudentEntity>.ReDraw(tableref, newData);
+
         return Task.FromResult(ClizerExitCode.SUCCESS);
     }
 }

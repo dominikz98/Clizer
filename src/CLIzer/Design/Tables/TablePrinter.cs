@@ -25,7 +25,6 @@ public class TablePrinter<T>
         DrawSeparator();
         DrawRows(columnWidths, table.ColumnDefinitions, data);
         DrawSeparator();
-        Console.Write(Environment.NewLine);
 
         // store position
         var (endLeft, endTop) = Console.GetCursorPosition();
@@ -33,8 +32,26 @@ public class TablePrinter<T>
         return new TableRef<T>(table, startLeft, startTop, endLeft, endTop);
     }
 
-    public static ITableRef<T> ReDraw(ITableRef<T> reference)
-        => reference;
+    public static ITableRef<T> ReDraw(ITableRef<T> originalRef, IReadOnlyCollection<T> data)
+    {
+        var currentPos = Console.GetCursorPosition();
+        Console.SetCursorPosition(originalRef.Start.Left, originalRef.Start.Top);
+        var currentRef = Draw(originalRef.Definition, data);
+
+        // new table is larger or equal
+        if (currentRef.End.Top >= originalRef.End.Top)
+            return currentRef;
+
+        // remove original relics
+        for (int i = currentRef.End.Top; i < originalRef.End.Top; i++)
+        {
+            Draw(" ".PadLeft(Console.WindowWidth, ' '), ConsoleColor.Red);
+            Console.Write(Environment.NewLine);
+        }
+
+        Console.SetCursorPosition(currentPos.Left, currentPos.Top);
+        return currentRef;
+    }
 
     private static void DrawTitle(ITableTitleDefinition title)
     {

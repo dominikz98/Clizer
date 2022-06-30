@@ -1,6 +1,4 @@
-﻿using CLIzer.Models;
-
-namespace CLIzer.Contracts;
+﻿namespace CLIzer.Contracts;
 
 public interface ICliCmd
 {
@@ -8,5 +6,3 @@ public interface ICliCmd
 }
 
 public interface ICliCmd<TParent> : ICliCmd { }
-
-public interface IEmptyCmd : ICliCmd<EmptyCommand> { }

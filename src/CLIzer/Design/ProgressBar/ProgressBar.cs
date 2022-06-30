@@ -1,17 +1,22 @@
-﻿using CLIzer.Extensions;
+﻿using CLIzer.Contracts.Design;
+using CLIzer.Design.Panel;
+using CLIzer.Extensions;
 
 namespace CLIzer.Design.ProgressBar;
 
-public class ProgressBar
+public class ProgressBar : IDesignComponent
 {
     public string? Title { get; }
     public ConsoleColor Color { get; set; } = Console.ForegroundColor;
 
+    CanvasSize? IDesignComponent.Canvas { get; set; }
+    public event EventHandler<int>? OnHeightChanged;
+
     private ConsolePointer? _start;
 
-    public ProgressBar() : this(null) { }
+    public ProgressBar() { }
 
-    public ProgressBar(string? title)
+    public ProgressBar(string title)
     {
         Title = title;
     }
@@ -48,9 +53,9 @@ public class ProgressBar
         Console.Write("| ");
 
         // set cursor position
-        if (currentPosition.Top == _start.Top)
-            return;
+        if (currentPosition.Top != _start.Top)
+            Console.SetCursorPosition(currentPosition.Left, currentPosition.Top);
 
-        Console.SetCursorPosition(currentPosition.Left, currentPosition.Top);
+        OnHeightChanged?.Invoke(this, 1);
     }
 }

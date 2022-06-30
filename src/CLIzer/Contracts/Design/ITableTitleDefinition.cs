@@ -1,4 +1,4 @@
-﻿namespace CLIzer.Contracts.Design.Tables;
+﻿namespace CLIzer.Contracts.Design;
 
 public interface ITableTitleDefinition : ITableCellStyle
 {

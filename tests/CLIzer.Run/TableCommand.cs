@@ -1,8 +1,10 @@
-﻿using CLIzer.Contracts;
+﻿using CLIzer.Attributes;
+using CLIzer.Contracts;
 using CLIzer.Design.Tables;
 
 namespace CLIzer.Run;
 
+[CliName("table")]
 public class TableCommand : ICliCmd
 {
     public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
@@ -20,7 +22,6 @@ public class TableCommand : ICliCmd
         var table = new StudentTable();
         var tableref = TablePrinter<StudentEntity>.Draw(table, data);
 
-        Console.WriteLine("TEST");
         var newData = data.ToList().GetRange(0, data.Length - 1);
         TablePrinter<StudentEntity>.ReDraw(tableref, newData);
 

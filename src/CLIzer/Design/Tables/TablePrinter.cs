@@ -1,17 +1,17 @@
 ﻿using CLIzer.Contracts.Design;
-using CLIzer.Contracts.Design.Tables;
+using CLIzer.Extensions;
 
 namespace CLIzer.Design.Tables;
 
 public class TablePrinter<T>
 {
-    public static ITableRef<T> Draw(ITableDefinition<T> table, IReadOnlyCollection<T> data)
+    public static IComponentRef<T> Draw(ITableDefinition<T> table, IReadOnlyCollection<T> data)
     {
         // store position
-        var (startLeft, startTop) = Console.GetCursorPosition();
+        var startPointer = ConsolePointer.CreateByStart();
 
         if (!table.ColumnDefinitions.Any())
-            return new TableRef<T>(table, startLeft, startTop);
+            return new TableRef<T>(table, startPointer);
 
         // calculate relative column widths
         var columnWidths = TableWidthCalculator<T>.RelativeToWidth(Console.WindowWidth, table.ColumnDefinitions, data);
@@ -27,15 +27,18 @@ public class TablePrinter<T>
         DrawSeparator();
 
         // store position
-        var (endLeft, endTop) = Console.GetCursorPosition();
+        var endPointer = ConsolePointer.CreateByCurrent();
 
-        return new TableRef<T>(table, startLeft, startTop, endLeft, endTop);
+        return new TableRef<T>(table, startPointer, endPointer);
     }
 
-    public static ITableRef<T> ReDraw(ITableRef<T> originalRef, IReadOnlyCollection<T> data)
+    public static IComponentRef<T> ReDraw(IComponentRef<T> originalRef, IReadOnlyCollection<T> data)
     {
-        var currentPos = Console.GetCursorPosition();
+        // store position
+        var (currentLeft, currentTop) = Console.GetCursorPosition();
         Console.SetCursorPosition(originalRef.Start.Left, originalRef.Start.Top);
+
+        // redraw table
         var currentRef = Draw(originalRef.Definition, data);
 
         // new table is larger or equal
@@ -45,18 +48,18 @@ public class TablePrinter<T>
         // remove original relics
         for (int i = currentRef.End.Top; i < originalRef.End.Top; i++)
         {
-            Draw(" ".PadLeft(Console.WindowWidth, ' '), ConsoleColor.Red);
+            ConsoleExtensions.Write(" ".PadLeft(Console.WindowWidth, ' '), ConsoleColor.Red);
             Console.Write(Environment.NewLine);
         }
 
-        Console.SetCursorPosition(currentPos.Left, currentPos.Top);
+        Console.SetCursorPosition(currentLeft, currentTop);
         return currentRef;
     }
 
     private static void DrawTitle(ITableTitleDefinition title)
     {
         var value = FormatCell(title.Name, Console.WindowWidth, title.Alignment, false, true);
-        Draw(value, title.Color);
+        ConsoleExtensions.Write(value, title.Color);
         Console.WriteLine();
     }
 
@@ -79,6 +82,7 @@ public class TablePrinter<T>
     private static void DrawRows(Dictionary<ITableColumnDefinition<T>, int> widths, ITableColumnDefinition<T>[] columns, IReadOnlyCollection<T> data)
     {
         foreach (var entry in data)
+        {
             foreach (var column in columns)
             {
                 var value = column.ValueAccessor(entry);
@@ -88,6 +92,9 @@ public class TablePrinter<T>
                 var cell = FormatCell(value, width, style.Alignment, true, column.PadIfPossible);
                 DrawCell(cell, style.Color, columns.First() == column);
             }
+
+            Console.Write(Environment.NewLine);
+        }
     }
 
     private static string FormatCell(string value, int width, Alignment alignment, bool truncateIfRequired, bool padIfPossible)
@@ -124,14 +131,7 @@ public class TablePrinter<T>
         if (printStartBracket)
             Console.Write('|');
 
-        Draw(value, color);
+        ConsoleExtensions.Write(value, color);
         Console.Write('|');
-    }
-
-    private static void Draw(string value, ConsoleColor color)
-    {
-        Console.ForegroundColor = color;
-        Console.Write(value);
-        Console.ResetColor();
     }
 }

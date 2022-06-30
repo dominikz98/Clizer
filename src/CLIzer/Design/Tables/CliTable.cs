@@ -3,57 +3,64 @@ using CLIzer.Extensions;
 
 namespace CLIzer.Design.Tables;
 
-public class TablePrinter<T>
+public abstract class CliTable<T> : ITableDefinition<T>
 {
-    public static IComponentRef<T> Draw(ITableDefinition<T> table, IReadOnlyCollection<T> data)
+    public abstract ITableTitleDefinition? Title { get; }
+    public abstract ITableColumnDefinition<T>[] ColumnDefinitions { get; }
+
+    internal ConsolePointer? _start;
+    internal ConsolePointer? _end;
+
+    public void Draw(IReadOnlyCollection<T> data)
     {
-        // store position
-        var startPointer = ConsolePointer.CreateByStart();
+        ConsolePointer? originalPosition = null;
 
-        if (!table.ColumnDefinitions.Any())
-            return new TableRef<T>(table, startPointer);
-
-        // calculate relative column widths
-        var columnWidths = TableWidthCalculator<T>.RelativeToWidth(Console.WindowWidth, table.ColumnDefinitions, data);
+        // store position (in case of redaw)
+        if (_start is not null && _end is not null)
+        {
+            originalPosition = ConsolePointer.CreateByCurrent();
+            Console.SetCursorPosition(_start.Left, _start.Top);
+        }
 
         // draw table
-        if (table.Title is not null && !string.IsNullOrWhiteSpace(table.Title.Name))
-            DrawTitle(table.Title);
-
-        DrawSeparator();
-        DrawHeader(columnWidths, table.ColumnDefinitions);
-        DrawSeparator();
-        DrawRows(columnWidths, table.ColumnDefinitions, data);
-        DrawSeparator();
-
-        // store position
-        var endPointer = ConsolePointer.CreateByCurrent();
-
-        return new TableRef<T>(table, startPointer, endPointer);
-    }
-
-    public static IComponentRef<T> ReDraw(IComponentRef<T> originalRef, IReadOnlyCollection<T> data)
-    {
-        // store position
-        var (currentLeft, currentTop) = Console.GetCursorPosition();
-        Console.SetCursorPosition(originalRef.Start.Left, originalRef.Start.Top);
-
-        // redraw table
-        var currentRef = Draw(originalRef.Definition, data);
+        DrawInternal(data);
 
         // new table is larger or equal
-        if (currentRef.End.Top >= originalRef.End.Top)
-            return currentRef;
+        var currentPosition = ConsolePointer.CreateByCurrent();
+        if (originalPosition is null || currentPosition.Top >= originalPosition!.Top)
+            return;
 
         // remove original relics
-        for (int i = currentRef.End.Top; i < originalRef.End.Top; i++)
+        for (int i = currentPosition.Top; i < originalPosition.Top; i++)
         {
             ConsoleExtensions.Write(" ".PadLeft(Console.WindowWidth, ' '), ConsoleColor.Red);
             Console.Write(Environment.NewLine);
         }
+    }
 
-        Console.SetCursorPosition(currentLeft, currentTop);
-        return currentRef;
+    private void DrawInternal(IReadOnlyCollection<T> data)
+    {
+        // store position
+        _start ??= ConsolePointer.CreateByStart();
+
+        if (!ColumnDefinitions.Any())
+            return;
+
+        // calculate relative column widths
+        var columnWidths = TableWidthCalculator<T>.RelativeToWidth(Console.WindowWidth, ColumnDefinitions, data);
+
+        // draw table
+        if (Title is not null && !string.IsNullOrWhiteSpace(Title.Name))
+            DrawTitle(Title);
+
+        DrawSeparator();
+        DrawHeader(columnWidths, ColumnDefinitions);
+        DrawSeparator();
+        DrawRows(columnWidths, ColumnDefinitions, data);
+        DrawSeparator();
+
+        // store position
+        _end = ConsolePointer.CreateByCurrent();
     }
 
     private static void DrawTitle(ITableTitleDefinition title)

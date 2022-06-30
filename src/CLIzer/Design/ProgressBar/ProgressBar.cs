@@ -7,21 +7,20 @@ namespace CLIzer.Design.ProgressBar
         public string? Title { get; }
         public ConsoleColor Color { get; set; } = Console.ForegroundColor;
 
-        private ConsolePointer _start;
+        private ConsolePointer? _start;
 
         public ProgressBar() : this(null) { }
 
         public ProgressBar(string? title)
         {
             Title = title;
-            _start = ConsolePointer.CreateByStart();
-            Step(0, 100);
         }
 
-        public void Step(int count, int max)
+        public void Draw(int count, int max)
         {
             // set and store cursor position 
             var currentPosition = ConsolePointer.CreateByCurrent();
+            _start ??= currentPosition;
             Console.SetCursorPosition(_start.Left, _start.Top);
 
             // draw prefix

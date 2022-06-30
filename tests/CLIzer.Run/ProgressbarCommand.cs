@@ -14,19 +14,19 @@ namespace CLIzer.Run
                 Color = ConsoleColor.Blue
             };
 
-            pb.Step(25, 100);
+            pb.Draw(25, 100);
             await Task.Delay(2000, cancellationToken);
 
-            pb.Step(50, 100);
+            pb.Draw(50, 100);
             await Task.Delay(2000, cancellationToken);
 
-            pb.Step(75, 100);
+            pb.Draw(75, 100);
             await Task.Delay(2000, cancellationToken);
 
-            pb.Step(100, 100);
+            pb.Draw(100, 100);
             await Task.Delay(2000, cancellationToken);
 
-            pb.Step(95, 100);
+            pb.Draw(95, 100);
 
             return ClizerExitCode.SUCCESS;
         }

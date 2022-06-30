@@ -3,16 +3,16 @@ using CLIzer.Design.Tables;
 
 namespace CLIzer.Run;
 
-internal class StudentTable : ITableDefinition<StudentEntity>
+internal class StudentTable : CliTable<StudentEntity>
 {
-    public ITableTitleDefinition? Title { get; }
+    public override ITableTitleDefinition? Title { get; }
         = new TableTitleDefinition("Test-Entities")
         {
             Color = ConsoleColor.Blue,
             Alignment = Alignment.Center
         };
 
-    public ITableColumnDefinition<StudentEntity>[] ColumnDefinitions { get; }
+    public override ITableColumnDefinition<StudentEntity>[] ColumnDefinitions { get; }
         = new TableColumnDefinition<StudentEntity>[]
         {
             new TableColumnDefinition<StudentEntity>("Id", (x) => $"#{x.Id}")

@@ -1,57 +1,56 @@
 ﻿using CLIzer.Extensions;
 
-namespace CLIzer.Design.ProgressBar
+namespace CLIzer.Design.ProgressBar;
+
+public class ProgressBar
 {
-    public class ProgressBar
+    public string? Title { get; }
+    public ConsoleColor Color { get; set; } = Console.ForegroundColor;
+
+    private ConsolePointer? _start;
+
+    public ProgressBar() : this(null) { }
+
+    public ProgressBar(string? title)
     {
-        public string? Title { get; }
-        public ConsoleColor Color { get; set; } = Console.ForegroundColor;
+        Title = title;
+    }
 
-        private ConsolePointer? _start;
+    public void Draw(int count, int max)
+    {
+        // set and store cursor position 
+        var currentPosition = ConsolePointer.CreateByCurrent();
+        _start ??= currentPosition;
+        Console.SetCursorPosition(_start.Left, _start.Top);
 
-        public ProgressBar() : this(null) { }
+        // draw prefix
+        var valueInPercent = max / 100 * count;
+        var prefix = string.Empty;
+        if (!string.IsNullOrWhiteSpace(Title))
+            prefix += $" {Title}";
 
-        public ProgressBar(string? title)
-        {
-            Title = title;
-        }
+        prefix = $"{prefix} {valueInPercent,3}%";
+        Console.Write(prefix);
 
-        public void Draw(int count, int max)
-        {
-            // set and store cursor position 
-            var currentPosition = ConsolePointer.CreateByCurrent();
-            _start ??= currentPosition;
-            Console.SetCursorPosition(_start.Left, _start.Top);
+        // get filled length in percent
+        var valueLength = Console.WindowWidth - (_start.Left + prefix.Length) - 4;
+        var filled = (int)((double)valueLength / 100 * valueInPercent);
 
-            // draw prefix
-            var valueInPercent = max / 100 * count;
-            var prefix = string.Empty;
-            if (!string.IsNullOrWhiteSpace(Title))
-                prefix += $" {Title}";
+        // draw bar
+        Console.Write(" |");
 
-            prefix = $"{prefix} {valueInPercent,3}%";
-            Console.Write(prefix);
+        var filledValue = "".PadLeft(filled, '=');
+        ConsoleExtensions.Write(filledValue, Color);
 
-            // get filled length in percent
-            var valueLength = Console.WindowWidth - (_start.Left + prefix.Length) - 4;
-            var filled = (int)((double)valueLength / 100 * valueInPercent);
+        var emptyValue = "".PadLeft(valueLength - filledValue.Length, '-');
+        Console.Write(emptyValue);
 
-            // draw bar
-            Console.Write(" |");
+        Console.Write("| ");
 
-            var filledValue = "".PadLeft(filled, '=');
-            ConsoleExtensions.Write(filledValue, Color);
+        // set cursor position
+        if (currentPosition.Top == _start.Top)
+            return;
 
-            var emptyValue = "".PadLeft(valueLength - filledValue.Length, '-');
-            Console.Write(emptyValue);
-
-            Console.Write("| ");
-
-            // set cursor position
-            if (currentPosition.Top == _start.Top)
-                return;
-
-            Console.SetCursorPosition(currentPosition.Left, currentPosition.Top);
-        }
+        Console.SetCursorPosition(currentPosition.Left, currentPosition.Top);
     }
 }

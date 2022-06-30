@@ -3,7 +3,7 @@ using CLIzer.Extensions;
 
 namespace CLIzer.Design.Tables;
 
-public abstract class CliTable<T> : ITableDefinition<T>
+public abstract class Table<T> : ITableDefinition<T>
 {
     public abstract ITableTitleDefinition? Title { get; }
     public abstract ITableColumnDefinition<T>[] ColumnDefinitions { get; }

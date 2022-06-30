@@ -3,7 +3,7 @@ using CLIzer.Design.Tables;
 
 namespace CLIzer.Run;
 
-internal class StudentTable : CliTable<StudentEntity>
+internal class StudentTable : Table<StudentEntity>
 {
     public override ITableTitleDefinition? Title { get; }
         = new TableTitleDefinition("Test-Entities")

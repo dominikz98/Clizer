@@ -5,5 +5,11 @@ namespace CLIzer.Contracts.Design;
 public interface IDesignComponent
 {
     internal CanvasSize? Canvas { get; set; }
-    internal event EventHandler<int> OnHeightChanged;
+    internal void Draw(bool suppressReDraw);
+    internal event EventHandler<int> OnDrawed;
+}
+
+public interface IDesignComponent<T> : IDesignComponent
+{
+    T? Value { get; }
 }

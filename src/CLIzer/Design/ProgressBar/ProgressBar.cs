@@ -4,15 +4,16 @@ using CLIzer.Extensions;
 
 namespace CLIzer.Design.ProgressBar;
 
-public class ProgressBar : IDesignComponent
+public class ProgressBar : IDesignComponent<ProgressBarValue>
 {
     public string? Title { get; }
     public ConsoleColor Color { get; set; } = Console.ForegroundColor;
 
+    public ProgressBarValue? Value { get; private set; }
     CanvasSize? IDesignComponent.Canvas { get; set; }
-    public event EventHandler<int>? OnHeightChanged;
+    public event EventHandler<int>? OnDrawed;
 
-    private ConsolePointer? _start;
+    private ConsolePointer? _internalPointer;
 
     public ProgressBar() { }
 
@@ -21,15 +22,22 @@ public class ProgressBar : IDesignComponent
         Title = title;
     }
 
-    public void Draw(int count, int max)
+    public void Step(int count, int max)
+    {
+        Value = new ProgressBarValue(count, max);
+        ((IDesignComponent<ProgressBarValue>)this).Draw(false);
+    }
+
+    void IDesignComponent.Draw(bool suppressReDraw)
     {
         // set and store cursor position 
-        var currentPosition = ConsolePointer.CreateByCurrent();
-        _start ??= currentPosition;
-        Console.SetCursorPosition(_start.Left, _start.Top);
+        _internalPointer ??= ConsolePointer.CreateByCurrent();
+        var canvasPointer = ((IDesignComponent<ProgressBarValue>)this).Canvas?.Pointer ?? _internalPointer;
+        var canvasWidth = ((IDesignComponent<ProgressBarValue>)this).Canvas?.Width ?? Console.WindowWidth;
+        Console.SetCursorPosition(canvasPointer.Left, canvasPointer.Top);
 
         // draw prefix
-        var valueInPercent = max / 100 * count;
+        var valueInPercent = (Value?.Max ?? 100) / 100 * (Value?.Count ?? 0);
         var prefix = string.Empty;
         if (!string.IsNullOrWhiteSpace(Title))
             prefix += $" {Title}";
@@ -38,7 +46,7 @@ public class ProgressBar : IDesignComponent
         Console.Write(prefix);
 
         // get filled length in percent
-        var valueLength = Console.WindowWidth - (_start.Left + prefix.Length) - 4;
+        var valueLength = canvasWidth - (canvasPointer.Left - canvasPointer.Left + prefix.Length) - 4;
         var filled = (int)((double)valueLength / 100 * valueInPercent);
 
         // draw bar
@@ -52,10 +60,6 @@ public class ProgressBar : IDesignComponent
 
         Console.Write("| ");
 
-        // set cursor position
-        if (currentPosition.Top != _start.Top)
-            Console.SetCursorPosition(currentPosition.Left, currentPosition.Top);
-
-        OnHeightChanged?.Invoke(this, 1);
+        OnDrawed?.Invoke(this, 1);
     }
 }

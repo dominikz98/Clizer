@@ -2,13 +2,13 @@
 
 internal class CanvasSize
 {
-    public ConsolePointer Start { get; set; }
+    public ConsolePointer Pointer { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
 
-    public CanvasSize(ConsolePointer start, int width, int height)
+    public CanvasSize(ConsolePointer pointer, int width, int height)
     {
-        Start = start;
+        Pointer = pointer;
         Width = width;
         Height = height;
     }

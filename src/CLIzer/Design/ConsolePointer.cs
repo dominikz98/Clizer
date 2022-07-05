@@ -24,9 +24,9 @@ public class ConsolePointer
         return new ConsolePointer(left, top);
     }
 
-    internal static ConsolePointer CreateByCurrent()
+    internal static ConsolePointer CreateByCurrent(bool stickOnLeftSide = false)
     {
         var (left, top) = Console.GetCursorPosition();
-        return new ConsolePointer(left, top);
+        return new ConsolePointer(stickOnLeftSide ? 0 : left, top);
     }
 }

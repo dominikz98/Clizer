@@ -1,4 +1,5 @@
 ﻿using CLIzer.Contracts.Design;
+using CLIzer.Design.Panel;
 using CLIzer.Extensions;
 
 namespace CLIzer.Design.Tables;
@@ -8,10 +9,20 @@ public abstract class Table<T> : ITableDefinition<T>
     public abstract ITableTitleDefinition? Title { get; }
     public abstract ITableColumnDefinition<T>[] ColumnDefinitions { get; }
 
+    public IReadOnlyCollection<T> Values { get; private set; } = new List<T>();
+    CanvasSize? IDesignComponent.Canvas { get; set; }
+    public event EventHandler<int>? OnDrawed;
+
     internal ConsolePointer? _start;
     internal ConsolePointer? _end;
 
-    public void Draw(IReadOnlyCollection<T> data)
+    public void Draw(IReadOnlyCollection<T> values)
+    {
+        Values = values;
+        Draw();
+    }
+
+    public void Draw()
     {
         ConsolePointer? originalPosition = null;
 
@@ -23,7 +34,7 @@ public abstract class Table<T> : ITableDefinition<T>
         }
 
         // draw table
-        DrawInternal(data);
+        DrawInternal();
 
         // new table is larger or equal
         var currentPosition = ConsolePointer.CreateByCurrent();
@@ -36,9 +47,11 @@ public abstract class Table<T> : ITableDefinition<T>
             ConsoleExtensions.Write(" ".PadLeft(Console.WindowWidth, ' '), ConsoleColor.Red);
             Console.Write(Environment.NewLine);
         }
+
+        OnDrawed?.Invoke(this, _end!.Top - _start!.Top);
     }
 
-    private void DrawInternal(IReadOnlyCollection<T> data)
+    private void DrawInternal()
     {
         // store position
         _start ??= ConsolePointer.CreateByStart();
@@ -47,7 +60,7 @@ public abstract class Table<T> : ITableDefinition<T>
             return;
 
         // calculate relative column widths
-        var columnWidths = TableWidthCalculator<T>.RelativeToWidth(Console.WindowWidth, ColumnDefinitions, data);
+        var columnWidths = TableWidthCalculator<T>.RelativeToWidth(Console.WindowWidth, ColumnDefinitions, Values);
 
         // draw table
         if (Title is not null && !string.IsNullOrWhiteSpace(Title.Name))
@@ -56,7 +69,7 @@ public abstract class Table<T> : ITableDefinition<T>
         DrawSeparator();
         DrawHeader(columnWidths, ColumnDefinitions);
         DrawSeparator();
-        DrawRows(columnWidths, ColumnDefinitions, data);
+        DrawRows(columnWidths, ColumnDefinitions);
         DrawSeparator();
 
         // store position
@@ -86,9 +99,9 @@ public abstract class Table<T> : ITableDefinition<T>
         Console.WriteLine(value);
     }
 
-    private static void DrawRows(Dictionary<ITableColumnDefinition<T>, int> widths, ITableColumnDefinition<T>[] columns, IReadOnlyCollection<T> data)
+    private void DrawRows(Dictionary<ITableColumnDefinition<T>, int> widths, ITableColumnDefinition<T>[] columns)
     {
-        foreach (var entry in data)
+        foreach (var entry in Values)
         {
             foreach (var column in columns)
             {

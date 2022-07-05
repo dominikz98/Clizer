@@ -8,6 +8,8 @@ public class Panel
     public ConsolePointer? Start { get; private set; }
     public ConsolePointer? End { get; private set; }
 
+    private bool _onRedraw = false;
+
     public Panel(IPanelRow[] rows)
     {
         Rows = rows;
@@ -19,6 +21,7 @@ public class Panel
 
     private void Draw(IDesignComponent? sender)
     {
+        _onRedraw = true;
         Start ??= ConsolePointer.CreateByCurrent(true);
 
         var rowIndex = 0;
@@ -37,7 +40,7 @@ public class Panel
                 if (sender is not null && column == sender)
                     continue;
 
-                column.Draw(true);
+                column.Draw();
             }
 
             rowIndex++;
@@ -48,6 +51,8 @@ public class Panel
             End = ConsolePointer.CreateByCurrent(true);
             End.Top += 1;
         }
+
+        _onRedraw = false;
     }
 
     private void RegisterComponents()
@@ -76,6 +81,12 @@ public class Panel
 
         var canvas = Rows.SelectMany(x => x.Columns).First(x => x == component).Canvas;
         canvas!.Height = height;
+
+        if (!_onRedraw)
+        {
+            Draw(component);
+            return;
+        }
 
         if (End is not null)
             Console.SetCursorPosition(End.Left, End.Top);

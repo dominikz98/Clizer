@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AAA6FF2-A
 		docs\custom_configs.md = docs\custom_configs.md
 		docs\custom_extensions.md = docs\custom_extensions.md
 		docs\dependency_injection.md = docs\dependency_injection.md
+		docs\design.md = docs\design.md
 		docs\help.md = docs\help.md
 		docs\mapper.md = docs\mapper.md
 		docs\middlewares.md = docs\middlewares.md
@@ -27,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AAA6FF2-A
 		docs\utils.md = docs\utils.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIzer.Run", "tests\CLIzer.Run\CLIzer.Run.csproj", "{4A478A29-3131-4716-9037-E33BCBCBC838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Run", "tests\CLIzer.Run\CLIzer.Run.csproj", "{4A478A29-3131-4716-9037-E33BCBCBC838}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

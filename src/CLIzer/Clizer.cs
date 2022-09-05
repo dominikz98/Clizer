@@ -20,6 +20,9 @@ public class Clizer
 
     public Clizer() : this(new()) { }
 
+    public async Task<ClizerExitCode> Execute()
+        => await Execute(Array.Empty<string>());
+
     /// <summary>
     /// Entry point
     /// </summary>

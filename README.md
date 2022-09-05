@@ -9,6 +9,7 @@ The project provides useful functions to make it really easy all the way:
 - :rocket: [Main/sub command handling](docs/commands.md)
 - :hammer: [Easy Configuration](docs/configuration.md)
 - :heavy_check_mark: [Argument parsing and validation](docs/arguments.md)
+- :pencil2: [UI Components](docs/design.md)
 - :bookmark: [Custom Configs](docs/custom_configs.md)
 - :book: [Help text generation](docs/help.md)
 - :keyboard: [User configurable aliases](docs/aliases.md)

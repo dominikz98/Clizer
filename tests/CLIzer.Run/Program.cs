@@ -1,7 +1,8 @@
 ﻿
 using CLIzer;
+using CLIzer.Run;
 
 await new Clizer()
     .Configure(config => config
-    .RegisterCommands(typeof(Program).Assembly))
-    .Execute(new string[] { "panel" });
+    .RegisterCommands<TableCommand>())
+    .Execute();

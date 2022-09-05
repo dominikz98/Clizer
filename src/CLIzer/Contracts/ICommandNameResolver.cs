@@ -1,8 +1,7 @@
-﻿namespace CLIzer.Contracts
+﻿namespace CLIzer.Contracts;
+
+public interface ICommandNameResolver
 {
-    public interface ICommandNameResolver
-    {
-        string Resolve(Type cmdType);
-        string Resolve<T>() where T : ICliCmd;
-    }
+    string Resolve(Type cmdType);
+    string Resolve<T>() where T : ICliCmd;
 }

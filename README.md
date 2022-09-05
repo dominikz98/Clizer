@@ -9,6 +9,7 @@ The project provides useful functions to make it really easy all the way:
 - :rocket: [Main/sub command handling](docs/commands.md)
 - :hammer: [Easy Configuration](docs/configuration.md)
 - :heavy_check_mark: [Argument parsing and validation](docs/arguments.md)
+- :pencil2: [UI Components](docs/design.md)
 - :bookmark: [Custom Configs](docs/custom_configs.md)
 - :book: [Help text generation](docs/help.md)
 - :keyboard: [User configurable aliases](docs/aliases.md)
@@ -19,11 +20,10 @@ The project provides useful functions to make it really easy all the way:
 
 # Minimal setup:
 ```csharp
-var clizer = new Clizer()
-    .Configure((config) => config
-        .RegisterCommands(GetType().Assembly));
-
-await clizer.Execute(args);
+await new Clizer()
+    .Configure(config => config
+    .RegisterCommands(typeof(Program).Assembly))
+    .Execute(Array.Empty<string>());
 
 public class Command : ICliCmd
 {

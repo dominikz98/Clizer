@@ -6,48 +6,47 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CLIzer.Tests.Aliases
+namespace CLIzer.Tests.Aliases;
+
+public class General
 {
-    public class General
+    [Fact]
+    public async Task Runtime()
     {
-        [Fact]
-        public async Task Runtime()
+        var args = new List<string>()
         {
-            var args = new List<string>()
-            {
-                "ut"
-            };
+            "ut"
+        };
 
-            var aliases = "ut = unit test al \r\n al = aliases";
-            var fileAccessor = new InMemoryFileAccessor<string>(aliases);
-            var clizer = new Clizer()
-                .Configure(config => config
-                .EnableAliases(fileAccessor)
-                .RegisterCommands(GetType().Assembly));
+        var aliases = "ut = unit test al \r\n al = aliases";
+        var fileAccessor = new InMemoryFileAccessor<string>(aliases);
+        var clizer = new Clizer()
+            .Configure(config => config
+            .EnableAliases(fileAccessor)
+            .RegisterCommands(GetType().Assembly));
 
-            var result = await clizer.Execute(args.ToArray());
-            Assert.Equal(ClizerExitCode.SUCCESS, result);
-        }
+        var result = await clizer.Execute(args.ToArray());
+        Assert.Equal(ClizerExitCode.SUCCESS, result);
+    }
 
-        [CliName("unit")]
-        class UnitCommand : ICliCmd
-        {
-            public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
-                => Task.FromResult(ClizerExitCode.HINT);
-        }
+    [CliName("unit")]
+    class UnitCommand : ICliCmd
+    {
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.HINT);
+    }
 
-        [CliName("test")]
-        class TestCommand : ICliCmd<UnitCommand>
-        {
-            public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
-                => Task.FromResult(ClizerExitCode.HINT);
-        }
+    [CliName("test")]
+    class TestCommand : ICliCmd<UnitCommand>
+    {
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.HINT);
+    }
 
-        [CliName("aliases")]
-        class AliasesCommand : ICliCmd<TestCommand>
-        {
-            public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
-                => Task.FromResult(ClizerExitCode.SUCCESS);
-        }
+    [CliName("aliases")]
+    class AliasesCommand : ICliCmd<TestCommand>
+    {
+        public Task<ClizerExitCode> Execute(CancellationToken cancellationToken)
+            => Task.FromResult(ClizerExitCode.SUCCESS);
     }
 }

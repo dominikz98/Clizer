@@ -20,12 +20,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9AAA6FF2-A
 		docs\custom_configs.md = docs\custom_configs.md
 		docs\custom_extensions.md = docs\custom_extensions.md
 		docs\dependency_injection.md = docs\dependency_injection.md
+		docs\design.md = docs\design.md
 		docs\help.md = docs\help.md
 		docs\mapper.md = docs\mapper.md
 		docs\middlewares.md = docs\middlewares.md
 		README.md = README.md
 		docs\utils.md = docs\utils.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIzer.Run", "tests\CLIzer.Run\CLIzer.Run.csproj", "{4A478A29-3131-4716-9037-E33BCBCBC838}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +44,10 @@ Global
 		{96EE9ED8-AC24-4B4F-9232-70684D61904E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96EE9ED8-AC24-4B4F-9232-70684D61904E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96EE9ED8-AC24-4B4F-9232-70684D61904E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A478A29-3131-4716-9037-E33BCBCBC838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A478A29-3131-4716-9037-E33BCBCBC838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A478A29-3131-4716-9037-E33BCBCBC838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A478A29-3131-4716-9037-E33BCBCBC838}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +55,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6548FB73-27C7-4F4B-9581-B0395B813344} = {F166207D-DDC1-49AD-9CB5-E708C4297DFC}
 		{96EE9ED8-AC24-4B4F-9232-70684D61904E} = {BD3B4201-1A08-4B68-A0AE-655F50496DE1}
+		{4A478A29-3131-4716-9037-E33BCBCBC838} = {BD3B4201-1A08-4B68-A0AE-655F50496DE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8697E305-D1B1-4CB6-AC84-26CEDBC559F1}

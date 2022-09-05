@@ -1,9 +1,8 @@
 ﻿using CLIzer.Models;
 
-namespace CLIzer.Contracts
+namespace CLIzer.Contracts;
+
+public interface IClizerMiddleware
 {
-    public interface IClizerMiddleware
-    {
-        Task<ClizerPostAction> Intercept(CommandContext context, CancellationToken cancellationToken);
-    }
+    Task<ClizerPostAction> Intercept(CommandContext context, CancellationToken cancellationToken);
 }

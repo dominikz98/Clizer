@@ -1,7 +1,6 @@
-﻿namespace CLIzer.Models
+﻿namespace CLIzer.Models;
+
+public class ClizerException : Exception
 {
-    public class ClizerException : Exception
-    {
-        public ClizerException(string message) : base(message) { }
-    }
+    public ClizerException(string message) : base(message) { }
 }

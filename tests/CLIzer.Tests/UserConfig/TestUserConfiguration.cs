@@ -1,7 +1,6 @@
-﻿namespace CLIzer.Tests.UserConfig
+﻿namespace CLIzer.Tests.UserConfig;
+
+public class TestUserConfiguration
 {
-    public class TestUserConfiguration
-    {
-        public int Value { get; set; }
-    }
+    public int Value { get; set; }
 }

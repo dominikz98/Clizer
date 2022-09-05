@@ -1,9 +1,8 @@
-﻿namespace CLIzer.Contracts
+﻿namespace CLIzer.Contracts;
+
+public enum ClizerExitCode
 {
-    public enum ClizerExitCode
-    {
-        SUCCESS = 0,
-        ERROR = 1,
-        HINT = 2
-    }
+    SUCCESS = 0,
+    ERROR = 1,
+    HINT = 2
 }

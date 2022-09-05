@@ -6,14 +6,14 @@ namespace CLIzer.Middlewares;
 
 public class HelpMiddleware : IClizerMiddleware
 {
-    public const string HelpCommand = "help";
-    public const string HelpOption = "--help";
-    public const string HelpOptionShortcut = "-h";
-    private static readonly IReadOnlyCollection<string> _helpAll = new List<string>() { HelpCommand, HelpOption, HelpOptionShortcut };
+    private const string HelpCommand = "help";
+    private const string HelpOption = "--help";
+    private const string HelpOptionShortcut = "-h";
+    private static readonly IReadOnlyCollection<string> HelpAll = new List<string>() { HelpCommand, HelpOption, HelpOptionShortcut };
 
     public Task<ClizerPostAction> Intercept(CommandContext context, CancellationToken cancellationToken)
     {
-        if (!context.Args.Intersect(_helpAll).Any()
+        if (!context.Args.Intersect(HelpAll).Any()
             && !context.Execute.Equals(HelpCommand, StringComparison.OrdinalIgnoreCase))
             return Task.FromResult(ClizerPostAction.CONTINUE);
 

@@ -84,7 +84,7 @@ public class ClizerConfiguration
             : typeof(RootCmd);
 
         var rootNameResolver = new PersistNameResolver(rootCmd, string.Empty, nameResolver);
-        RootCommand = AttachSubCommands(commandsWithoutParent[0], commands, rootNameResolver);
+        RootCommand = AttachSubCommands(rootCmd, commands, rootNameResolver);
 
         // resolve subcommands hierarchical from custom entry point
         var remainingCommands = commands.Except(commandsWithoutParent).ToList();

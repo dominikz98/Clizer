@@ -11,9 +11,11 @@ internal static class TableWidthCalculator<T>
         // get required chars per column
         foreach (var column in columnDefinitions)
         {
-            var requiredChars = data.Select(x => column.ValueAccessor(x))
-                .Select(x => x.Length + 1)
-                .Max();
+            var requiredChars = data.Count > 0
+                ? data.Select(x => column.ValueAccessor(x))
+                    .Select(x => x.Length + 1)
+                    .Max()
+                : 0;
 
             if (columnDefinitions.First() == column)
                 requiredChars += 1;

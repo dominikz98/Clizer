@@ -25,15 +25,13 @@
 		<Company />
 		<Description>Use Clizer to easily access your written services/commands via CLI. Documentation in README on Github.
 		</Description>
-		<Version>2.2.1</Version>
+		<Version>2.3.0</Version>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<PackageReleaseNotes>V2.1.0:
-- Search similiar commands if no matching found
-- Support of user configurable alias
-- Support of cancellation- and closing-handling
-- Auto register commands
+		<PackageReleaseNotes>V2.3.0:
+- Add UI-Element: Table
+- Add UI-Element: Progressbar
 - Bugfixes</PackageReleaseNotes>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageProjectUrl>https://github.com/dominikz98/Clizer.git</PackageProjectUrl>
